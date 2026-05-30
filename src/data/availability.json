@@ -1,0 +1,209 @@
+{
+  "windowStart": "2026-06-01",
+  "windowEnd": "2026-08-31",
+  "travel": [
+    {
+      "id": "travel-01",
+      "destination": "Singapore",
+      "blocked": [{ "start": "2026-06-22", "end": "2026-06-29" }]
+    },
+    {
+      "id": "travel-02",
+      "destination": "Tokyo",
+      "blocked": [{ "start": "2026-08-10", "end": "2026-08-14" }]
+    }
+  ],
+  "equipment": [
+    {
+      "id": "eq-treadmill-01",
+      "role": "treadmill",
+      "label": "Home Treadmill",
+      "blocked": [{ "start": "2026-07-06", "end": "2026-07-12" }]
+    },
+    {
+      "id": "eq-rower-01",
+      "role": "rower",
+      "label": "Concept2 Rower",
+      "blocked": []
+    },
+    {
+      "id": "eq-stationary-bike-01",
+      "role": "stationary-bike",
+      "label": "Stationary Bike",
+      "blocked": []
+    },
+    {
+      "id": "eq-squat-rack-01",
+      "role": "squat-rack",
+      "label": "Squat Rack",
+      "blocked": []
+    },
+    {
+      "id": "eq-dumbbells-01",
+      "role": "dumbbells",
+      "label": "Dumbbell Set",
+      "blocked": []
+    },
+    {
+      "id": "eq-kettlebell-01",
+      "role": "kettlebell",
+      "label": "Kettlebell Set",
+      "blocked": []
+    },
+    {
+      "id": "eq-cable-machine-01",
+      "role": "cable-machine",
+      "label": "Cable Machine",
+      "blocked": []
+    },
+    {
+      "id": "eq-sauna-01",
+      "role": "sauna",
+      "label": "Infrared Sauna",
+      "blocked": []
+    },
+    {
+      "id": "eq-ice-bath-01",
+      "role": "ice-bath",
+      "label": "Ice Bath",
+      "blocked": [{ "start": "2026-07-20", "end": "2026-07-22" }]
+    },
+    {
+      "id": "eq-pool-01",
+      "role": "pool",
+      "label": "Lap Pool",
+      "blocked": []
+    },
+    {
+      "id": "eq-yoga-mat-01",
+      "role": "yoga-mat",
+      "label": "Yoga Mat",
+      "blocked": []
+    },
+    {
+      "id": "eq-foam-roller-01",
+      "role": "foam-roller",
+      "label": "Foam Roller",
+      "blocked": []
+    },
+    {
+      "id": "eq-bp-cuff-01",
+      "role": "bp-cuff",
+      "label": "Blood-Pressure Cuff",
+      "blocked": []
+    },
+    {
+      "id": "eq-glucose-monitor-01",
+      "role": "glucose-monitor",
+      "label": "CGM",
+      "blocked": []
+    },
+    {
+      "id": "eq-pulse-oximeter-01",
+      "role": "pulse-oximeter",
+      "label": "Pulse Oximeter",
+      "blocked": []
+    }
+  ],
+  "specialists": [
+    {
+      "id": "sp-physician-01",
+      "role": "physician",
+      "name": "Dr. Reyes",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "sp-cardiologist-01",
+      "role": "cardiologist",
+      "name": "Dr. Okafor",
+      "available": [
+        { "start": "2026-07-01", "end": "2026-07-03" },
+        { "start": "2026-08-01", "end": "2026-08-03" }
+      ]
+    },
+    {
+      "id": "sp-endocrinologist-01",
+      "role": "endocrinologist",
+      "name": "Dr. Haddad",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "sp-sleep-physician-01",
+      "role": "sleep-physician",
+      "name": "Dr. Tan",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "sp-dermatologist-01",
+      "role": "dermatologist",
+      "name": "Dr. Alvarez",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "sp-psychiatrist-01",
+      "role": "psychiatrist",
+      "name": "Dr. Mwangi",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "sp-phlebotomist-01",
+      "role": "phlebotomist",
+      "name": "Robin Vance",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    }
+  ],
+  "alliedHealth": [
+    {
+      "id": "ah-physio-01",
+      "role": "physiotherapist",
+      "discipline": "Physiotherapy",
+      "name": "Jo Park",
+      "available": [
+        { "start": "2026-06-01", "end": "2026-06-14" },
+        { "start": "2026-07-06", "end": "2026-08-31" }
+      ]
+    },
+    {
+      "id": "ah-ot-01",
+      "role": "occupational-therapist",
+      "discipline": "Occupational Therapy",
+      "name": "Sam Cole",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "ah-dietitian-01",
+      "role": "dietitian",
+      "discipline": "Dietetics",
+      "name": "Dana Fox",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "ah-speech-01",
+      "role": "speech-therapist",
+      "discipline": "Speech Therapy",
+      "name": "Priya Nair",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "ah-massage-01",
+      "role": "massage-therapist",
+      "discipline": "Massage Therapy",
+      "name": "Marco Ili",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "ah-trainer-01",
+      "role": "personal-trainer",
+      "discipline": "Personal Training",
+      "name": "Lena Frost",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    },
+    {
+      "id": "ah-coach-01",
+      "role": "health-coach",
+      "discipline": "Health Coaching",
+      "name": "Kai Brooks",
+      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+    }
+  ]
+}

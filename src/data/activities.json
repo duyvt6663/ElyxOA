@@ -1,0 +1,4019 @@
+[
+  {
+    "id": "act-001",
+    "type": "medication",
+    "title": "Morning Antihypertensive",
+    "details": "Morning Antihypertensive supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 1,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-002",
+    "type": "medication",
+    "title": "Metformin With Breakfast",
+    "details": "Metformin With Breakfast supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 2,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-003",
+    "type": "consultation",
+    "title": "Cardiology Review",
+    "details": "Monthly review of cardiovascular risk markers, wearable trends, and cardioprotective interventions. Includes ECG review when the member is in clinic.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 60,
+    "priority": 3,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Clinic"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "cardiologist"
+      }
+    ],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-004",
+    "type": "medication",
+    "title": "Morning Supplementation Protocol",
+    "details": "Morning Supplementation Protocol supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 4,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-005",
+    "type": "fitness",
+    "title": "Zone 2 Treadmill Cardio",
+    "details": "Zone 2 Treadmill Cardio is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 3,
+      "period": "week"
+    },
+    "durationMinutes": 45,
+    "priority": 5,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "treadmill"
+      },
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-006",
+    "type": "consultation",
+    "title": "Annual Blood Panel Draw",
+    "details": "Annual Blood Panel Draw coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "year"
+    },
+    "durationMinutes": 30,
+    "priority": 6,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Clinic"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "phlebotomist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-007",
+    "type": "medication",
+    "title": "CGM Sensor Check",
+    "details": "CGM Sensor Check supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 7,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "glucose-monitor"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-008",
+    "type": "medication",
+    "title": "Blood Pressure Log",
+    "details": "Blood Pressure Log supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 7,
+    "priority": 8,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "bp-cuff"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-009",
+    "type": "consultation",
+    "title": "Physician Plan Review",
+    "details": "Physician Plan Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 9,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Clinic",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-010",
+    "type": "fitness",
+    "title": "Lower Body Strength",
+    "details": "Lower Body Strength is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 60,
+    "priority": 10,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "squat-rack"
+      },
+      {
+        "kind": "equipment",
+        "role": "dumbbells"
+      },
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-011",
+    "type": "medication",
+    "title": "Evening Magnesium Glycinate",
+    "details": "Evening Magnesium Glycinate supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 11,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-012",
+    "type": "therapy",
+    "title": "Physiotherapy Rehab Session",
+    "details": "Physiotherapy Rehab Session supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 45,
+    "priority": 12,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Elyx Clinic"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "physiotherapist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-013",
+    "type": "food",
+    "title": "Protein-Forward Breakfast",
+    "details": "Protein-Forward Breakfast is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 20,
+    "priority": 13,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-014",
+    "type": "consultation",
+    "title": "Endocrinology Review",
+    "details": "Endocrinology Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 14,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Clinic",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "endocrinologist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-015",
+    "type": "fitness",
+    "title": "Upper Body Strength",
+    "details": "Upper Body Strength is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 55,
+    "priority": 15,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "dumbbells"
+      },
+      {
+        "kind": "equipment",
+        "role": "cable-machine"
+      },
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-016",
+    "type": "food",
+    "title": "Lunch Vegetable Anchor",
+    "details": "Lunch Vegetable Anchor is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 15,
+    "priority": 16,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-017",
+    "type": "medication",
+    "title": "Weekly GLP-1 Injection",
+    "details": "Weekly GLP-1 Injection supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 17,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-018",
+    "type": "therapy",
+    "title": "Contrast Therapy Recovery",
+    "details": "Contrast Therapy Recovery supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 60,
+    "priority": 18,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Elyx Recovery Suite"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "sauna"
+      },
+      {
+        "kind": "equipment",
+        "role": "ice-bath"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-019",
+    "type": "fitness",
+    "title": "Swimming Intervals",
+    "details": "Swimming Intervals is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 45,
+    "priority": 19,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Pool"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "pool"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-020",
+    "type": "food",
+    "title": "Hydration Target",
+    "details": "Hydration Target is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 20,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-021",
+    "type": "medication",
+    "title": "Weekly Pill Organizer Refill",
+    "details": "Weekly Pill Organizer Refill supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 21,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-022",
+    "type": "therapy",
+    "title": "Guided Breathwork Session",
+    "details": "Guided Breathwork Session supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 20,
+    "priority": 22,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Remote",
+      "Home"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "health-coach"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-023",
+    "type": "consultation",
+    "title": "Sleep Physician Review",
+    "details": "Sleep Physician Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 23,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Sleep Lab",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "sleep-physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-024",
+    "type": "fitness",
+    "title": "Row Erg Intervals",
+    "details": "Row Erg Intervals is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 35,
+    "priority": 24,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "rower"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-025",
+    "type": "food",
+    "title": "Dinner Carb Timing",
+    "details": "Dinner Carb Timing is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 15,
+    "priority": 25,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-026",
+    "type": "medication",
+    "title": "Vitamin D Weekly Audit",
+    "details": "Vitamin D Weekly Audit supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 5,
+    "priority": 26,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-027",
+    "type": "therapy",
+    "title": "Deep Tissue Massage",
+    "details": "Deep Tissue Massage supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 60,
+    "priority": 27,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Elyx Clinic"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "massage-therapist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-028",
+    "type": "fitness",
+    "title": "Stationary Bike Tempo",
+    "details": "Stationary Bike Tempo is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 40,
+    "priority": 28,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "stationary-bike"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-029",
+    "type": "food",
+    "title": "Weekly Meal Prep",
+    "details": "Weekly Meal Prep is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 90,
+    "priority": 29,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-030",
+    "type": "medication",
+    "title": "Omega-3 With Lunch",
+    "details": "Omega-3 With Lunch supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 30,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-031",
+    "type": "food",
+    "title": "Dietitian Macro Review",
+    "details": "Dietitian Macro Review is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 31,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote",
+      "Elyx Clinic"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "dietitian"
+      }
+    ],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-032",
+    "type": "fitness",
+    "title": "Kettlebell Power Circuit",
+    "details": "Kettlebell Power Circuit is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 32,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "kettlebell"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-033",
+    "type": "therapy",
+    "title": "Occupational Ergonomics Session",
+    "details": "Occupational Ergonomics Session supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 33,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Remote",
+      "Home Office"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "occupational-therapist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-034",
+    "type": "food",
+    "title": "Fermented Food Serving",
+    "details": "Fermented Food Serving is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 34,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-035",
+    "type": "medication",
+    "title": "Monthly Prescription Refill Check",
+    "details": "Monthly Prescription Refill Check supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 15,
+    "priority": 35,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "health-coach"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-036",
+    "type": "fitness",
+    "title": "Daily Mobility Flow",
+    "details": "Daily Mobility Flow is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 15,
+    "priority": 36,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "yoga-mat"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-037",
+    "type": "consultation",
+    "title": "Dermatology Skin Check",
+    "details": "Dermatology Skin Check coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "year"
+    },
+    "durationMinutes": 40,
+    "priority": 37,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Clinic"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "dermatologist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-038",
+    "type": "food",
+    "title": "Evening Alcohol-Free Default",
+    "details": "Evening Alcohol-Free Default is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 2,
+    "priority": 38,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-039",
+    "type": "medication",
+    "title": "Sleep Supplement Decision",
+    "details": "Sleep Supplement Decision supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 39,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-040",
+    "type": "therapy",
+    "title": "Foam Rolling Recovery",
+    "details": "Foam Rolling Recovery supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 3,
+      "period": "week"
+    },
+    "durationMinutes": 20,
+    "priority": 40,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Home",
+      "Elyx Clinic",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "foam-roller"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-041",
+    "type": "fitness",
+    "title": "Core Stability Circuit",
+    "details": "Core Stability Circuit is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 12,
+    "priority": 41,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-042",
+    "type": "food",
+    "title": "Mindful Eating Check",
+    "details": "Mindful Eating Check is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 42,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-043",
+    "type": "medication",
+    "title": "Weekly Side-Effect Survey",
+    "details": "Weekly Side-Effect Survey supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 8,
+    "priority": 43,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "health-coach"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-044",
+    "type": "fitness",
+    "title": "Outdoor Brisk Walk",
+    "details": "Outdoor Brisk Walk is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 35,
+    "priority": 44,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Outdoor",
+      "Hotel Area"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-045",
+    "type": "consultation",
+    "title": "Psychiatry Medication Review",
+    "details": "Psychiatry Medication Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 45,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Remote",
+      "Elyx Clinic"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "psychiatrist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-046",
+    "type": "therapy",
+    "title": "Mental Health Counseling",
+    "details": "Mental Health Counseling supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 50,
+    "priority": 46,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "health-coach"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-047",
+    "type": "food",
+    "title": "Weekly Grocery Order",
+    "details": "Weekly Grocery Order is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 25,
+    "priority": 47,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-048",
+    "type": "medication",
+    "title": "Monthly Clinician Dose Audit",
+    "details": "Monthly Clinician Dose Audit supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 20,
+    "priority": 48,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-049",
+    "type": "fitness",
+    "title": "VO2 Max Primer",
+    "details": "VO2 Max Primer is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 49,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "treadmill"
+      },
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-050",
+    "type": "food",
+    "title": "Travel Protein Pack",
+    "details": "Travel Protein Pack is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 50,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-051",
+    "type": "therapy",
+    "title": "Speech and Breathing Mechanics",
+    "details": "Speech and Breathing Mechanics supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 51,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Remote",
+      "Elyx Clinic"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "speech-therapist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-052",
+    "type": "fitness",
+    "title": "Full Body Strength Maintenance",
+    "details": "Full Body Strength Maintenance is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 65,
+    "priority": 52,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "squat-rack"
+      },
+      {
+        "kind": "equipment",
+        "role": "dumbbells"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-053",
+    "type": "fitness",
+    "title": "Pulse Oximeter Readiness Check",
+    "details": "Pulse Oximeter Readiness Check is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 3,
+    "priority": 53,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "pulse-oximeter"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-054",
+    "type": "food",
+    "title": "Fiber Booster",
+    "details": "Fiber Booster is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 54,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-055",
+    "type": "consultation",
+    "title": "Health Coach Monthly Strategy",
+    "details": "Health Coach Monthly Strategy coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 55,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "health-coach"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-056",
+    "type": "therapy",
+    "title": "Acute Pain Triage",
+    "details": "Acute Pain Triage supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 30,
+    "priority": 56,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Remote",
+      "Elyx Clinic"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "physiotherapist"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-057",
+    "type": "fitness",
+    "title": "Balance and Proprioception",
+    "details": "Balance and Proprioception is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 3,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 57,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-058",
+    "type": "food",
+    "title": "Monthly Pantry Reset",
+    "details": "Monthly Pantry Reset is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 45,
+    "priority": 58,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-059",
+    "type": "medication",
+    "title": "Creatine Daily Dose",
+    "details": "Creatine Daily Dose supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 2,
+    "priority": 59,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-060",
+    "type": "fitness",
+    "title": "Loaded Carry Session",
+    "details": "Loaded Carry Session is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 25,
+    "priority": 60,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "kettlebell"
+      },
+      {
+        "kind": "equipment",
+        "role": "dumbbells"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-061",
+    "type": "food",
+    "title": "Restaurant Ordering Guardrails",
+    "details": "Restaurant Ordering Guardrails is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 61,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-062",
+    "type": "therapy",
+    "title": "Sauna-Only Downshift",
+    "details": "Sauna-Only Downshift supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 62,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Elyx Recovery Suite"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "sauna"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-063",
+    "type": "medication",
+    "title": "Monthly Supplement Safety Review",
+    "details": "Monthly Supplement Safety Review supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 20,
+    "priority": 63,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-064",
+    "type": "consultation",
+    "title": "Body Composition Scan Review",
+    "details": "Body Composition Scan Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 25,
+    "priority": 64,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "health-coach"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-065",
+    "type": "fitness",
+    "title": "Posterior Chain Technique",
+    "details": "Posterior Chain Technique is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 40,
+    "priority": 65,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "dumbbells"
+      },
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-066",
+    "type": "food",
+    "title": "Sodium and Electrolyte Check",
+    "details": "Sodium and Electrolyte Check is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 66,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-067",
+    "type": "therapy",
+    "title": "Ice Bath Recovery",
+    "details": "Ice Bath Recovery supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 67,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Elyx Recovery Suite"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "ice-bath"
+      }
+    ],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-068",
+    "type": "fitness",
+    "title": "Pilates Alignment Block",
+    "details": "Pilates Alignment Block is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 35,
+    "priority": 68,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "yoga-mat"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-069",
+    "type": "medication",
+    "title": "Travel Medication Pack Check",
+    "details": "Travel Medication Pack Check supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 69,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-070",
+    "type": "food",
+    "title": "Late Snack Decision",
+    "details": "Late Snack Decision is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 3,
+    "priority": 70,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-071",
+    "type": "consultation",
+    "title": "Gastrointestinal Symptom Review",
+    "details": "Gastrointestinal Symptom Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 30,
+    "priority": 71,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-072",
+    "type": "fitness",
+    "title": "Neck and Shoulder Reset",
+    "details": "Neck and Shoulder Reset is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 8,
+    "priority": 72,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-073",
+    "type": "therapy",
+    "title": "Recovery Walk and Reflection",
+    "details": "Recovery Walk and Reflection supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 73,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Outdoor",
+      "Hotel Area"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-074",
+    "type": "food",
+    "title": "Dietitian Office Hours",
+    "details": "Dietitian Office Hours is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 74,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "dietitian"
+      }
+    ],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-075",
+    "type": "fitness",
+    "title": "Wearable Readiness Sync",
+    "details": "Wearable Readiness Sync is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 75,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-076",
+    "type": "fitness",
+    "title": "Foot and Ankle Strength",
+    "details": "Foot and Ankle Strength is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 3,
+      "period": "week"
+    },
+    "durationMinutes": 12,
+    "priority": 76,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-077",
+    "type": "therapy",
+    "title": "Range-of-Motion Audit",
+    "details": "Range-of-Motion Audit supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 20,
+    "priority": 77,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Home",
+      "Elyx Clinic",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-078",
+    "type": "food",
+    "title": "Protein Shake After Strength",
+    "details": "Protein Shake After Strength is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 3,
+      "period": "week"
+    },
+    "durationMinutes": 5,
+    "priority": 78,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-079",
+    "type": "consultation",
+    "title": "Training Load Review",
+    "details": "Training Load Review coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 30,
+    "priority": 79,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Gym",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-080",
+    "type": "fitness",
+    "title": "Travel Hotel Gym Circuit",
+    "details": "Travel Hotel Gym Circuit is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 80,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Hotel Gym",
+      "Hotel Room"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-081",
+    "type": "medication",
+    "title": "Monthly Lab Result Review Prep",
+    "details": "Monthly Lab Result Review Prep supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 20,
+    "priority": 81,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-082",
+    "type": "food",
+    "title": "Caffeine Cutoff",
+    "details": "Caffeine Cutoff is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 2,
+    "priority": 82,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-083",
+    "type": "therapy",
+    "title": "Massage Gun Recovery",
+    "details": "Massage Gun Recovery supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 12,
+    "priority": 83,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Home",
+      "Elyx Clinic",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-084",
+    "type": "fitness",
+    "title": "Plyometric Primer",
+    "details": "Plyometric Primer is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 20,
+    "priority": 84,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym",
+      "Outdoor"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-085",
+    "type": "medication",
+    "title": "Monthly Pharmacy Pickup",
+    "details": "Monthly Pharmacy Pickup supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 30,
+    "priority": 85,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Pharmacy",
+      "Home"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-086",
+    "type": "food",
+    "title": "Weekend Family Meal Plan",
+    "details": "Weekend Family Meal Plan is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 20,
+    "priority": 86,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-087",
+    "type": "consultation",
+    "title": "Annual Physical Exam",
+    "details": "Annual Physical Exam coordinates clinician review and care-plan decisions using the latest member data and symptom notes.",
+    "frequency": {
+      "count": 1,
+      "period": "year"
+    },
+    "durationMinutes": 60,
+    "priority": 87,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Elyx Clinic"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Prepare latest notes and data export",
+      "List top questions"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-110"
+    ],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-088",
+    "type": "therapy",
+    "title": "Evening Downshift Routine",
+    "details": "Evening Downshift Routine supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 15,
+    "priority": 88,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Home",
+      "Elyx Clinic",
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-089",
+    "type": "fitness",
+    "title": "Flexibility Block",
+    "details": "Flexibility Block is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 12,
+    "priority": 89,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-090",
+    "type": "medication",
+    "title": "Monthly Vaccine Status Check",
+    "details": "Monthly Vaccine Status Check supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 10,
+    "priority": 90,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [
+      {
+        "kind": "specialist",
+        "role": "physician"
+      }
+    ],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-091",
+    "type": "food",
+    "title": "High-Protein Snack Setup",
+    "details": "High-Protein Snack Setup is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 2,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 91,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-092",
+    "type": "fitness",
+    "title": "HRV Guided Easy Ride",
+    "details": "HRV Guided Easy Ride is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 92,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Elyx Gym"
+    ],
+    "canBeRemote": false,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "equipment",
+        "role": "stationary-bike"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-093",
+    "type": "therapy",
+    "title": "Post-Flight Mobility",
+    "details": "Post-Flight Mobility supports recovery, pain control, mobility, and nervous-system downregulation within the broader action plan.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 18,
+    "priority": 93,
+    "facilitatorLabel": "Self / allied health as needed",
+    "locations": [
+      "Hotel",
+      "Home"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Choose a quiet space",
+      "Record pain or recovery score"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-107"
+    ],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-094",
+    "type": "medication",
+    "title": "Monthly Emergency Medication Check",
+    "details": "Monthly Emergency Medication Check supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 10,
+    "priority": 94,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-095",
+    "type": "food",
+    "title": "Weekly Weigh-In Context Note",
+    "details": "Weekly Weigh-In Context Note is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 5,
+    "priority": 95,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-096",
+    "type": "fitness",
+    "title": "Technique Video Review",
+    "details": "Technique Video Review is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 25,
+    "priority": 96,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [
+      {
+        "kind": "alliedHealth",
+        "role": "personal-trainer"
+      }
+    ],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-097",
+    "type": "fitness",
+    "title": "Monthly Training Adherence Report",
+    "details": "Monthly Training Adherence Report is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 15,
+    "priority": 97,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-098",
+    "type": "food",
+    "title": "Dining Window Consistency",
+    "details": "Dining Window Consistency is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 2,
+    "priority": 98,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-099",
+    "type": "fitness",
+    "title": "Deload Readiness Check",
+    "details": "Deload Readiness Check is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 99,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Elyx Gym",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-100",
+    "type": "medication",
+    "title": "Weekly Hydration-Supplement Review",
+    "details": "Weekly Hydration-Supplement Review supports medication, supplement, or monitoring adherence and gives the care team reliable longitudinal data.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 8,
+    "priority": 100,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Confirm dose and timing",
+      "Log completion"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-112"
+    ],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence",
+      "side-effects"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-101",
+    "type": "food",
+    "title": "Monthly Nutrition Scorecard",
+    "details": "Monthly Nutrition Scorecard is a practical nutrition behavior designed to preserve protein, fiber, hydration, and adherence during normal and travel days.",
+    "frequency": {
+      "count": 1,
+      "period": "month"
+    },
+    "durationMinutes": 20,
+    "priority": 101,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Review meal context",
+      "Log completion after the meal"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-114"
+    ],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-102",
+    "type": "fitness",
+    "title": "Step Count Floor",
+    "details": "Step Count Floor is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
+    "frequency": {
+      "count": 1,
+      "period": "day"
+    },
+    "durationMinutes": 5,
+    "priority": 102,
+    "facilitatorLabel": "Self / trainer as needed",
+    "locations": [
+      "Home",
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Check readiness score",
+      "Hydrate before starting"
+    ],
+    "resources": [],
+    "backupActivityIds": [
+      "act-103"
+    ],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "isBackupOnly": false
+  },
+  {
+    "id": "act-103",
+    "type": "fitness",
+    "title": "Remote Brisk Walk Fallback",
+    "details": "Remote Brisk Walk Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 35,
+    "priority": 103,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Outdoor",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "walk-minutes",
+      "steps"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-104",
+    "type": "fitness",
+    "title": "No-Equipment Strength Fallback",
+    "details": "No-Equipment Strength Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 30,
+    "priority": 104,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "rounds-completed",
+      "session-rpe"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-105",
+    "type": "fitness",
+    "title": "Easy Mobility Fallback",
+    "details": "Easy Mobility Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 105,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "mobility-minutes",
+      "stiffness-score"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-106",
+    "type": "fitness",
+    "title": "Desk Reset Fallback",
+    "details": "Desk Reset Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 5,
+    "priority": 106,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Office",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the same-type fallback when feasible; otherwise resume at the next planned session without doubling volume.",
+    "metrics": [
+      "reset-completion"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-107",
+    "type": "therapy",
+    "title": "Home Rehab Fallback",
+    "details": "Home Rehab Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 20,
+    "priority": 107,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "pain-score",
+      "rehab-minutes"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-108",
+    "type": "therapy",
+    "title": "Breathwork Recovery Fallback",
+    "details": "Breathwork Recovery Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 108,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "breathing-minutes",
+      "stress-score"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-109",
+    "type": "therapy",
+    "title": "Recovery Journal Fallback",
+    "details": "Recovery Journal Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 109,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, complete the home recovery fallback and keep intensity conservative until the next session.",
+    "metrics": [
+      "readiness-score",
+      "soreness-score"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-110",
+    "type": "consultation",
+    "title": "Async Physician Review Fallback",
+    "details": "Async Physician Review Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 15,
+    "priority": 110,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Submit concise context and latest metrics"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "questions-submitted",
+      "care-team-response"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-111",
+    "type": "consultation",
+    "title": "Care Team Summary Fallback",
+    "details": "Care Team Summary Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 111,
+    "facilitatorLabel": "Care team",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Submit concise context and latest metrics"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, send the key notes asynchronously and rebook the next available care-team slot.",
+    "metrics": [
+      "summary-submitted"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-112",
+    "type": "medication",
+    "title": "Adherence Log Fallback",
+    "details": "Adherence Log Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 3,
+    "priority": 112,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "adherence-log-complete"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-113",
+    "type": "medication",
+    "title": "Pharmacy Message Fallback",
+    "details": "Pharmacy Message Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 5,
+    "priority": 113,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Remote"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If missed, do not double the next dose; log the miss and resume the normal schedule unless clinician instructions say otherwise.",
+    "metrics": [
+      "message-sent",
+      "days-of-supply"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-114",
+    "type": "food",
+    "title": "Travel Protein Plate Fallback",
+    "details": "Travel Protein Plate Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 114,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Restaurant",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "meal-adherence"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-115",
+    "type": "food",
+    "title": "Pantry Meal Fallback",
+    "details": "Pantry Meal Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 10,
+    "priority": 115,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "protein-grams",
+      "fiber-grams"
+    ],
+    "isBackupOnly": true
+  },
+  {
+    "id": "act-116",
+    "type": "food",
+    "title": "Hydration Prompt Fallback",
+    "details": "Hydration Prompt Fallback is a no-resource same-type fallback used when travel, equipment, or clinician availability blocks the preferred activity.",
+    "frequency": {
+      "count": 1,
+      "period": "week"
+    },
+    "durationMinutes": 2,
+    "priority": 116,
+    "facilitatorLabel": "Self",
+    "locations": [
+      "Home",
+      "Hotel",
+      "Office"
+    ],
+    "canBeRemote": true,
+    "prep": [
+      "Use the simplest available setup"
+    ],
+    "resources": [],
+    "backupActivityIds": [],
+    "skipAdjustment": "If skipped, use the travel or pantry fallback and return to the next planned meal without compensatory restriction.",
+    "metrics": [
+      "fluid-liters",
+      "habit-check"
+    ],
+    "isBackupOnly": true
+  }
+]

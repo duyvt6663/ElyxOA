@@ -215,13 +215,30 @@ Driven + verified on a local dev server; acceptance A1–A6 → 6/6, 26 unit tes
 - *Orphan:* `src/components/OccurrenceCard.tsx` is no longer imported (DayCell/AgendaList/DayDetail
   all moved to pills/timeline). Left in place (pre-existing component); safe to delete later.
 
+## Review pass 2 (2026-05-31) — fresh hands-on audit + fixes
+
+Drove every surface again (desktop + mobile, 0 console errors). Fixes shipped this pass:
+- **#3 (partial):** staggered weekly expansion (per-activity weekday offset — Monday skips
+  342 → 20) + consultations may overlap `work` (member steps out for an appointment), so all
+  consultations now schedule (act-003 cardiology S 0 → 2, Jun skip preserved). Never-scheduled
+  activities 50 → 38; the remainder is genuine fitness/therapy capacity (more blocking workouts
+  than focused slots around a 9-5 + family) → honest substitution to remote walks.
+- **A** legible `B`/`X` outcome glyphs on calendar pills (was illegible ⟳/✕).
+- **B** one-item "bundles" render as the raw action.
+- **C** Trace dedupes identical failed constraints with `(×N)` (cardiology skip 7 → 2 lines).
+- **D** "HH:MM ×N" timeline groups hint their content ("· N sub").
+- **E** Actions tab 11 → 7 columns + scheduling **outcome (S·B·X)** column + sticky header.
+- **F** mobile collapses status/type filters behind a "Filters" toggle (month stays visible).
+- **G** dropped the redundant Legend row. (`Legend.tsx` now orphaned, left in place.)
+
 ## Still open (tracked)
-- **#3** Monday weekly pile-up (scheduling quality) — stagger weekly expansion across the week.
+- **#3 (remainder)** fitness/therapy capacity — ~38 activities can't all fit the limited focused
+  slots; they substitute to remote walks. Genuinely needs either lighter member busy blocks or a
+  tier rework. The Trace explains each honestly.
 - **#4** Trace whitespace for short/skipped traces.
 - **#8 (starter scope)** explicit selected-vs-global chat starters.
 - **#11 (optional)** LLM label refinement for bundles (`generate:bundles` → `calendar-bundles.json`);
   deterministic labels ship today.
-- **#12** ⟳ glyph polish.
 
 ## Bundle pass (2026-05-31) — addressed #10, #11
 

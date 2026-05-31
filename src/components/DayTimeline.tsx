@@ -175,14 +175,30 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
   const hours: number[] = [];
   for (let h = 6; h <= 22; h++) hours.push(h);
 
-  // Chronological list rows: bundles + slot-groups + singles, sorted by start.
-  // List rows: SEMANTIC bundles stay collapsed (named + timestamped); everything else (monitoring,
-  // substituted, blocking) lists INDIVIDUALLY — they're heterogeneous and not nameable as one
-  // bundle, so a bland "07:30 ×9" helps no one. Merge + sort by start time.
-  const listRows: Array<{ sort: number; bundle: Entry | null; occ: ScheduledOccurrence | null }> = [
-    ...entries.filter((e) => e.kind === 'bundle').map((e) => ({ sort: e.startMin, bundle: e, occ: null })),
-    ...loose.map((o) => ({ sort: toMin(o.startTime)!, bundle: null as Entry | null, occ: o })),
-  ].sort((a, b) => a.sort - b.sort);
+  // 018: group the list by START TIME → two-level hierarchy. The time appears ONCE as a header;
+  // under it: semantic bundles (collapsed), then individual scheduled rows, then a distinct
+  // "substituted" sub-group. Rows drop their (now-redundant) per-row timestamp.
+  interface TimeGroup {
+    bundles: Entry[];
+    scheduled: ScheduledOccurrence[];
+    substituted: ScheduledOccurrence[];
+  }
+  const timeGroups = new Map<string, TimeGroup>();
+  const groupFor = (t: string): TimeGroup => {
+    let g = timeGroups.get(t);
+    if (!g) {
+      g = { bundles: [], scheduled: [], substituted: [] };
+      timeGroups.set(t, g);
+    }
+    return g;
+  };
+  for (const e of entries.filter((e) => e.kind === 'bundle')) groupFor(e.items[0]!.startTime!).bundles.push(e);
+  for (const o of loose) {
+    const g = groupFor(o.startTime!);
+    if (o.status === 'substituted') g.substituted.push(o);
+    else g.scheduled.push(o);
+  }
+  const sortedTimes = [...timeGroups.keys()].sort();
 
   return (
     <div>
@@ -240,36 +256,56 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
       {timed.length > 0 && (
         <div className="mt-3">
           <div className="mb-1 text-xs font-medium text-gray-500">Scheduled actions ({timed.length})</div>
-          <ul className="flex flex-col gap-0.5">
-            {listRows.map((r) => {
-              if (!r.bundle) return <ActionRow key={r.occ!.id} occ={r.occ!} onSelect={onSelect} />;
-              const e = r.bundle;
-              const isOpen = openEntries.has(e.key);
+          <div className="flex flex-col gap-2">
+            {sortedTimes.map((t) => {
+              const g = timeGroups.get(t)!;
               return (
-                <li key={e.key}>
-                  <button
-                    type="button"
-                    onClick={() => toggle(e.key)}
-                    className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
-                  >
-                    <span className="w-3 shrink-0 text-center text-gray-400">{isOpen ? '▾' : '▸'}</span>
-                    <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[e.type]}`} />
-                    <span className="font-mono text-gray-500">{e.items[0]!.startTime}</span>
-                    <span className="font-medium">
-                      {e.items[0]!.displayBundleLabel} ×{e.items.length}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <ul className="ml-3 border-l border-gray-200 pl-2">
-                      {e.items.map((o) => (
-                        <ActionRow key={o.id} occ={o} onSelect={onSelect} nested />
-                      ))}
-                    </ul>
-                  )}
-                </li>
+                <div key={t}>
+                  <div className="font-mono text-[11px] font-medium text-gray-400">{t}</div>
+                  <ul className="flex flex-col gap-0.5 pl-2">
+                    {g.bundles.map((e) => {
+                      const isOpen = openEntries.has(e.key);
+                      return (
+                        <li key={e.key}>
+                          <button
+                            type="button"
+                            onClick={() => toggle(e.key)}
+                            className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
+                          >
+                            <span className="w-3 shrink-0 text-center text-gray-400">{isOpen ? '▾' : '▸'}</span>
+                            <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[e.type]}`} />
+                            <span className="font-medium">
+                              {e.items[0]!.displayBundleLabel} ×{e.items.length}
+                            </span>
+                          </button>
+                          {isOpen && (
+                            <ul className="ml-4 border-l border-gray-200 pl-3">
+                              {e.items.map((o) => (
+                                <ActionRow key={o.id} occ={o} onSelect={onSelect} />
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
+                    {g.scheduled.map((o) => (
+                      <ActionRow key={o.id} occ={o} onSelect={onSelect} />
+                    ))}
+                    {g.substituted.length > 0 && (
+                      <li>
+                        <div className="px-1.5 text-[10px] text-amber-600">↳ substituted ({g.substituted.length})</div>
+                        <ul className="ml-2 border-l border-amber-200 pl-2">
+                          {g.substituted.map((o) => (
+                            <ActionRow key={o.id} occ={o} onSelect={onSelect} variant="substituted" />
+                          ))}
+                        </ul>
+                      </li>
+                    )}
+                  </ul>
+                </div>
               );
             })}
-          </ul>
+          </div>
         </div>
       )}
 
@@ -294,33 +330,34 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
   );
 }
 
+/**
+ * 018: a single action row inside a time group. The time lives in the group header, so rows show
+ * no per-row timestamp. variant='substituted' tints amber + prefixes ↳ + shows "← source" so
+ * adaptations are visibly distinct from scheduled actions.
+ */
 function ActionRow({
   occ,
   onSelect,
-  nested,
+  variant = 'scheduled',
 }: {
   occ: ScheduledOccurrence;
   onSelect?: (o: ScheduledOccurrence) => void;
-  /** Inside a bundle's expansion (already indented), so skip the leading chevron-width spacer. */
-  nested?: boolean;
+  variant?: 'scheduled' | 'substituted';
 }) {
+  const isSub = variant === 'substituted';
   return (
     <li>
       <button
         type="button"
         onClick={() => onSelect?.(occ)}
-        className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
+        className={`flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100 ${
+          isSub ? 'bg-amber-50' : ''
+        }`}
       >
-        {/* 016 §2: spacer matching the bundle toggle's chevron so single rows align by time column. */}
-        {!nested && <span className="w-3 shrink-0" />}
+        {isSub && <span className="shrink-0 text-amber-600">↳</span>}
         <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[occ.type]}`} />
-        <span className="font-mono text-gray-500">{occ.startTime}</span>
         <span className="truncate">{occ.title}</span>
-        {occ.status === 'substituted' && (
-          <span className="shrink-0 text-amber-600">
-            {occ.sourceTitle ? <span className="text-gray-400">← {occ.sourceTitle}</span> : 'sub'}
-          </span>
-        )}
+        {isSub && occ.sourceTitle && <span className="shrink-0 text-gray-400">← {occ.sourceTitle}</span>}
         {occ.outsidePreferredWindow && <span className="text-amber-500" title="outside preferred window">◷</span>}
       </button>
     </li>

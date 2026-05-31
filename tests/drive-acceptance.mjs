@@ -98,8 +98,13 @@ async function runA5(page) {
   await cell.waitFor({ timeout: 8000 });
   await cell.click();
   await page.waitForTimeout(1200); // let the DayDetail scroll-into-view animation settle
-  // Select via a real action row (has a mono time) — not a bundle/group toggle.
-  const action = page.locator('aside li button').filter({ has: page.locator('span.font-mono') }).first();
+  // Select via a real leaf action row (type-dot, no chevron) — not a bundle/group toggle.
+  // 018: the time moved to the group header, so rows no longer carry a mono timestamp.
+  const action = page
+    .locator('aside li button')
+    .filter({ has: page.locator('span.rounded-full') })
+    .filter({ hasNot: page.locator('span.w-3') })
+    .first();
   await action.waitFor({ timeout: 5000 });
   await action.click({ force: true });
   await page.waitForTimeout(300);

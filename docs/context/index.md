@@ -64,7 +64,7 @@ gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallba
   scripts/          generate-availability.mjs (015: LLM weekly pattern → 92-day expansion;
                     npm run generate:availability; deterministic fallback w/o key).
   tests/            drive-acceptance.mjs (Playwright A1-A5; A4 hits live LLM when key present).
-  docs/             DEPLOY.md, prompts/, backlog/ (007-010, 014-015), archive/ (001-006, 011-013), context/.
+  docs/             DEPLOY.md, prompts/, backlog/ (active 019), archive/ (001-018), context/.
   .env.local        OPENAI_API_KEY (gitignored via .env*; mode 600).
   README.md         reviewer entry point with hosted-URL placeholder + 6-item assignment checklist.
 
@@ -93,16 +93,22 @@ example: `src/lib/scheduler.ts` (algorithm) and `src/components/CalendarView.tsx
 
 # 6. backlog state
 
-**Backlog is empty — all 16 plans archived (001-016).** See `docs/archive/`. Highlights:
-007 prompts+README · 008 deploy (live at https://elyx-oa.vercel.app/) · 015 temporal
-availability + scheduler · 016 temporal UI/UX audit (closed: duplicate-id fix, month-cell
-B/X count pills, DayTimeline slot-grouping + display bundles, scheduler-emitted Priority
-off-window, temporal ImportPanel rerun, mobile AgendaList density + link nav, substituted
-`← source` labels, Trace dedup + Source panel, weekly-stagger + consultation work-overlap,
-and **the capacity fix** — lightening the member busy fixture cut skip rate 4.5% → 0.2% and
-never-scheduled activities 38 → 3 while preserving the June cardiology + travel demos).
+**Active backlog:** `019-contextual-chat-agent-workspace.md` (Cursor/Claude-CLI-style visible
+chat contexts, `@` refs, navigation actions, and validated draft schedule/travel edits).
+
+Archived plans 001-018 live in `docs/archive/`. Highlights: 007 prompts+README · 008 deploy
+(live at https://elyx-oa.vercel.app/) · 015 temporal availability + scheduler · 016 temporal
+UI/UX audit (closed: duplicate-id fix, month-cell B/X count pills, DayTimeline slot-grouping +
+display bundles, scheduler-emitted Priority off-window, temporal ImportPanel rerun, mobile
+AgendaList density + link nav, substituted `← source` labels, Trace dedup + Source panel,
+weekly-stagger + consultation work-overlap, and **the capacity fix** — lightening the member busy
+fixture cut skip rate 4.5% → 0.2% and never-scheduled activities 38 → 3 while preserving the June
+cardiology + travel demos) · 017 merged Actions + Priority into one sortable **Activities** tab
+(5 tabs total) · 018 reworked the DayTimeline action list into a **time-grouped hierarchy**
+(one HH:MM header per group, no per-row timestamp, collapsible bundles, and a distinct amber
+`↳ substituted (N)` sub-group).
 
 The take-home is **live + fully UI/UX-verified**. 33 unit tests, 6/6 Playwright acceptance,
 `npm run build` static (`/` ○, `/api/chat` ƒ), lint clean, 0 console errors. Offline data
 regenerators: `generate:availability`, `generate:hints`, `generate:bundles` (each deterministic
-without a key). No open backlog items.
+without a key).

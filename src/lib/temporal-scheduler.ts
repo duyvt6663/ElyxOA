@@ -280,6 +280,18 @@ const MOVE_RADIUS: Record<Activity['frequency']['period'], number> = {
   year: 30,
 };
 
+/**
+ * 016 §3 — deterministic per-activity weekday stagger (0-6 days). expandFrequency pins every
+ * weekly activity's base day to Monday, so ~30 weekly actions pile on Mondays and the tier-5
+ * ones (breathwork/recovery) never win the scarce evening slot. Shifting each weekly activity's
+ * generated dates by a stable hash spreads them across the week before scoring/movement.
+ */
+function staggerOffset(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 7;
+  return h;
+}
+
 function candidateDays(activity: Activity, genDate: string, windowStart: string, windowEnd: string): string[] {
   const radius = MOVE_RADIUS[activity.frequency.period];
   const out: string[] = [];
@@ -359,10 +371,15 @@ function evaluateCandidates(
       // HARD: member busy overlap. Blocking actions avoid all blocksScheduling blocks;
       // quick actions only avoid sleep (so they stay in waking hours but may coincide with
       // work/commute/meal/travel — taking a pill during your commute is fine).
+      // 016 §3: consultations are appointments the member steps OUT of work for, so they may
+      // overlap a 'work' block (otherwise business hours == work hours and consults never fit).
       let blocked = false;
       for (const b of busy) {
         if (!overlaps(startMin, endMin, b.startMin, b.endMin)) continue;
-        const hard = candBlocking ? b.blocksScheduling : b.category === 'sleep';
+        let hard: boolean;
+        if (!candBlocking) hard = b.category === 'sleep';
+        else if (activity.type === 'consultation' && b.category === 'work') hard = false;
+        else hard = b.blocksScheduling;
         if (hard) {
           pushFail({ kind: 'memberBusy', detail: `${minToTime(startMin)} overlaps ${b.title} (${b.category})` });
           blocked = true;
@@ -671,7 +688,11 @@ export function scheduleTemporal(
   for (const activity of activities) {
     if (activity.isBackupOnly) continue;
     const tier = queueTier(activity, resolve(activity).policy);
-    for (const genDate of expandFrequency(activity, availability.windowStart, availability.windowEnd)) {
+    // 016 §3: spread weekly activities across the week so they don't all pile on Monday.
+    const offset = activity.frequency.period === 'week' ? staggerOffset(activity.id) : 0;
+    for (const baseDate of expandFrequency(activity, availability.windowStart, availability.windowEnd)) {
+      const genDate = offset ? addDaysYMD(baseDate, offset) : baseDate;
+      if (genDate < availability.windowStart || genDate > availability.windowEnd) continue;
       slots.push({ activity, genDate, tier });
     }
   }

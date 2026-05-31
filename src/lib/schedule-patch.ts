@@ -20,6 +20,7 @@ import type {
   ActivityTemporalPolicy,
   LocalTime,
   MemberBusyBlock,
+  TravelPlan,
 } from './types';
 import { getDefaultTemporalPolicy } from './temporal-policy';
 
@@ -45,7 +46,10 @@ export type SchedulePatch =
   | { kind: 'setTemporalPolicy'; activityId: string; window?: TimeWindow; anchor?: ActivityTemporalPolicy['anchor'] }
   | { kind: 'addBusyBlock'; date: string; startTime: string; endTime: string; title: string; category: BusyCategory }
   | { kind: 'removeBusyBlock'; busyBlockId: string; date?: string }
-  | { kind: 'editTravelWindow'; travelId: string; startDate: string; endDate: string };
+  | { kind: 'editTravelWindow'; travelId: string; startDate: string; endDate: string }
+  // adds a NEW trip to any destination; the member is away those days, so the scheduler reruns and
+  // non-remote actions on the trip days fall back to a remote alternative or get skipped.
+  | { kind: 'addTravelWindow'; destination: string; startDate: string; endDate: string; timeZone?: string };
 
 export interface PatchedInputs {
   activities: Activity[];
@@ -70,6 +74,11 @@ export function validatePatch(patch: SchedulePatch, activities: Activity[], avai
       return null;
     case 'editTravelWindow':
       if (!availability.travel.some((t) => t.id === patch.travelId)) return `Unknown travel window "${patch.travelId}".`;
+      if (!DATE_RE.test(patch.startDate) || !DATE_RE.test(patch.endDate)) return 'Dates must be YYYY-MM-DD.';
+      if (patch.startDate > patch.endDate) return 'startDate must be on or before endDate.';
+      return null;
+    case 'addTravelWindow':
+      if (!patch.destination.trim()) return 'Specify a travel destination.';
       if (!DATE_RE.test(patch.startDate) || !DATE_RE.test(patch.endDate)) return 'Dates must be YYYY-MM-DD.';
       if (patch.startDate > patch.endDate) return 'startDate must be on or before endDate.';
       return null;
@@ -129,6 +138,16 @@ export function applyPatchToInputs(
       );
       return { activities, availability: { ...availability, travel: nextTravel } };
     }
+    case 'addTravelWindow': {
+      const slug = patch.destination.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'trip';
+      const plan: TravelPlan = {
+        id: `travel-draft-${slug}-${patch.startDate}`,
+        destination: patch.destination,
+        ...(patch.timeZone ? { timeZone: patch.timeZone } : {}),
+        blocked: [{ start: patch.startDate, end: patch.endDate }],
+      };
+      return { activities, availability: { ...availability, travel: [...availability.travel, plan] } };
+    }
   }
 }
 
@@ -150,6 +169,8 @@ export function describePatch(patch: SchedulePatch, activities: Activity[], avai
       const dest = availability.travel.find((t) => t.id === patch.travelId)?.destination ?? patch.travelId;
       return `Set ${dest} travel to ${patch.startDate} → ${patch.endDate}`;
     }
+    case 'addTravelWindow':
+      return `Add ${patch.destination} trip ${patch.startDate} → ${patch.endDate}`;
   }
 }
 

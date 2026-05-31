@@ -117,6 +117,23 @@ const editTools = {
     inputSchema: z.object({ travelId: z.string(), startDate: z.string(), endDate: z.string() }),
     execute: async () => ({ acknowledged: true as const }),
   }),
+  addTravelWindow: tool({
+    description:
+      'Propose scheduling a NEW trip to ANY destination (e.g. "add a trip to Paris Jul 10-15", ' +
+      '"plan a week in Bali next month"). The member is away those days, so on Apply the scheduler ' +
+      'reruns and reschedules the trip days: remote-capable actions stay (often as a remote fallback), ' +
+      'location-bound ones get substituted or skipped. Provide the destination, startDate and endDate ' +
+      '(YYYY-MM-DD, inside the Jun–Aug 2026 plan window), and the destination IANA timeZone when you ' +
+      'know it (e.g. Paris → Europe/Paris, Bali → Asia/Makassar) so the offset is annotated. This is a ' +
+      'DRAFT the user must Apply — never claim it is applied.',
+    inputSchema: z.object({
+      destination: z.string(),
+      startDate: z.string(),
+      endDate: z.string(),
+      timeZone: z.string().optional(),
+    }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
 };
 
 interface ChatRequestBody {

@@ -17,6 +17,8 @@
 // A12 (023 + follow-up): clicking a calendar action shows an inline detail card (no tab jump);
 //   its "View full trace" button is the opt-in path to the Trace "About this action" block.
 // A13 (023): a substituted action's Trace shows the fallback education + "Original plan".
+// A14 (travel tool): asking to add a trip makes the assistant call addTravelWindow → a draft the
+//   user can Apply, rescheduling the trip days. Needs a key; skipped without one.
 
 import { chromium } from 'playwright';
 import { mkdirSync, readFileSync } from 'node:fs';
@@ -287,6 +289,31 @@ async function runA13(page) {
   record('A13', ok, ok ? 'fallback + original plan shown' : 'substituted education not distinguished');
 }
 
+// A14 (travel tool): the assistant calls addTravelWindow when asked to add a trip; a draft preview
+// appears (and Apply reschedules). Live LLM — skipped without a key, like A5.
+async function runA14(page) {
+  if (!process.env.OPENAI_API_KEY) {
+    console.log('A14 SKIP — no OPENAI_API_KEY');
+    results.push({ name: 'A14', ok: true, detail: 'skipped (no API key)' });
+    return;
+  }
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  const ta = page.locator('textarea:visible').first();
+  await ta.click();
+  await ta.fill('Add a trip to Paris from July 6 to July 10, 2026 and reschedule those days.');
+  await ta.press('Enter');
+  let ok = false;
+  const deadline = Date.now() + 30000;
+  while (Date.now() < deadline) {
+    const body = await page.locator('section').first().innerText();
+    if (/Add Paris trip 2026-07-06/i.test(body) || (/Paris/i.test(body) && /\bApply\b/.test(body))) { ok = true; break; }
+    await page.waitForTimeout(700);
+  }
+  await page.screenshot({ path: `${SHOTS}/A14.png` });
+  record('A14', ok, ok ? 'addTravelWindow draft shown' : 'no travel draft within 30s');
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true });
   const ctx = await browser.newContext();
@@ -307,6 +334,7 @@ async function main() {
     ['A11', runA11],
     ['A12', runA12],
     ['A13', runA13],
+    ['A14', runA14],
   ]) {
     try {
       await runner(page);

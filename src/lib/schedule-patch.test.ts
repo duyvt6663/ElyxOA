@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { applyPatchToInputs, validatePatch, diffResults, describePatch, type SchedulePatch } from './schedule-patch';
+import { scheduleTemporal } from './temporal-scheduler';
 import type { Activity, AvailabilityBundle, ScheduleResult, ScheduledOccurrence } from './types';
+import activitiesData from '../data/activities.json';
+import availabilityData from '../data/availability.json';
 
 const act = (over: Partial<Activity>): Activity => ({
   id: 'act-1',
@@ -93,6 +96,15 @@ describe('validatePatch', () => {
   it('accepts a valid editTravelWindow', () => {
     expect(validatePatch({ kind: 'editTravelWindow', travelId: 'tr-1', startDate: '2026-06-22', endDate: '2026-06-30' }, acts, avRich)).toBeNull();
   });
+  it('rejects addTravelWindow with an empty destination', () => {
+    expect(validatePatch({ kind: 'addTravelWindow', destination: '  ', startDate: '2026-07-10', endDate: '2026-07-15' }, acts, av)).toMatch(/destination/i);
+  });
+  it('rejects addTravelWindow with inverted dates', () => {
+    expect(validatePatch({ kind: 'addTravelWindow', destination: 'Paris', startDate: '2026-07-15', endDate: '2026-07-10' }, acts, av)).toMatch(/on or before/);
+  });
+  it('accepts a valid addTravelWindow', () => {
+    expect(validatePatch({ kind: 'addTravelWindow', destination: 'Paris', startDate: '2026-07-10', endDate: '2026-07-15', timeZone: 'Europe/Paris' }, acts, av)).toBeNull();
+  });
 });
 
 describe('applyPatchToInputs', () => {
@@ -125,6 +137,16 @@ describe('applyPatchToInputs', () => {
   it('editTravelWindow updates the blocked range', () => {
     const { availability } = applyPatchToInputs({ kind: 'editTravelWindow', travelId: 'tr-1', startDate: '2026-06-22', endDate: '2026-06-30' }, [], avRich);
     expect(availability.travel[0].blocked).toEqual([{ start: '2026-06-22', end: '2026-06-30' }]);
+  });
+
+  it('addTravelWindow appends a new trip (generated id + timezone) without mutating the original', () => {
+    const { availability } = applyPatchToInputs({ kind: 'addTravelWindow', destination: 'Paris', startDate: '2026-07-10', endDate: '2026-07-15', timeZone: 'Europe/Paris' }, [], avRich);
+    expect(availability.travel).toHaveLength(2); // existing Singapore + new Paris
+    const paris = availability.travel.find((t) => t.destination === 'Paris')!;
+    expect(paris.id).toBe('travel-draft-paris-2026-07-10');
+    expect(paris.timeZone).toBe('Europe/Paris');
+    expect(paris.blocked).toEqual([{ start: '2026-07-10', end: '2026-07-15' }]);
+    expect(avRich.travel).toHaveLength(1); // input not mutated
   });
 });
 
@@ -165,5 +187,28 @@ describe('describePatch', () => {
   });
   it('describes a travel edit with the destination', () => {
     expect(describePatch({ kind: 'editTravelWindow', travelId: 'tr-1', startDate: '2026-06-22', endDate: '2026-06-30' }, [], avRich)).toMatch(/Singapore.*2026-06-30/);
+  });
+  it('describes a new trip with the destination + dates', () => {
+    expect(describePatch({ kind: 'addTravelWindow', destination: 'Paris', startDate: '2026-07-10', endDate: '2026-07-15' }, [], av)).toMatch(/Add Paris.*2026-07-10.*2026-07-15/);
+  });
+});
+
+// End-to-end: a new trip reschedules its days. Uses the real fixtures + the temporal scheduler to
+// prove that adding travel forces location-bound actions to fall back (substitute) or skip.
+describe('addTravelWindow reschedules the trip days', () => {
+  const activities = activitiesData as unknown as Activity[];
+  const availability = availabilityData as unknown as AvailabilityBundle;
+
+  it('increases adaptations (substituted/skipped) after adding a trip to a previously trip-free week', () => {
+    const baseline = scheduleTemporal(activities, availability).result;
+    // 2026-07-06..2026-07-10 is a Mon–Fri with no existing trip (trips are Jun 22–29 + Aug 10–14).
+    const patched = applyPatchToInputs(
+      { kind: 'addTravelWindow', destination: 'Paris', startDate: '2026-07-06', endDate: '2026-07-10', timeZone: 'Europe/Paris' },
+      activities,
+      availability,
+    );
+    const after = scheduleTemporal(patched.activities, patched.availability).result;
+    const adapt = (r: ScheduleResult) => r.occurrences.filter((o) => o.status !== 'scheduled').length;
+    expect(adapt(after)).toBeGreaterThan(adapt(baseline));
   });
 });

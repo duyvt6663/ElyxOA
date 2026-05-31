@@ -52,6 +52,15 @@ export function parseSchedulePatch(name: string, input: unknown): SchedulePatch 
     case 'editTravelWindow':
       if (![a.travelId, a.startDate, a.endDate].every((v) => typeof v === 'string')) return null;
       return { kind: 'editTravelWindow', travelId: a.travelId as string, startDate: a.startDate as string, endDate: a.endDate as string };
+    case 'addTravelWindow':
+      if (![a.destination, a.startDate, a.endDate].every((v) => typeof v === 'string')) return null;
+      return {
+        kind: 'addTravelWindow',
+        destination: a.destination as string,
+        startDate: a.startDate as string,
+        endDate: a.endDate as string,
+        timeZone: str(a.timeZone),
+      };
     default:
       return null;
   }

@@ -13,11 +13,14 @@ gated on the app being publicly hosted.
 
 - **Stack:** Next.js (App Router) + TypeScript, Tailwind, Vitest. Node 22 + npm. TS strict.
   ESLint via `next lint`, no Prettier. No backend/database.
-- **Scheduler is runtime-agnostic**: pure deterministic `schedule(activities, availability)
-  -> ScheduleResult` in `src/lib/`. The baseline demo calls it during static route render
-  with direct ES-imported fixtures from `src/data/`; optional future import/edit flows can
-  call the same function client-side without changing the algorithm.
-- **Window:** 2026-06-01 .. 2026-08-31. Whole-day granularity (no intra-day slots).
+- **Scheduler is runtime-agnostic**: pure deterministic functions in `src/lib/`. The live
+  app (015) calls `scheduleTemporal(activities, availability, hints?) -> ScheduleDebugResult`
+  which places actions into `{ date, startTime, endTime }` (30-min slots) around the member's
+  occupied blocks; the original date-only `schedule(...)` / `scheduleWithDiagnostics(...)`
+  remain in `scheduler.ts` for the baseline + reuse (the temporal scheduler reuses 005's
+  `isFeasible` for date-granular resource/travel feasibility). All run during static render.
+- **Window:** 2026-06-01 .. 2026-08-31. 015 adds 30-min local-time placement (was whole-day);
+  `AvailabilityBundle.timeZone` is the home tz, `TimeBlock.timeZone?` overrides per block.
 - **Data:** static JSON committed once (activities 116 records: 102 primary + 14
   backup-only fallbacks; availability with engineered conflicts); prompts/run record
   captured in `docs/prompts/`.
@@ -35,12 +38,16 @@ on a live dev server with a real OpenAI key set (`OPENAI_API_KEY` loaded via `.e
 gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallbacks.
 
   src/app/          layout.tsx, page.tsx (Server Component: schedules at build via
-                    scheduleWithDiagnostics, threads { result, diagnostics } into AllocatorWorkspace),
-                    globals.css; api/chat/route.ts (POST → OpenAI streamText with grounding payload).
-  src/lib/          types.ts (canonical types incl. AllocationTrace/ScheduleDiagnostics),
-                    roles.ts (rich 15/7/7 vocabulary), validate.ts (17 hand-rolled type guards),
-                    scheduler.ts (greedy-by-priority pure function + scheduleWithDiagnostics
-                    sibling emitting full AllocationTrace[]), scheduler.test.ts (18 tests).
+                    scheduleTemporal (015), threads { result, diagnostics } into AllocatorWorkspace),
+                    globals.css; api/chat/route.ts (POST → OpenAI streamText with grounding payload
+                    incl. occupiedBlocks sliced to selected date ±1 day).
+  src/lib/          types.ts (canonical types + 015 temporal: LocalTime/TimeBlock/MemberBusyBlock/
+                    ActivityTemporalPolicy/SchedulingSemanticHints),
+                    roles.ts (rich 15/7/7 vocabulary), validate.ts (hand-rolled guards incl. 015 temporal),
+                    scheduler.ts (date-only greedy + scheduleWithDiagnostics + exported date/isFeasible helpers),
+                    temporal-policy.ts (getDefaultTemporalPolicy by type+title),
+                    temporal-scheduler.ts (015 scheduleTemporal: candidate slots → hard temporal
+                    feasibility → scored allocation → ledgers), {scheduler,temporal-scheduler}.test.ts (24 tests).
                     llm/{config,prompt,rate-limit}.ts (model = gpt-5.3-chat-latest via @ai-sdk/openai;
                     sliding-window per-IP rate-limit; SYSTEM_PROMPT + buildGrounding).
   src/components/   workspace/ — AllocatorWorkspace (selection state + diagnostics threading),
@@ -48,8 +55,12 @@ gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallba
                     with markdown link-button parsing → workspace navigation), WorkspacePanel,
                     TabNav, tabs/{Calendar,ActionList,PriorityQueue,Resources,AllocationTrace,DataImport}Tab.
                     Plus the 006 calendar primitives (CalendarView/MonthGrid/DayCell/DayDetail/
-                    AgendaList/OccurrenceCard/SummaryHeader/FilterBar/Legend) and ImportPanel (009).
-  src/data/         activities.json (116 records), availability.json (complete).
+                    AgendaList/OccurrenceCard/SummaryHeader/FilterBar/Legend) plus DayTimeline (015:
+                    chronological lane, actions interleaved with occupied blocks) and ImportPanel (009).
+  src/data/         activities.json (116 records; 015 temporalPolicy overrides on demo-critical acts),
+                    availability.json (015: timeZone + memberBusy, 23 groups / ~1006 time blocks).
+  scripts/          generate-availability.mjs (015: LLM weekly pattern → 92-day expansion;
+                    npm run generate:availability; deterministic fallback w/o key).
   tests/            drive-acceptance.mjs (Playwright A1-A5; A4 hits live LLM when key present).
   docs/             DEPLOY.md, prompts/, backlog/ (007-010, 014-015), archive/ (001-006, 011-013), context/.
   .env.local        OPENAI_API_KEY (gitignored via .env*; mode 600).
@@ -100,14 +111,17 @@ hoist closed the verification gap) · 011 workspace shell · 012 scheduler diagn
   holding for an architectural decision: §1 calendar density blowout (medication chips
   dominate); §3 Resources axis labels; §4-§6 Trace whitespace / empty-state polish /
   Priority hover; §7-§10 cosmetic; §11 data quirk (Upper Body Strength all-substituted).
-- `015-temporal-availability-and-scheduler.md` — architectural plan for richer member
-  availability, optional LLM-assisted semantic compilation into typed scheduling hints,
-  30-minute local-time placement, temporal scheduling rules, diagnostics for rejected
-  time slots, and UI toggles to show/hide occupied member slots. This is a dedicated
-  robustness pass that supersedes the calendar-density part of 014 if implemented, but
-  it must not block 008 deploy. 015 explicitly preserves the existing travel-substitution
-  demo while making travel days more realistic.
+- `008` — **DEPLOYED**: https://elyx-oa.vercel.app/ (README hosted URL filled). Vercel
+  Git integration on `main`; `OPENAI_API_KEY` set as a project env var for `/api/chat`.
+- `015-temporal-availability-and-scheduler.md` — **IN PROGRESS (live)**. Done: Task 1 data
+  contract + validators; Task 2 `getDefaultTemporalPolicy` + demo overrides; Task 3
+  LLM-generated member busy fixture (`generate:availability`); Task 5 temporal scheduler
+  core (24 tests; real-fixture profile 2900 scheduled / 492 substituted / 166 skipped, 4.7%);
+  Task 7 wired `scheduleTemporal` into the app + calendar density fix + DayTimeline +
+  occupied-slots toggle; Task 8 (partial) Trace shows slot+score + chat temporal grounding.
+  June cardiology skip + Singapore/Tokyo travel adaptation preserved.
+  **Remaining:** Task 4 LLM semantic compiler + `scheduling-hints.json` + `generate:hints`;
+  Task 6 diagnostics provenance/cap polish; Task 8 leftovers (Resources Member lane,
+  Priority time-fields); Task 9 acceptance-suite refresh + prompts/run records.
 
-The take-home is functionally complete at the live-server level. Remaining work: 015
-architectural robustness if chosen, 014/010 polish, and deploy (008 + amend for
-`OPENAI_API_KEY`).
+The take-home is live with the temporal upgrade. Remaining: 015 Tasks 4/6/8-leftovers/9.

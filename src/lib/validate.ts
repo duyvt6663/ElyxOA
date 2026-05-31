@@ -24,11 +24,13 @@ import { ALLIED_HEALTH_ROLES, EQUIPMENT_ROLES, SPECIALIST_ROLES } from './roles'
 import type {
   Activity,
   ActivityTemporalPolicy,
+  ActivityTemporalPolicyHint,
   AllocationAttempt,
   AllocationTrace,
   AlliedHealthAvailability,
   AvailabilityBundle,
   BoundResource,
+  BusyBlockClassification,
   DateRange,
   EquipmentAvailability,
   FailedConstraint,
@@ -40,8 +42,11 @@ import type {
   ScheduleDiagnostics,
   ScheduleResult,
   ScheduledOccurrence,
+  SchedulingSemanticHints,
+  SemanticWarning,
   SpecialistAvailability,
   TemporalAvoidRule,
+  TemporalRuleHint,
   TimeBlock,
   TimeBlockPreference,
   TravelPlan,
@@ -373,4 +378,87 @@ export function isScheduleDebugResult(x: unknown): x is ScheduleDebugResult {
   if (!isScheduleResult(x.result)) return false;
   if (!isScheduleDiagnostics(x.diagnostics)) return false;
   return true;
+}
+
+// === 015: SchedulingSemanticHints guards + reference validation ===
+
+function isConfidence(x: unknown): x is number {
+  return isNum(x) && x >= 0 && x <= 1;
+}
+
+export function isActivityTemporalPolicyHint(x: unknown): x is ActivityTemporalPolicyHint {
+  if (!isObj(x)) return false;
+  if (!isStr(x.activityId) || x.activityId.length === 0) return false;
+  if (!isActivityTemporalPolicy(x.temporalPolicy)) return false;
+  if (!isConfidence(x.confidence)) return false;
+  if (!isStr(x.rationale)) return false;
+  return true;
+}
+
+export function isBusyBlockClassification(x: unknown): x is BusyBlockClassification {
+  if (!isObj(x)) return false;
+  if (!isStr(x.busyBlockId) || x.busyBlockId.length === 0) return false;
+  if (!isStr(x.category) || !MEMBER_BUSY_CATEGORIES.has(x.category)) return false;
+  if (!isBool(x.blocksScheduling) || !isBool(x.visibleByDefault)) return false;
+  if (!isConfidence(x.confidence)) return false;
+  if (!isStr(x.rationale)) return false;
+  return true;
+}
+
+export function isTemporalRuleHint(x: unknown): x is TemporalRuleHint {
+  if (!isObj(x)) return false;
+  if (!isStr(x.id) || x.id.length === 0) return false;
+  if (!isArr(x.appliesToActivityIds) || !x.appliesToActivityIds.every(isStr)) return false;
+  if (!isBool(x.hard)) return false;
+  if (typeof x.avoidAfter !== 'undefined' && (!isArr(x.avoidAfter) || !x.avoidAfter.every(isTemporalAvoidRule))) return false;
+  if (typeof x.avoidBefore !== 'undefined' && (!isArr(x.avoidBefore) || !x.avoidBefore.every(isTemporalAvoidRule))) return false;
+  if (!isStr(x.rationale)) return false;
+  return true;
+}
+
+const WARNING_SEVERITIES = new Set<string>(['info', 'warning', 'error']);
+export function isSemanticWarning(x: unknown): x is SemanticWarning {
+  if (!isObj(x)) return false;
+  if (!isStr(x.severity) || !WARNING_SEVERITIES.has(x.severity)) return false;
+  if (typeof x.targetId !== 'undefined' && !isStr(x.targetId)) return false;
+  if (!isStr(x.message)) return false;
+  return true;
+}
+
+export function isSchedulingSemanticHints(x: unknown): x is SchedulingSemanticHints {
+  if (!isObj(x)) return false;
+  if (!isStr(x.generatedAt)) return false;
+  if (typeof x.model !== 'undefined' && !isStr(x.model)) return false;
+  if (!isArr(x.activityPolicies) || !x.activityPolicies.every(isActivityTemporalPolicyHint)) return false;
+  if (!isArr(x.busyBlockClassifications) || !x.busyBlockClassifications.every(isBusyBlockClassification)) return false;
+  if (!isArr(x.globalRules) || !x.globalRules.every(isTemporalRuleHint)) return false;
+  if (!isArr(x.warnings) || !x.warnings.every(isSemanticWarning)) return false;
+  return true;
+}
+
+/**
+ * 015 — fail-loud staleness check: every activityId / busyBlockId a hint references must
+ * exist in the current fixtures. Returns a list of human-readable errors (empty = valid).
+ * Callers throw at the build-time boundary so a stale scheduling-hints.json breaks the build.
+ */
+export function validateHintReferences(
+  hints: SchedulingSemanticHints,
+  activities: Activity[],
+  availability: AvailabilityBundle,
+): string[] {
+  const activityIds = new Set(activities.map((a) => a.id));
+  const busyIds = new Set(availability.memberBusy.map((m) => m.id));
+  const errors: string[] = [];
+  for (const h of hints.activityPolicies) {
+    if (!activityIds.has(h.activityId)) errors.push(`activityPolicies references unknown activityId "${h.activityId}"`);
+  }
+  for (const c of hints.busyBlockClassifications) {
+    if (!busyIds.has(c.busyBlockId)) errors.push(`busyBlockClassifications references unknown busyBlockId "${c.busyBlockId}"`);
+  }
+  for (const r of hints.globalRules) {
+    for (const id of r.appliesToActivityIds) {
+      if (!activityIds.has(id)) errors.push(`globalRules[${r.id}] references unknown activityId "${id}"`);
+    }
+  }
+  return errors;
 }

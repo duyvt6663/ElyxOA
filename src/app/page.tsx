@@ -26,8 +26,14 @@
 
 import activitiesData from '@/data/activities.json';
 import availabilityData from '@/data/availability.json';
+import schedulingHintsData from '@/data/scheduling-hints.json';
 import { scheduleTemporal } from '@/lib/temporal-scheduler';
-import { isActivity, isAvailabilityBundle } from '@/lib/validate';
+import {
+  isActivity,
+  isAvailabilityBundle,
+  isSchedulingSemanticHints,
+  validateHintReferences,
+} from '@/lib/validate';
 import AllocatorWorkspace from '@/components/workspace/AllocatorWorkspace';
 
 const activities = (activitiesData as unknown[]).map((x, i) => {
@@ -39,9 +45,21 @@ if (!isAvailabilityBundle(availabilityData)) {
 }
 const availability = availabilityData;
 
+// 015: validate the committed LLM hints at the build boundary. Schema failure OR a stale
+// reference (activity/busy-block id that no longer exists) throws here and breaks the build,
+// so scheduling-hints.json can never silently drift out of sync with the fixtures.
+if (!isSchedulingSemanticHints(schedulingHintsData)) {
+  throw new Error('scheduling-hints.json failed schema validation');
+}
+const hintRefErrors = validateHintReferences(schedulingHintsData, activities, availability);
+if (hintRefErrors.length > 0) {
+  throw new Error(`scheduling-hints.json has stale references:\n- ${hintRefErrors.join('\n- ')}`);
+}
+
 // 015: temporal scheduler — places actions into { date, startTime, endTime } around the
-// member's occupied blocks (availability.memberBusy) instead of date-only.
-const { result, diagnostics } = scheduleTemporal(activities, availability);
+// member's occupied blocks (availability.memberBusy). Validated LLM hints supply temporal
+// policies for activities without an explicit override (merge: explicit > hint > default).
+const { result, diagnostics } = scheduleTemporal(activities, availability, schedulingHintsData);
 
 export default function Page() {
   return (

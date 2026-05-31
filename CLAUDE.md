@@ -58,3 +58,25 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 - Read `docs/context/index.md` at the start of every session to understand the project.
 - Update `docs/context/index.md` after large code or document updates, and keep it concise.
+
+## 5. Concurrent, Multi-Party Work
+
+**Multiple people and AI agents edit this SAME working tree at the same time. Never assume a
+change you didn't make is junk.**
+
+At any moment the tree may contain in-progress, untracked, uncommitted work belonging to a
+teammate (a new backlog doc, a new component, scratch files). That a file is "unexpected",
+outside your task's scope, or untracked is NOT evidence it's safe to remove — it is far more
+likely someone else's live work.
+
+- **Touch only the files your current task owns.** Leave everything else exactly as found,
+  even if it looks stray or half-finished.
+- **Never delete or revert what you did not create.** No `rm`, `git clean`, `git checkout --`,
+  `git restore`, or `git reset --hard` on files/paths you didn't author. Untracked files are
+  unrecoverable from git. If something looks wrong, STOP and ask the human — don't "fix" it.
+- **Stage narrowly.** When committing, `git add` only your task's specific files (never `git add
+  -A`/`.`), so you never sweep a teammate's concurrent changes into your commit.
+- A PreToolUse guard (`.claude/hooks/block-dangerous-commands.mjs`, wired in
+  `.claude/settings.json`) blocks the destructive commands above. It's a backstop, not a
+  substitute for the judgment above. If it blocks you, that's the signal to ask a human — not
+  to find a way around it.

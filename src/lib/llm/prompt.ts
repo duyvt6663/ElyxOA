@@ -25,7 +25,7 @@
  *   5. Return GroundingPayload.
  */
 
-import type { Activity, ScheduleResult, AllocationTrace, AvailabilityBundle } from '@/lib/types';
+import type { Activity, ScheduleResult, ScheduledOccurrence, AllocationTrace, AvailabilityBundle } from '@/lib/types';
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -59,9 +59,12 @@ export interface GroundingPayload {
   occupiedBlocks: OccupiedBlock[];
   /** 016 §11 — customer-facing display bundles on the selected date (e.g. "Morning meds": 4). */
   dayBundles: Array<{ label: string; count: number }>;
+  /** 016 §8 — a compact sample of schedule-wide adaptations (substituted/skipped), so global
+   * questions ("what changed during travel?", "show substituted items") have data to answer from. */
+  adaptations: Array<{ date: string; status: ScheduledOccurrence['status']; title: string; reason: string }>;
 }
 
-export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, and occupiedBlocks — never invent facts. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. dayBundles are the customer-facing groupings of the selected day's routine low-risk daily food/medication actions (e.g. "Morning meds": 4) — use them to answer routine/grouping questions. If the selection is empty, ask the user to click an occurrence. When directing the user to the workspace, format links as [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), or [Resources](tab://resources).`;
+export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, occupiedBlocks, dayBundles, and adaptations — never invent facts. SCOPE: the selection is CONTEXT, not necessarily the subject. Answer the user's ACTUAL question — only lean on the selected occurrence's trace when the question is about that occurrence; for schedule-wide questions (travel changes, substituted/skipped items, constrained resources, routines) use scheduleSummary, adaptations, and dayBundles, and do not narrow to the selected occurrence. If the data needed isn't in the snapshot, say so briefly. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. dayBundles are the customer-facing groupings of the selected day's routine low-risk daily food/medication actions (e.g. "Morning meds": 4) — use them to answer routine/grouping questions. If the selection is empty, ask the user to click an occurrence. When directing the user to the workspace, format links as [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), or [Resources](tab://resources).`;
 
 const DAY_MS = 86400000;
 function nearbyDates(date: string | null): Set<string> {
@@ -143,6 +146,24 @@ export function buildGrounding(args: {
   }
   const dayBundles = [...bundleCounts.entries()].map(([label, count]) => ({ label, count }));
 
+  // 016 §8: a small, deterministic sample of schedule-wide adaptations for global questions —
+  // prefer travel-window events, then the earliest substituted/skipped, capped at 12.
+  const TRAVEL_WINDOWS = [
+    ['2026-06-22', '2026-06-29'],
+    ['2026-08-10', '2026-08-14'],
+  ];
+  const inTravel = (d: string) => TRAVEL_WINDOWS.some(([s, e]) => d >= s && d <= e);
+  const adaptationPool = result.occurrences.filter((o) => o.status !== 'scheduled');
+  adaptationPool.sort(
+    (a, b) => Number(inTravel(b.date)) - Number(inTravel(a.date)) || a.date.localeCompare(b.date),
+  );
+  const adaptations = adaptationPool.slice(0, 12).map((o: ScheduledOccurrence) => ({
+    date: o.date,
+    status: o.status,
+    title: o.title,
+    reason: o.reason,
+  }));
+
   return {
     selection,
     trace,
@@ -159,5 +180,6 @@ export function buildGrounding(args: {
     activities: referencedActivities,
     occupiedBlocks,
     dayBundles,
+    adaptations,
   };
 }

@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "vitest run",
     "generate:availability": "node scripts/generate-availability.mjs",
-    "generate:hints": "node scripts/generate-hints.mjs"
+    "generate:hints": "node scripts/generate-hints.mjs",
+    "generate:bundles": "node scripts/generate-bundles.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.67",

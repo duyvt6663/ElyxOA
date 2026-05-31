@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-05-31T00:00:00Z",
+  "model": "gpt-5.3-chat-latest",
+  "labels": {
+    "medication:breakfast": "Morning Medications",
+    "medication:dinner": "Evening Medications",
+    "medication:bedtime": "Bedtime Medications",
+    "medication:any": "Daily Medications",
+    "food:breakfast": "Breakfast Nourishment",
+    "food:lunch": "Lunch Nourishment",
+    "food:dinner": "Dinner Nourishment",
+    "food:any": "Daily Nourishment"
+  }
+}

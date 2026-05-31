@@ -243,21 +243,39 @@ export default function ChatSurface({ selection, result, diagnostics, activities
             <p className="text-gray-500">
               Ask about the schedule, a specific occurrence, or a resource constraint.
             </p>
-            <div className="flex flex-wrap gap-2">
-              {STARTER_CHIPS.map((chip) => {
-                const disabled = chip.requiresSelection && !hasSelection;
-                return (
+            <div>
+              <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">About the schedule</div>
+              <div className="flex flex-wrap gap-2">
+                {STARTER_CHIPS.filter((c) => !c.requiresSelection).map((chip) => (
                   <button
                     key={chip.label}
                     type="button"
-                    disabled={disabled}
+                    onClick={() => onChipClick(chip.label)}
+                    className="px-3 py-1 rounded-full border text-xs bg-white hover:bg-gray-50"
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">
+                About the selected occurrence{hasSelection ? '' : ' (select one first)'}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {STARTER_CHIPS.filter((c) => c.requiresSelection).map((chip) => (
+                  <button
+                    key={chip.label}
+                    type="button"
+                    disabled={!hasSelection}
+                    title={hasSelection ? undefined : 'Select an occurrence in the Calendar/Priority/Resources tab first'}
                     onClick={() => onChipClick(chip.label)}
                     className="px-3 py-1 rounded-full border text-xs bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {chip.label}
                   </button>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         ) : (

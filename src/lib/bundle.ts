@@ -17,6 +17,11 @@
  */
 
 import type { Activity, ActivityTemporalPolicy } from './types';
+import bundlesFixture from '@/data/calendar-bundles.json';
+
+// 016 §11: optional committed label overrides from the LLM pass (generate:bundles). Empty by
+// default → the deterministic map below is used. An explicit labelOverrides arg still wins.
+const FIXTURE_LABELS: Record<string, string> = (bundlesFixture as { labels?: Record<string, string> }).labels ?? {};
 
 /** Member-facing label per `${type}:${anchor}` bucket. */
 const BUNDLE_LABELS: Record<string, string> = {
@@ -59,6 +64,7 @@ export function bundleAssignment(
   const key = `${activity.type}:${anchor}`;
   const label =
     labelOverrides?.[key] ??
+    FIXTURE_LABELS[key] ??
     BUNDLE_LABELS[key] ??
     BUNDLE_LABELS[`${activity.type}:any`] ??
     (activity.type === 'medication' ? 'Daily meds' : 'Daily nutrition');

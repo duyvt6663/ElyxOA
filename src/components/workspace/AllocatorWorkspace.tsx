@@ -78,6 +78,9 @@ export default function AllocatorWorkspace({ result, activities, availability, d
 
   const select = (partial: Partial<WorkspaceSelection>) => {
     setSelection((prev) => ({ ...prev, ...partial }));
+    // 016 §8: a chat link (or any tab change) on mobile must bring the Workspace pane forward,
+    // otherwise the navigation silently happens behind the Chat pane and feels like a no-op.
+    if (partial.activeTab) setMobilePanel('workspace');
   };
 
   const setSchedule = useCallback(

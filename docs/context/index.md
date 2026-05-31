@@ -122,8 +122,11 @@ hoist closed the verification gap) · 011 workspace shell · 012 scheduler diagn
   2900 / 490 / 168 (4.7% skip); June cardiology skip + Singapore/Tokyo travel adaptation preserved.
 - `016-temporal-ui-ux-verification.md` — full post-015 Playwright UI/UX audit. Fixed two severe
   issues (duplicate occurrence ids from movement-window day collisions; month-cell chip flood →
-  per-type count pills with ⟳/✕ badges). Tracks remaining quality/cosmetic items (Monday therapy
-  pile-up, trace whitespace, overlapping-quick-action rendering).
+  per-type count pills with ⟳/✕ badges). A deployed follow-up audit on 2026-05-31 kept tests
+  green but added open gaps: same-slot day-timeline stacks hide many actions, Priority
+  `off-window` counts rederive stale policy semantics, Data imports omit scheduling-hints status,
+  chat starters over-scope to the selected occurrence, and mobile Calendar/navigation density
+  regressed under the temporal fixture.
 
 015 is fully implemented + UI/UX-verified (9 tasks + the 016 audit). 26 unit tests, 6/6
-acceptance, 0 console errors. Remaining items are quality/cosmetic (016 §3–6).
+acceptance, 0 console errors. Remaining items are post-015 robustness/UX work (016 §3–10).

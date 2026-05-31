@@ -98,9 +98,10 @@ async function runA5(page) {
   await cell.waitFor({ timeout: 8000 });
   await cell.click();
   await page.waitForTimeout(1200); // let the DayDetail scroll-into-view animation settle
-  const action = page.locator('aside button[title]').first();
+  // Select via the chronological action list (always selectable, unlike grouped timeline bars).
+  const action = page.locator('aside li button').first();
   await action.waitFor({ timeout: 5000 });
-  await action.click({ force: true }); // bypass the smooth-scroll stability wait
+  await action.click({ force: true });
   await page.waitForTimeout(300);
   const ta = page.locator('textarea:visible').first();
   await ta.click();

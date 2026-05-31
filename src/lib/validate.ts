@@ -285,6 +285,7 @@ export function isScheduledOccurrence(x: unknown): x is ScheduledOccurrence {
   if (typeof x.startTime !== 'undefined' && !isLocalTime(x.startTime)) return false;
   if (typeof x.endTime !== 'undefined' && !isLocalTime(x.endTime)) return false;
   if (typeof x.timeZone !== 'undefined' && !isStr(x.timeZone)) return false;
+  if (typeof x.outsidePreferredWindow !== 'undefined' && !isBool(x.outsidePreferredWindow)) return false;
   if (!isStr(x.status) || !STATUSES.has(x.status)) return false;
   if (!isStr(x.sourceActivityId)) return false;
   if (typeof x.effectiveActivityId !== 'undefined' && !isStr(x.effectiveActivityId)) return false;

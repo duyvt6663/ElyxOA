@@ -54,9 +54,11 @@ import type {
   AvailabilityBundle,
   ScheduleResult,
   ScheduleDiagnostics,
+  SchedulingSemanticHints,
 } from '@/lib/types';
-import { isActivity, isAvailabilityBundle } from '@/lib/validate';
-import { scheduleWithDiagnostics } from '@/lib/scheduler';
+import { isActivity, isAvailabilityBundle, isSchedulingSemanticHints, validateHintReferences } from '@/lib/validate';
+import { scheduleTemporal } from '@/lib/temporal-scheduler';
+import schedulingHints from '@/data/scheduling-hints.json';
 
 interface ImportPanelProps {
   /** Committed-fixture result computed at build time; baseline + reset target. */
@@ -80,6 +82,7 @@ export default function ImportPanel({
   const [importedActivities, setImportedActivities] = useState<Activity[] | null>(null);
   const [importedAvailability, setImportedAvailability] = useState<AvailabilityBundle | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [hintStatus, setHintStatus] = useState<string | null>(null);
 
   async function handleActivitiesFile(file: File): Promise<void> {
     let parsed: unknown;
@@ -138,14 +141,30 @@ export default function ImportPanel({
   function rerun(): void {
     const acts = importedActivities ?? fallbackActivities;
     const av = importedAvailability ?? fallbackAvailability;
-    const next = scheduleWithDiagnostics(acts, av);
+    // 015/016: rerun on the TEMPORAL scheduler (not the date-only one) so imports produce
+    // time-placed occurrences consistent with the rest of the app. Committed hints apply
+    // only if they still validate against this (possibly imported) bundle; else fall back
+    // deterministically. This keeps a stale-reference import honest.
+    const imported = importedActivities !== null || importedAvailability !== null;
+    const hintsOk =
+      isSchedulingSemanticHints(schedulingHints) &&
+      validateHintReferences(schedulingHints as SchedulingSemanticHints, acts, av).length === 0;
+    const next = scheduleTemporal(acts, av, hintsOk ? (schedulingHints as SchedulingSemanticHints) : undefined);
     onScheduleUpdate(next);
+    setHintStatus(
+      hintsOk
+        ? imported
+          ? 'committed hints applied (valid for import)'
+          : 'committed hints applied'
+        : 'imported bundle invalidates committed hints → deterministic fallback policies',
+    );
   }
 
   function reset(): void {
     setImportedActivities(null);
     setImportedAvailability(null);
     setErrors([]);
+    setHintStatus(null);
     onScheduleReset();
   }
 
@@ -199,6 +218,12 @@ export default function ImportPanel({
           Activities: {importedActivities ? 'imported' : 'fixture'} · Availability: {importedAvailability ? 'imported' : 'fixture'}
         </span>
       </div>
+
+      {hintStatus && (
+        <p className="text-xs text-gray-500">
+          Scheduling hints: <span className="font-medium text-gray-700">{hintStatus}</span>
+        </p>
+      )}
 
       {errors.length > 0 && (
         <ul className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700 flex flex-col gap-1">

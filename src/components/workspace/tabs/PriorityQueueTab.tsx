@@ -27,9 +27,6 @@
 import { useMemo } from 'react';
 import type { Activity, ActivityType, ScheduleResult } from '@/lib/types';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
-import { getDefaultTemporalPolicy } from '@/lib/temporal-policy';
-
-const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
 
 export interface PriorityQueueTabProps {
   activities: Activity[];
@@ -62,7 +59,6 @@ export default function PriorityQueueTab({ activities, result, selection: _selec
   );
 
   const counts = useMemo(() => {
-    const byId = new Map(activities.map((a) => [a.id, a]));
     const m = new Map<string, Counts>();
     for (const occ of result.occurrences) {
       const c = m.get(occ.sourceActivityId) ?? {
@@ -73,20 +69,14 @@ export default function PriorityQueueTab({ activities, result, selection: _selec
         firstOccId: null,
       };
       c[occ.status] += 1;
-      if (occ.startTime) {
-        const act = byId.get(occ.sourceActivityId);
-        const policy = act?.temporalPolicy ?? (act ? getDefaultTemporalPolicy(act) : null);
-        if (policy) {
-          const s = toMin(occ.startTime);
-          const inWindow = policy.preferredWindows.some((w) => s >= toMin(w.startTime) && s < toMin(w.endTime));
-          if (!inWindow) c.offWindow += 1;
-        }
-      }
+      // Read the scheduler-emitted flag — do NOT rederive policy semantics in the UI
+      // (the scheduler accounts for hint policies + anchor allowance, which the UI cannot).
+      if (occ.outsidePreferredWindow) c.offWindow += 1;
       if (c.firstOccId === null) c.firstOccId = occ.id;
       m.set(occ.sourceActivityId, c);
     }
     return m;
-  }, [result, activities]);
+  }, [result]);
 
   function onRowClick(activityId: string) {
     const c = counts.get(activityId);

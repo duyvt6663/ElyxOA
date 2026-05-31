@@ -213,6 +213,9 @@ export interface ScheduledOccurrence {
   endTime?: LocalTime;
   /** 015 — which local clock startTime/endTime are in; defaults to AvailabilityBundle.timeZone. */
   timeZone?: string;
+  /** 015 — true when the chosen slot is outside the merged policy's preferred/anchor window
+   * (emitted by the scheduler so UIs don't rederive policy semantics). */
+  outsidePreferredWindow?: boolean;
   status: 'scheduled' | 'substituted' | 'skipped';
   sourceActivityId: string;
   effectiveActivityId?: string;

@@ -84,7 +84,7 @@ export default function CalendarView({ result, memberBusy = [], onSelect }: Cale
         <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} onSelect={onSelect} />
       </div>
       <div className="block md:hidden">
-        <AgendaList occurrences={filtered} month={month} onSelect={onSelect} />
+        <AgendaList occurrences={filtered} month={month} memberBusy={memberBusy} onSelect={onSelect} />
       </div>
     </div>
   );

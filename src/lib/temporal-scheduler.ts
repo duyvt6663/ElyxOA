@@ -299,6 +299,7 @@ interface FeasibleCandidate {
   bound: BoundResource[];
   isRemote: boolean;
   location: string;
+  inPreferred: boolean;
 }
 
 const MAX_FAIL_DETAIL = 8;
@@ -411,8 +412,9 @@ function evaluateCandidates(
       }
 
       // FEASIBLE — score it.
+      const within = inPreferred(startMin, endMin, policy, anchor);
       let score = movedDays * TEMPORAL_SCORE_WEIGHTS.movedPerDay;
-      if (!inPreferred(startMin, endMin, policy, anchor)) {
+      if (!within) {
         score += TEMPORAL_SCORE_WEIGHTS.outsidePreferredWindow;
         pushFail({ kind: 'outsidePreferredWindow', detail: `${minToTime(startMin)} is outside the preferred window` });
       }
@@ -435,6 +437,7 @@ function evaluateCandidates(
         bound: rf.boundResources,
         isRemote: rf.isRemote,
         location: rf.location,
+        inPreferred: within,
       });
     }
   }
@@ -573,6 +576,7 @@ function allocateTemporal(
       occ.startTime = minToTime(best.startMin);
       occ.endTime = minToTime(best.endMin);
       occ.timeZone = availability.timeZone;
+      occ.outsidePreferredWindow = !best.inPreferred;
       // ID derives from the stable due-date (genDate), NOT the placed day: with movement
       // windows two occurrences of the same activity can land on the same day, which would
       // collide if keyed by placed day (duplicate React keys + broken trace lockstep).

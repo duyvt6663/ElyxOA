@@ -31,13 +31,13 @@ const TABS: ReadonlyArray<{ id: TabId; label: string }> = [
 
 export default function TabNav({ activeTab, onChange }: TabNavProps) {
   return (
-    <nav className="flex gap-1 border-b px-2 overflow-x-auto">
+    <nav className="flex gap-0.5 sm:gap-1 border-b px-1 sm:px-2 overflow-x-auto">
       {TABS.map(({ id, label }) => (
         <button
           type="button"
           key={id}
           onClick={() => onChange(id)}
-          className={`px-3 py-2 text-sm whitespace-nowrap ${
+          className={`px-2 sm:px-3 py-2 text-xs sm:text-sm whitespace-nowrap ${
             activeTab === id ? 'bg-gray-900 text-white rounded-t' : 'text-gray-700 hover:bg-gray-100'
           }`}
         >

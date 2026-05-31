@@ -1,28 +1,24 @@
-/**
- * DECISION RECAP — 006 Render Calendar Output
- * - Mobile fallback for MonthGrid: vertical list grouped by week then day.
- * - Same OccurrenceCard component reused in detail variant for readability on small screens.
- * - Skipped occurrences remain DIMMED-BUT-VISIBLE.
- */
+'use client';
 
 /**
- * BEHAVIOR SKETCH
- * 1. Group occurrences by ISO week (Mon-start) -> then by day.
- * 2. For each week, render a header (e.g. "Week of Jun 1").
- * 3. For each day in the week with occurrences, render a day header + OccurrenceCards.
- * 4. (010 #6) When `month` is provided, filter occurrences to that month's date prefix
- *    BEFORE grouping, so the mobile list stays consistent with the MonthGrid switcher.
- * 5. (010 #8) When the filtered list is empty, render a dashed empty-state notice.
+ * DECISION RECAP — 006 Render Calendar Output + 016 §9 mobile density
+ * - Mobile fallback for MonthGrid. 016 §9: rendering an OccurrenceCard per occurrence is
+ *   ~1189 cards for one month at temporal scale — unusable. Instead render one compact
+ *   SUMMARY ROW per day (date + per-type count pills with ⟳/✕ adaptation badges, mirroring
+ *   DayCell), and tap a day to expand its DayTimeline inline. Drill into one day, not 1189 cards.
  */
 
-import type { ScheduledOccurrence } from '@/lib/types';
-import OccurrenceCard from './OccurrenceCard';
+import { useState } from 'react';
+import type { ScheduledOccurrence, ActivityType, MemberBusyBlock } from '@/lib/types';
+import DayTimeline from './DayTimeline';
 
 export interface AgendaListProps {
   occurrences: ScheduledOccurrence[];
   onSelect?: (occurrence: ScheduledOccurrence) => void;
   /** (010 #6) Optional month filter; when set, only occurrences in that month show. */
   month?: 'Jun' | 'Jul' | 'Aug';
+  /** 015 — member occupied blocks for the expanded day timeline. */
+  memberBusy?: MemberBusyBlock[];
 }
 
 const MONTH_PREFIX: Record<'Jun' | 'Jul' | 'Aug', string> = {
@@ -31,30 +27,25 @@ const MONTH_PREFIX: Record<'Jun' | 'Jul' | 'Aug', string> = {
   Aug: '2026-08-',
 };
 
-function parseYMD(s: string): { y: number; m: number; d: number } {
-  const [y, m, d] = s.split('-').map(Number);
-  return { y, m, d };
-}
-function formatYMD(y: number, m: number, d: number): string {
-  return `${y.toString().padStart(4, '0')}-${m.toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
-}
-function weekdayOfYMD(s: string): number {
-  const { y, m, d } = parseYMD(s);
-  const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
-  return dow === 0 ? 7 : dow;
-}
-function mondayOfWeek(s: string): string {
-  const { y, m, d } = parseYMD(s);
-  const wd = weekdayOfYMD(s);
-  const ts = Date.UTC(y, m - 1, d) - (wd - 1) * 86400000;
-  const dt = new Date(ts);
-  return formatYMD(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+const TYPE_SUMMARY: Record<ActivityType, { label: string; cls: string }> = {
+  fitness: { label: 'Fitness', cls: 'bg-indigo-100 text-indigo-800' },
+  food: { label: 'Food', cls: 'bg-lime-100 text-lime-800' },
+  medication: { label: 'Meds', cls: 'bg-rose-100 text-rose-800' },
+  therapy: { label: 'Therapy', cls: 'bg-violet-100 text-violet-800' },
+  consultation: { label: 'Consult', cls: 'bg-sky-100 text-sky-800' },
+};
+const TYPE_ORDER: ActivityType[] = ['consultation', 'therapy', 'fitness', 'food', 'medication'];
+
+interface Tally {
+  happening: number;
+  substituted: number;
+  skipped: number;
 }
 
-export default function AgendaList({ occurrences, onSelect, month }: AgendaListProps) {
-  const filtered = month
-    ? occurrences.filter((o) => o.date.startsWith(MONTH_PREFIX[month]))
-    : occurrences;
+export default function AgendaList({ occurrences, onSelect, month, memberBusy = [] }: AgendaListProps) {
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  const filtered = month ? occurrences.filter((o) => o.date.startsWith(MONTH_PREFIX[month])) : occurrences;
 
   if (filtered.length === 0) {
     return (
@@ -64,42 +55,56 @@ export default function AgendaList({ occurrences, onSelect, month }: AgendaListP
     );
   }
 
-  const byWeek = new Map<string, Map<string, ScheduledOccurrence[]>>();
+  const byDate = new Map<string, ScheduledOccurrence[]>();
   for (const o of filtered) {
-    const wk = mondayOfWeek(o.date);
-    let days = byWeek.get(wk);
-    if (!days) {
-      days = new Map<string, ScheduledOccurrence[]>();
-      byWeek.set(wk, days);
-    }
-    const arr = days.get(o.date) ?? [];
+    const arr = byDate.get(o.date) ?? [];
     arr.push(o);
-    days.set(o.date, arr);
+    byDate.set(o.date, arr);
   }
-
-  const sortedWeeks = [...byWeek.keys()].sort();
+  const dates = [...byDate.keys()].sort();
 
   return (
-    <section className="flex flex-col gap-4">
-      {sortedWeeks.map((weekStart) => {
-        const days = byWeek.get(weekStart)!;
-        const sortedDates = [...days.keys()].sort();
+    <section className="flex flex-col gap-2">
+      {dates.map((date) => {
+        const occs = byDate.get(date)!;
+        const byType = new Map<ActivityType, Tally>();
+        for (const o of occs) {
+          const t = byType.get(o.type) ?? { happening: 0, substituted: 0, skipped: 0 };
+          if (o.status === 'skipped') t.skipped += 1;
+          else {
+            t.happening += 1;
+            if (o.status === 'substituted') t.substituted += 1;
+          }
+          byType.set(o.type, t);
+        }
+        const pills = TYPE_ORDER.filter((t) => byType.has(t)).map((t) => ({ type: t, ...byType.get(t)! }));
+        const isOpen = expanded === date;
         return (
-          <article key={weekStart}>
-            <h3 className="text-xs font-semibold text-gray-500 mb-2">
-              Week of {weekStart}
-            </h3>
-            {sortedDates.map((date) => (
-              <div key={date} className="border-l-2 border-gray-200 pl-3 mb-3">
-                <div className="text-xs font-medium text-gray-700 mb-1">{date}</div>
-                <div className="flex flex-col gap-3">
-                  {days.get(date)!.map((o) => (
-                    <OccurrenceCard key={o.id} occurrence={o} variant="detail" onSelect={onSelect} />
-                  ))}
-                </div>
+          <div key={date} className="rounded border border-gray-200">
+            <button
+              type="button"
+              onClick={() => setExpanded((p) => (p === date ? null : date))}
+              className="flex w-full flex-wrap items-center gap-1.5 p-2 text-left"
+            >
+              <span className="mr-1 text-xs font-medium text-gray-700">{date}</span>
+              {pills.map((p) => {
+                const meta = TYPE_SUMMARY[p.type];
+                return (
+                  <span key={p.type} className={`rounded px-1.5 py-0.5 text-[10px] ${meta.cls}`}>
+                    {meta.label} {p.happening}
+                    {p.substituted > 0 && <span className="ml-1 text-amber-700">⟳{p.substituted}</span>}
+                    {p.skipped > 0 && <span className="ml-1 text-gray-500">✕{p.skipped}</span>}
+                  </span>
+                );
+              })}
+              <span className="ml-auto text-xs text-gray-400">{isOpen ? '▾' : '▸'}</span>
+            </button>
+            {isOpen && (
+              <div className="border-t border-gray-200 p-2">
+                <DayTimeline date={date} occurrences={occs} memberBusy={memberBusy} showOccupied onSelect={onSelect} />
               </div>
-            ))}
-          </article>
+            )}
+          </div>
         );
       })}
     </section>

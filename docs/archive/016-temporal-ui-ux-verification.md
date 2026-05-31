@@ -232,17 +232,21 @@ Drove every surface again (desktop + mobile, 0 console errors). Fixes shipped th
 - **F** mobile collapses status/type filters behind a "Filters" toggle (month stays visible).
 - **G** dropped the redundant Legend row. (`Legend.tsx` now orphaned, left in place.)
 
-## Still open (tracked)
-- **#3 (remainder) — THE open product decision.** ~38 activities (esp. blocking fitness/therapy)
-  can't all fit the member's limited focused time (early-AM + post-family evening), so they
-  substitute to remote walks / skip. Staggering + the consultation carve-out fixed the Monday pile
-  and consultations; the remainder is genuine over-subscription. Fixing it is a tradeoff call:
-  (a) lighten the member busy fixture (fewer/shorter family blocks → more evening slots),
-  (b) lift recovery/downshift therapy out of tier-5, or (c) accept it as honest adaptation (the
-  Trace explains each). Needs a decision before more scheduler work.
-- **#8 (starter scope)** explicit selected-vs-global chat starters (prompt/UX design).
-- **#11 (optional)** LLM label refinement for bundles (`generate:bundles` → `calendar-bundles.json`);
-  deterministic labels ship today.
+## Final pass (2026-05-31) — #3, #8, #11 closed; 016 archived
+
+- **#3 (capacity) ✅ FIXED** — Option 1 (lighten the busy fixture), scoped + measured. Forced a
+  realistic deterministic weekday (real lunch gap, earlier work end, family Mon/Wed/Fri only →
+  Tue/Thu evenings free for recovery; sleep/work/commute/travel preserved). Regenerated
+  availability + hints. **Skip rate 4.5% → 0.2% (157 → 7); never-scheduled 38 → 3; breathwork
+  S 0 → 24/25; Upper Body Strength S 0 → 21/25.** June cardiology skip + Singapore/Tokyo travel
+  adaptation preserved. Option 2 (therapy tier) NOT needed.
+- **#8 (chat starter scope) ✅ FIXED** — prompt scopes selection as context not subject; grounding
+  gains `adaptations` for global questions; starters grouped schedule-vs-occurrence.
+- **#11 (bundle labels) ✅ FIXED** — `generate:bundles` LLM label refinement →
+  `calendar-bundles.json`; bundler applies them ("Morning Medications ×3"), deterministic fallback.
+
+All 016 items resolved. **Archived.** Backlog is now empty; the take-home is live + fully
+UI/UX-verified (33 unit tests, 6/6 acceptance, build static, lint clean, 0 console errors).
 
 ## Bundle pass (2026-05-31) — addressed #10, #11
 

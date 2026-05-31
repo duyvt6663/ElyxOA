@@ -91,24 +91,16 @@ example: `src/lib/scheduler.ts` (algorithm) and `src/components/CalendarView.tsx
 
 # 6. backlog state
 
-**Archived (completed):** 001 scaffold · 002 data model · 003 activity fixture ·
-004 availability fixture · 005 scheduler · 006 calendar UI · 007 prompts+README ·
-008 deploy (live at https://elyx-oa.vercel.app/) · 009 runtime import · 010 iteration gaps ·
-011 workspace shell · 012 scheduler diagnostics · 013 explainability tabs + LLM chat ·
-014 workspace UI/UX gaps · 015 temporal availability + scheduler. See `docs/archive/`.
+**Backlog is empty — all 16 plans archived (001-016).** See `docs/archive/`. Highlights:
+007 prompts+README · 008 deploy (live at https://elyx-oa.vercel.app/) · 015 temporal
+availability + scheduler · 016 temporal UI/UX audit (closed: duplicate-id fix, month-cell
+B/X count pills, DayTimeline slot-grouping + display bundles, scheduler-emitted Priority
+off-window, temporal ImportPanel rerun, mobile AgendaList density + link nav, substituted
+`← source` labels, Trace dedup + Source panel, weekly-stagger + consultation work-overlap,
+and **the capacity fix** — lightening the member busy fixture cut skip rate 4.5% → 0.2% and
+never-scheduled activities 38 → 3 while preserving the June cardiology + travel demos).
 
-**Still in `docs/backlog/` (1):**
-- `016-temporal-ui-ux-verification.md` — the living post-015 UI/UX audit. Fixed across several
-  passes: duplicate occurrence ids, month-cell chip flood (per-type B/X pills), same-slot
-  DayTimeline grouping/listing, scheduler-emitted Priority `off-window`, temporal ImportPanel
-  rerun + hints, mobile link nav + AgendaList density, substituted-row source labels (`← source`),
-  deterministic food/med display bundles, weekly-expansion stagger + consultation work-overlap,
-  legible B/X glyphs, Trace dedup + Source-activity panel + richer empty state, SummaryHeader
-  filtered subline, mobile filter collapse, Actions outcome column.
-  **One open product decision — 016 #3:** ~38 blocking fitness/therapy activities can't all fit the
-  member's limited focused time and substitute to remote walks / skip. Resolution is a tradeoff
-  (lighten the busy fixture, lift recovery therapy out of tier-5, or accept as honest adaptation).
-  Plus optional/minor: chat starter scope (#8), LLM bundle-label refinement (#11).
-
-The take-home is live + UI/UX-verified. 33 unit tests, 6/6 acceptance, build static, lint clean,
-0 console errors. Only 016 #3 (scheduling capacity) needs a product call before more work.
+The take-home is **live + fully UI/UX-verified**. 33 unit tests, 6/6 Playwright acceptance,
+`npm run build` static (`/` ○, `/api/chat` ƒ), lint clean, 0 console errors. Offline data
+regenerators: `generate:availability`, `generate:hints`, `generate:bundles` (each deterministic
+without a key). No open backlog items.

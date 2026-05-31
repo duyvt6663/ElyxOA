@@ -1,9 +1,10 @@
 # 019 - Contextual chat agent workspace
 
-> **Status (2026-06-01):** Phases 1–3 shipped, deployed, and verified live (visible typed context +
-> `@`-mentions, tool-call navigation cards, and validated draft schedule/travel edits with
-> preview/Apply/undo). Phase 4 (ergonomics) is partly landed; the rest is planned. See
-> [Implementation phases](#implementation-phases) for per-phase status and deviations.
+> **Status (2026-06-01):** Phases 1–4 substantially shipped, deployed, and verified live — visible
+> typed context + `@`-mentions, tool-call navigation cards, validated draft schedule/travel edits
+> (preview/Apply/undo), the rejection-explanation loop + why-not alternatives, JSON export, and command
+> history. **Only multi-patch batching is deferred** (it alone changes the single-patch interaction
+> model). See [Implementation phases](#implementation-phases) for per-phase status and deviations.
 
 ## Web review
 Reviewed the live app at `https://elyx-oa.vercel.app/` on 2026-05-31.
@@ -407,8 +408,11 @@ card, workspace `previewPatch`/`applyPatch`/`undoLastEdit`). Key findings vs. th
   id; `diffResults` just gained a `movedDay` bucket (date change) alongside `retimed` (time change).
 - Patch validation lives in `schedule-patch.ts` (not `validate.ts`); `setTemporalPolicy` patches a copy
   of `activity.temporalPolicy` directly (highest precedence).
-- **Rejection-explanation:** the draft card shows the *deterministic* outcome (validator error +
-  `now skipped` in the diff). The LLM second-turn narration (patch-flow step 6) is **deferred**.
+- **Rejection-explanation:** ✅ shipped (`8a39543`). Newly-skipped occurrences carry the scheduler's
+  deterministic `reason` into the diff; when an edit causes skips the card shows an "Explain why" button
+  that sends a follow-up turn grounded in those reasons + alternatives, so the assistant narrates from
+  validator output (patch-flow step 6). Verified live: "Cardiology Review to the evening" causes skips →
+  button appears → grounded answer.
 
 Scope (**input edits only** — `addBusyBlock`, `removeBusyBlock`, `editTravelWindow`,
 `setTemporalPolicy`; output overrides are deferred):
@@ -436,24 +440,27 @@ Verification:
 
 ### Phase 4 - Stronger agent ergonomics
 
-**◐ Partly landed early; remainder planned.** Pinned contexts (Phase 1: the tray pin toggle +
-persistent blocks) and single-step undo (Phase 3: `undoLastEdit` snapshot, distinct from
-`resetSchedule()`) already ship. Still open: command history, "why-not" alternatives, multi-patch
-batching, JSON export, and the deferred `OutputOverride` class. Also still open from Phase 3: the
-LLM rejection-explanation loop.
+**◑ Mostly shipped; only batching + the optional `OutputOverride` class deferred.** Landed across
+Phases 1, 3, and `8a39543`. Only multi-patch batching (it alone changes the single-patch interaction
+model) and the optional `OutputOverride` class remain.
 
 Scope:
 
 - ~~Add pinned contexts that survive tab/date changes.~~ **(done — Phase 1)**
-- Add command history and reusable prompts for common review flows.
-- Add "why not" alternatives: when a requested move fails, show the nearest feasible options.
+- ~~Add command history and reusable prompts for common review flows.~~ **(done — `8a39543`:
+  ArrowUp/Down recall of sent prompts, gated so it never fights the @-menu; starter chips already serve
+  as reusable prompts.)**
+- ~~Add "why not" alternatives: when a requested move fails, show the nearest feasible options.~~
+  **(done — `8a39543`: a `setTemporalPolicy` retime that causes skips ranks the other windows by skip
+  count → "Fewer skips in: …".)**
 - ~~Add a patch-apply **undo stack** (snapshot-before-apply) so an applied edit reverts in one step,
   distinct from `resetSchedule()`.~~ **(done — Phase 3, single-step)**
-- Allow **batching** multiple input patches into one preview/apply ("block dinner *and* extend the
+- **Deferred:** batching multiple input patches into one preview/apply ("block dinner *and* extend the
   Singapore trip") instead of one-patch-at-a-time.
-- (Optional, gated by demand) the deferred `OutputOverride` class — `moveOccurrence` /
+- **Deferred (optional, gated by demand):** the `OutputOverride` class — `moveOccurrence` /
   `setDisplayBundle` — with an explicit "won't survive the next rerun" badge.
-- Add export of draft/imported state as JSON for reproducible teammate review.
+- ~~Add export of draft/imported state as JSON for reproducible teammate review.~~ **(done — `8a39543`:
+  chat-header Export → `elyx-workspace.json` of the edited inputs, re-importable via the Data tab.)**
 
 Verification:
 

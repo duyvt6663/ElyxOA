@@ -151,7 +151,7 @@ export default function AllocationTraceTab({ selection, diagnostics, activities 
   }
 
   return (
-    <div className="p-4 text-sm">
+    <div className="p-4 text-sm" data-tour-id="trace-content">
       <header className="mb-3">
         <h2 className="font-semibold font-mono text-sm">{trace.occurrenceId}</h2>
         <div className="text-xs text-gray-500">

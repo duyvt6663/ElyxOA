@@ -384,7 +384,7 @@ export default function ChatSurface({
   const lastId = messages[messages.length - 1]?.id;
 
   return (
-    <section className="relative flex h-full flex-col">
+    <section className="relative flex h-full flex-col" data-tour-id="chat-panel">
       <header className="flex items-center justify-between px-4 py-3 border-b text-sm font-medium">
         <span>Allocator Assistant</span>
         <div className="flex items-center gap-2">

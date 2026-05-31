@@ -43,7 +43,7 @@ export default function SummaryHeader({ result, visibleCount }: SummaryHeaderPro
   const filtered = typeof visibleCount === 'number' && visibleCount !== total;
 
   return (
-    <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b pb-3">
+    <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b pb-3" data-tour-id="calendar-summary">
       <div className="text-sm font-medium">
         Window: {result.windowStart} → {result.windowEnd}
       </div>

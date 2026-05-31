@@ -73,7 +73,7 @@ export default function CalendarView({ result, memberBusy = [], travel, onSelect
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 md:p-6">
+    <div className="flex flex-col gap-4 p-4 md:p-6" data-tour-id="calendar-grid">
       <SummaryHeader result={result} visibleCount={filtered.length} />
       <FilterBar
         month={month}

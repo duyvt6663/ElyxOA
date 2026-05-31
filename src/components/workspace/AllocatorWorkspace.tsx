@@ -55,7 +55,7 @@
  * 6. <md: render MobileSwitch, then the active panel only (ChatSurface OR WorkspacePanel).
  */
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics, SchedulingSemanticHints } from '@/lib/types';
 import type { ContextBlock, ContextIndex } from '@/lib/chat-context';
 import schedulingHints from '@/data/scheduling-hints.json';
@@ -67,6 +67,8 @@ import WindowLayout from './WindowLayout';
 import MobileSwitch from './MobileSwitch';
 import ChatSurface from './ChatSurface';
 import WorkspacePanel from './WorkspacePanel';
+import GuidedTour from './GuidedTour';
+import { TOUR_STEPS, TOUR_DONE_KEY, type TourStep } from './tourSteps';
 
 /** 019 Phase 3 — result of previewing a draft patch (no commit). Carries a human description so the
  * preview card needs neither activities nor availability. `alternatives` (019 Phase 4 "why-not") lists
@@ -108,6 +110,25 @@ export default function AllocatorWorkspace({ result, activities, availability, d
     activeTab: 'calendar',
   });
   const [mobilePanel, setMobilePanel] = useState<'chat' | 'workspace'>('chat');
+
+  // 020 guided tour: tourStep is the active 0-based step, or null when inactive. showPrompt is the
+  // first-run "take a tour" nudge (shown once per browser).
+  const [tourStep, setTourStep] = useState<number | null>(null);
+  const [showPrompt, setShowPrompt] = useState(false);
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem(TOUR_DONE_KEY)) setShowPrompt(true);
+    } catch {
+      // localStorage unavailable (private mode) — just don't nudge.
+    }
+  }, []);
+  const markTourDone = () => {
+    try {
+      localStorage.setItem(TOUR_DONE_KEY, '1');
+    } catch {
+      // ignore
+    }
+  };
 
   // 019: persistent context blocks (pinned + @-mention); survive selection/tab changes.
   const [extraBlocks, setExtraBlocks] = useState<ContextBlock[]>([]);
@@ -317,6 +338,31 @@ export default function AllocatorWorkspace({ result, activities, availability, d
     URL.revokeObjectURL(url);
   }, [editedActivities, editedAvailability]);
 
+  // 020 tour controls.
+  const startTour = () => {
+    setShowPrompt(false);
+    setTourStep(0);
+  };
+  const endTour = () => {
+    setTourStep(null);
+    markTourDone();
+  };
+  const dismissPrompt = () => {
+    setShowPrompt(false);
+    markTourDone();
+  };
+  const onTourPrepare = (step: TourStep) => {
+    if (step.prepare === 'chat') {
+      setMobilePanel('chat');
+    } else if (step.prepare === 'calendar') {
+      select({ activeTab: 'calendar' });
+    } else if (step.prepare === 'traceDemo') {
+      const demo = displayedResult.occurrences.find((o) => o.status === 'substituted' || o.status === 'skipped');
+      if (demo) select({ selectedOccurrenceId: demo.id, selectedDate: demo.date, activeTab: 'trace' });
+      else select({ activeTab: 'trace' });
+    }
+  };
+
   const chat = (
     <ChatSurface
       selection={selection}
@@ -353,7 +399,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
 
   return (
     <>
-      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} />
+      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} onStartTour={startTour} />
       {/* md+: side-by-side */}
       <WindowLayout left={chat} right={workspace} />
       {/* <md: switch + single panel */}
@@ -363,6 +409,37 @@ export default function AllocatorWorkspace({ result, activities, availability, d
           {mobilePanel === 'chat' ? chat : workspace}
         </div>
       </div>
+
+      {/* 020 first-run nudge (once per browser). Bottom-RIGHT corner so it never overlaps the chat
+          composer or calendar interactions (incl. the acceptance suite). */}
+      {showPrompt && tourStep === null && (
+        <div className="fixed bottom-4 right-4 z-40 w-72 max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white p-3 shadow-xl">
+          <div className="text-sm font-medium text-gray-900">New here? Take a 90-second tour</div>
+          <p className="mt-0.5 text-xs text-gray-500">
+            See how the plan becomes an adaptive calendar you can explain and edit.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button type="button" onClick={startTour} className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700">
+              Start tour
+            </button>
+            <button type="button" onClick={dismissPrompt} className="rounded border border-gray-300 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50">
+              Skip
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 020 guided tour overlay. */}
+      {tourStep !== null && (
+        <GuidedTour
+          stepIndex={tourStep}
+          onPrepare={onTourPrepare}
+          onBack={() => setTourStep((s) => (s === null ? null : Math.max(s - 1, 0)))}
+          onNext={() => setTourStep((s) => (s === null ? null : Math.min(s + 1, TOUR_STEPS.length - 1)))}
+          onSkip={endTour}
+          onFinish={endTour}
+        />
+      )}
     </>
   );
 }

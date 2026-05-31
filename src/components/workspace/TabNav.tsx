@@ -30,7 +30,7 @@ const TABS: ReadonlyArray<{ id: TabId; label: string }> = [
 
 export default function TabNav({ activeTab, onChange }: TabNavProps) {
   return (
-    <nav className="flex gap-0.5 sm:gap-1 border-b px-1 sm:px-2 overflow-x-auto">
+    <nav className="flex gap-0.5 sm:gap-1 border-b px-1 sm:px-2 overflow-x-auto" data-tour-id="workspace-tabs">
       {TABS.map(({ id, label }) => (
         <button
           type="button"

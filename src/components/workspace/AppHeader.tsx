@@ -20,9 +20,11 @@ export interface AppHeaderProps {
    * here (not only in the chat header) so the signal is visible across both panes, incl. mobile. */
   edited?: boolean;
   onReset?: () => void;
+  /** 020 — start/restart the guided tour. */
+  onStartTour?: () => void;
 }
 
-export default function AppHeader({ result, edited, onReset }: AppHeaderProps) {
+export default function AppHeader({ result, edited, onReset, onStartTour }: AppHeaderProps) {
   return (
     <header className="border-b px-4 py-3 flex flex-wrap items-center gap-3">
       <span className="font-semibold">Elyx Resource Allocator</span>
@@ -41,7 +43,16 @@ export default function AppHeader({ result, edited, onReset }: AppHeaderProps) {
           )}
         </span>
       )}
-      <span className="text-xs text-gray-500 ml-auto">Last generated: build-time</span>
+      {onStartTour && (
+        <button
+          type="button"
+          onClick={onStartTour}
+          className="ml-auto rounded border border-gray-300 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-50"
+        >
+          ? Take the tour
+        </button>
+      )}
+      <span className={`text-xs text-gray-500 ${onStartTour ? '' : 'ml-auto'}`}>Last generated: build-time</span>
     </header>
   );
 }

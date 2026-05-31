@@ -335,9 +335,14 @@ function evaluateCandidates(
   const duration = Math.max(activity.durationMinutes, 1);
   const candBlocking = isBlocking(activity, policy);
   const feasible: FeasibleCandidate[] = [];
-  const fails: FailedConstraint[] = [];
+  // 016 §C: dedupe identical failed constraints (e.g. the same "no cardiologist" reason emitted
+  // once per rejected candidate day) and carry a count, so the Trace shows one line, not seven.
+  const failMap = new Map<string, { fc: FailedConstraint; count: number }>();
   const pushFail = (fc: FailedConstraint) => {
-    if (fails.length < MAX_FAIL_DETAIL) fails.push(fc);
+    const sig = `${fc.kind}|${fc.role ?? ''}|${fc.resourceId ?? ''}|${fc.detail}`;
+    const ex = failMap.get(sig);
+    if (ex) ex.count += 1;
+    else if (failMap.size < MAX_FAIL_DETAIL) failMap.set(sig, { fc, count: 1 });
   };
 
   for (const day of candidateDays(activity, genDate, availability.windowStart, availability.windowEnd)) {
@@ -460,6 +465,9 @@ function evaluateCandidates(
     }
   }
 
+  const fails: FailedConstraint[] = [...failMap.values()].map(({ fc, count }) =>
+    count > 1 ? { ...fc, detail: `${fc.detail} (×${count})` } : fc,
+  );
   return { feasible, fails };
 }
 

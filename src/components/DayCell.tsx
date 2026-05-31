@@ -78,8 +78,8 @@ export default function DayCell({ date, occurrences, expanded, onExpand }: DayCe
               title={`${meta.label}: ${p.happening} scheduled${p.substituted ? `, ${p.substituted} substituted` : ''}${p.skipped ? `, ${p.skipped} skipped` : ''}`}
             >
               {meta.label} {p.happening}
-              {p.substituted > 0 && <span className="ml-1 text-amber-700">⟳{p.substituted}</span>}
-              {p.skipped > 0 && <span className="ml-1 text-gray-500">✕{p.skipped}</span>}
+              {p.substituted > 0 && <span className="ml-1 font-semibold text-amber-700">B{p.substituted}</span>}
+              {p.skipped > 0 && <span className="ml-1 font-semibold text-gray-500">X{p.skipped}</span>}
             </span>
           );
         })}

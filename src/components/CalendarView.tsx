@@ -30,7 +30,6 @@ import type {
 } from '@/lib/types';
 import SummaryHeader from './SummaryHeader';
 import FilterBar from './FilterBar';
-import Legend from './Legend';
 import MonthGrid from './MonthGrid';
 import AgendaList from './AgendaList';
 
@@ -79,7 +78,6 @@ export default function CalendarView({ result, memberBusy = [], onSelect }: Cale
         onTypeToggle={(t) => setTypeFilters((prev) => toggleSet(prev, t))}
         onReset={resetFilters}
       />
-      <Legend />
       <div className="hidden md:block">
         <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} onSelect={onSelect} />
       </div>

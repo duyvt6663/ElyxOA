@@ -97,6 +97,19 @@ export default function ActionListTab({ activities, result, selection: _selectio
     return m;
   }, [result]);
 
+  // 016 §E: per-activity scheduling outcome so the table connects to the schedule.
+  const outcome = useMemo(() => {
+    const m = new Map<string, { s: number; b: number; x: number }>();
+    for (const occ of result.occurrences) {
+      const c = m.get(occ.sourceActivityId) ?? { s: 0, b: 0, x: 0 };
+      if (occ.status === 'scheduled') c.s += 1;
+      else if (occ.status === 'substituted') c.b += 1;
+      else c.x += 1;
+      m.set(occ.sourceActivityId, c);
+    }
+    return m;
+  }, [result]);
+
   return (
     <div className="p-4 text-sm">
       <div className="flex items-center justify-between mb-3">
@@ -114,51 +127,56 @@ export default function ActionListTab({ activities, result, selection: _selectio
           </select>
         </label>
       </div>
+      <p className="text-xs text-gray-500 mb-2">Row → expand occurrences; outcome S scheduled · B substituted · X skipped. Click an occurrence for its Trace.</p>
       <table className="w-full text-xs border-collapse">
-        <thead className="text-left text-gray-500 border-b">
+        <thead className="sticky top-0 z-10 bg-white text-left text-gray-500 border-b">
           <tr>
-            <th className="py-2 pr-2">id</th>
-            <th className="py-2 pr-2">title</th>
+            <th className="py-2 pr-2 font-mono">id</th>
+            <th className="py-2 pr-2 min-w-48">title</th>
             <th className="py-2 pr-2">type</th>
-            <th className="py-2 pr-2">frequency</th>
-            <th className="py-2 pr-2">priority</th>
-            <th className="py-2 pr-2">facilitator</th>
-            <th className="py-2 pr-2">locations</th>
-            <th className="py-2 pr-2">remote</th>
-            <th className="py-2 pr-2">prep</th>
+            <th className="py-2 pr-2">freq</th>
+            <th className="py-2 pr-2">pri</th>
             <th className="py-2 pr-2">resources</th>
-            <th className="py-2 pr-2">backups</th>
+            <th className="py-2 pr-2 whitespace-nowrap">outcome</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((a) => {
             const expanded = expandedId === a.id;
             const occs = occByActivity.get(a.id) ?? [];
+            const o = outcome.get(a.id) ?? { s: 0, b: 0, x: 0 };
             return (
               <Fragment key={a.id}>
                 <tr
                   className="border-b hover:bg-gray-50 cursor-pointer"
                   onClick={() => setExpandedId(expanded ? null : a.id)}
                 >
-                  <td className="py-2 pr-2 font-mono">{a.id}</td>
-                  <td className="py-2 pr-2">{a.title}</td>
+                  <td className="py-2 pr-2 font-mono text-gray-400">{a.id}</td>
+                  <td className="py-2 pr-2 font-medium">{a.title}</td>
                   <td className="py-2 pr-2">
                     <span className={`px-1.5 py-0.5 rounded text-[10px] ${TYPE_TAG[a.type]}`}>{a.type}</span>
                   </td>
-                  <td className="py-2 pr-2">
+                  <td className="py-2 pr-2 whitespace-nowrap">
                     {a.frequency.count}/{a.frequency.period}
                   </td>
                   <td className="py-2 pr-2 font-mono">{a.priority}</td>
-                  <td className="py-2 pr-2">{a.facilitatorLabel}</td>
-                  <td className="py-2 pr-2">{a.locations.join(', ')}</td>
-                  <td className="py-2 pr-2">{a.canBeRemote ? 'yes' : 'no'}</td>
-                  <td className="py-2 pr-2">{a.prep.length}</td>
                   <td className="py-2 pr-2">{summarizeResources(a)}</td>
-                  <td className="py-2 pr-2">{a.backupActivityIds.length}</td>
+                  <td className="py-2 pr-2 font-mono whitespace-nowrap">
+                    <span className="text-emerald-700">S {o.s}</span>{' · '}
+                    <span className="text-amber-700">B {o.b}</span>{' · '}
+                    <span className="text-gray-500">X {o.x}</span>
+                  </td>
                 </tr>
                 {expanded && (
                   <tr className="bg-gray-50">
-                    <td colSpan={11} className="p-3">
+                    <td colSpan={7} className="p-3">
+                      <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-500">
+                        <span>facilitator: {a.facilitatorLabel}</span>
+                        <span>locations: {a.locations.join(', ')}</span>
+                        <span>remote: {a.canBeRemote ? 'yes' : 'no'}</span>
+                        <span>prep: {a.prep.length}</span>
+                        <span>backups: {a.backupActivityIds.length}</span>
+                      </div>
                       <div className="text-[11px] text-gray-500 mb-1">
                         {occs.length} occurrence{occs.length === 1 ? '' : 's'}
                       </div>

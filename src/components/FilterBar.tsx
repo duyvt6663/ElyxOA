@@ -1,8 +1,12 @@
+'use client';
+
 /**
- * DECISION RECAP — 006 Render Calendar Output
+ * DECISION RECAP — 006 Render Calendar Output + 016 §F mobile density
  * - Three toggle groups: month switcher (Jun/Jul/Aug), status toggles, type toggles.
- * - Pure controlled component: parent (CalendarView) owns the state.
- * - Tailwind utility classes for layout.
+ * - Pure controlled component for the filter VALUES (parent owns them); only the mobile
+ *   show/hide of the filter section is local UI state.
+ * - 016 §F: on mobile the month switcher stays visible; the status/type filters collapse
+ *   behind a "Filters" button so they don't eat the screen above the agenda.
  */
 
 /**
@@ -13,6 +17,7 @@
  * 4. Click handlers delegate to the prop callbacks (no internal state).
  */
 
+import { useState } from 'react';
 import type { ActivityType, ScheduledOccurrence } from '@/lib/types';
 
 type Month = 'Jun' | 'Jul' | 'Aug';
@@ -56,6 +61,7 @@ export default function FilterBar({
   onTypeToggle,
   onReset,
 }: FilterBarProps) {
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-wrap items-center gap-3">
       <div className="flex items-center gap-1" aria-label="Month">
@@ -70,6 +76,15 @@ export default function FilterBar({
           </button>
         ))}
       </div>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="md:hidden rounded border border-gray-200 px-2 py-1 text-xs text-gray-600"
+      >
+        Filters {open ? '▾' : '▸'}
+      </button>
+      <div className={`${open ? 'flex' : 'hidden'} md:flex w-full md:w-auto flex-wrap items-center gap-3`}>
       <div className="flex items-center gap-1" aria-label="Status filters">
         {STATUSES.map((s) => {
           const active = statusFilters.has(s);
@@ -106,11 +121,12 @@ export default function FilterBar({
         <button
           type="button"
           onClick={onReset}
-          className="ml-auto text-xs text-blue-600 hover:underline"
+          className="md:ml-auto text-xs text-blue-600 hover:underline"
         >
           Reset filters
         </button>
       )}
+      </div>
     </div>
   );
 }

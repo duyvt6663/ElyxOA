@@ -104,6 +104,13 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
       loose.push(o);
     }
   }
+  // 016 §B: a bundle of one is just a normal action — render it raw, not as "Label ×1".
+  for (const [id, items] of [...bundleMap]) {
+    if (items.length === 1) {
+      loose.push(items[0]!);
+      bundleMap.delete(id);
+    }
+  }
   for (const [id, items] of bundleMap) {
     const starts = items.map((o) => toMin(o.startTime)!);
     const ends = items.map((o) => toMin(o.endTime ?? o.startTime)!);
@@ -130,10 +137,13 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
     const s = toMin(items[0]!.startTime)!;
     const e = toMin(items[0]!.endTime ?? items[0]!.startTime)!;
     const single = items[0]!;
+    // 016 §D: give the bland "HH:MM ×N" group a hint of its contents (sub count).
+    const subs = items.filter((o) => o.status === 'substituted').length;
+    const hint = subs > 0 ? ` · ${subs} sub` : '';
     entries.push({
       key: `slot-${s}-${e}`,
       kind: 'slot',
-      label: items.length > 1 ? `${single.startTime} ×${items.length}` : `${single.startTime} ${single.title}`,
+      label: items.length > 1 ? `${single.startTime} ×${items.length}${hint}` : `${single.startTime} ${single.title}`,
       type: single.type,
       startMin: s,
       endMin: e,
@@ -228,10 +238,11 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
             {listEntries.map((en) => {
               if (en.items.length === 1) return <ActionRow key={en.key} occ={en.items[0]!} onSelect={onSelect} />;
               const isOpen = openEntries.has(en.key);
+              const subN = en.items.filter((o) => o.status === 'substituted').length;
               const labelText =
                 en.kind === 'bundle'
                   ? `${en.items[0]!.displayBundleLabel} ×${en.items.length}`
-                  : `${en.items[0]!.startTime} · ${en.items.length} actions`;
+                  : `${en.items[0]!.startTime} · ${en.items.length} actions${subN > 0 ? ` (${subN} sub)` : ''}`;
               return (
                 <li key={en.key}>
                   <button
@@ -290,8 +301,8 @@ function ActionRow({ occ, onSelect }: { occ: ScheduledOccurrence; onSelect?: (o:
         <span className="font-mono text-gray-500">{occ.startTime}</span>
         <span className="truncate">{occ.title}</span>
         {occ.status === 'substituted' && (
-          <span className="text-amber-600 shrink-0">
-            ⟳{occ.sourceTitle ? <span className="ml-1 text-gray-400">← {occ.sourceTitle}</span> : null}
+          <span className="shrink-0 text-amber-600">
+            {occ.sourceTitle ? <span className="text-gray-400">← {occ.sourceTitle}</span> : 'sub'}
           </span>
         )}
         {occ.outsidePreferredWindow && <span className="text-amber-500" title="outside preferred window">◷</span>}

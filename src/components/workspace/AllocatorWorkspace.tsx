@@ -226,7 +226,15 @@ export default function AllocatorWorkspace({ result, activities, availability, d
   const resetSchedule = useCallback(() => {
     setDisplayedResult(result);
     setDisplayedDiagnostics(diagnostics);
-  }, [result, diagnostics]);
+    // 019: a full reset also discards chat-edited inputs + the undo snapshot, so the schedule and the
+    // "edited" signal return to the build-time original.
+    setEditedActivities(activities);
+    setEditedAvailability(availability);
+    setUndoSnapshot(null);
+  }, [result, diagnostics, activities, availability]);
+
+  // 019: chat edits replace the inputs with new arrays/objects, so reference inequality flags an edit.
+  const isEdited = editedActivities !== activities || editedAvailability !== availability;
 
   // 019 Phase 3: rerun the TEMPORAL scheduler client-side (same path as the Data Import flow),
   // applying committed hints only while they still validate against the (possibly edited) inputs.
@@ -345,7 +353,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
 
   return (
     <>
-      <AppHeader result={displayedResult} />
+      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} />
       {/* md+: side-by-side */}
       <WindowLayout left={chat} right={workspace} />
       {/* <md: switch + single panel */}

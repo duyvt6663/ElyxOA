@@ -189,15 +189,18 @@ function refKey(ref: ContextRef): string {
 
 interface StarterChip {
   label: string;
-  requiresSelection: boolean;
+  group: 'schedule' | 'edit' | 'occurrence';
 }
 
 const STARTER_CHIPS: StarterChip[] = [
-  { label: 'Why was this skipped?', requiresSelection: true },
-  { label: 'What changed during travel?', requiresSelection: false },
-  { label: 'Show substituted items this month', requiresSelection: false },
-  { label: 'What resources are constrained?', requiresSelection: false },
-  { label: 'Walk me through this trace step by step', requiresSelection: true },
+  { label: 'What changed during travel?', group: 'schedule' },
+  { label: 'Show substituted items this month', group: 'schedule' },
+  { label: 'What resources are constrained?', group: 'schedule' },
+  // 019: surface the draft-edit capability — these propose an edit you preview + Apply, not Q&A.
+  { label: 'Move my brisk walks to the morning', group: 'edit' },
+  { label: 'Block Jun 24 6–8pm for dinner', group: 'edit' },
+  { label: 'Why was this skipped?', group: 'occurrence' },
+  { label: 'Walk me through this trace step by step', group: 'occurrence' },
 ];
 
 /**
@@ -413,7 +416,7 @@ export default function ChatSurface({
             <div>
               <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">About the schedule</div>
               <div className="flex flex-wrap gap-2">
-                {STARTER_CHIPS.filter((c) => !c.requiresSelection).map((chip) => (
+                {STARTER_CHIPS.filter((c) => c.group === 'schedule').map((chip) => (
                   <button
                     key={chip.label}
                     type="button"
@@ -427,10 +430,27 @@ export default function ChatSurface({
             </div>
             <div>
               <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">
+                Try a schedule edit · preview before applying
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {STARTER_CHIPS.filter((c) => c.group === 'edit').map((chip) => (
+                  <button
+                    key={chip.label}
+                    type="button"
+                    onClick={() => onChipClick(chip.label)}
+                    className="px-3 py-1 rounded-full border border-amber-300 bg-amber-50 text-xs text-amber-800 hover:bg-amber-100"
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">
                 About the selected occurrence{hasSelection ? '' : ' (select one first)'}
               </div>
               <div className="flex flex-wrap gap-2">
-                {STARTER_CHIPS.filter((c) => c.requiresSelection).map((chip) => (
+                {STARTER_CHIPS.filter((c) => c.group === 'occurrence').map((chip) => (
                   <button
                     key={chip.label}
                     type="button"

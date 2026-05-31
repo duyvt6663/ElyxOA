@@ -26,6 +26,7 @@ import type {
   ScheduleResult,
   ScheduledOccurrence,
   ActivityType,
+  MemberBusyBlock,
 } from '@/lib/types';
 import SummaryHeader from './SummaryHeader';
 import FilterBar from './FilterBar';
@@ -45,11 +46,13 @@ const ALL_TYPES = ['fitness', 'food', 'medication', 'therapy', 'consultation'] a
 
 export interface CalendarViewProps {
   result: ScheduleResult;
+  /** 015 — member occupied blocks for the day-timeline view. */
+  memberBusy?: MemberBusyBlock[];
   /** 011: optional selection callback fired when a chip is clicked. Wired in 011 impl: forwarded down to MonthGrid + AgendaList → OccurrenceCard. */
   onSelect?: (occurrence: ScheduledOccurrence) => void;
 }
 
-export default function CalendarView({ result, onSelect }: CalendarViewProps) {
+export default function CalendarView({ result, memberBusy = [], onSelect }: CalendarViewProps) {
   // 011 impl: onSelect is forwarded to MonthGrid + AgendaList; chips invoke it on click.
   const [month, setMonth] = useState<'Jun' | 'Jul' | 'Aug'>('Jun');
   const [statusFilters, setStatusFilters] = useState<Set<ScheduledOccurrence['status']>>(() => new Set(ALL_STATUSES));
@@ -78,7 +81,7 @@ export default function CalendarView({ result, onSelect }: CalendarViewProps) {
       />
       <Legend />
       <div className="hidden md:block">
-        <MonthGrid occurrences={filtered} month={month} year={2026} onSelect={onSelect} />
+        <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} onSelect={onSelect} />
       </div>
       <div className="block md:hidden">
         <AgendaList occurrences={filtered} month={month} onSelect={onSelect} />

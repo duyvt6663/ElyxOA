@@ -12,20 +12,22 @@
  * 2. onSelect translates an occurrence into a selection patch and calls onSelect prop.
  */
 
-import type { ScheduleResult, ScheduledOccurrence } from '@/lib/types';
+import type { AvailabilityBundle, ScheduleResult, ScheduledOccurrence } from '@/lib/types';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
 import CalendarView from '@/components/CalendarView';
 
 export interface CalendarTabProps {
   result: ScheduleResult;
+  availability: AvailabilityBundle;
   selection: WorkspaceSelection;
   onSelect: (partial: Partial<WorkspaceSelection>) => void;
 }
 
-export default function CalendarTab({ result, selection: _selection, onSelect }: CalendarTabProps) {
+export default function CalendarTab({ result, availability, selection: _selection, onSelect }: CalendarTabProps) {
   return (
     <CalendarView
       result={result}
+      memberBusy={availability.memberBusy}
       onSelect={(occ: ScheduledOccurrence) =>
         onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date })
       }

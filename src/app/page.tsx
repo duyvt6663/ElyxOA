@@ -26,7 +26,7 @@
 
 import activitiesData from '@/data/activities.json';
 import availabilityData from '@/data/availability.json';
-import { scheduleWithDiagnostics } from '@/lib/scheduler';
+import { scheduleTemporal } from '@/lib/temporal-scheduler';
 import { isActivity, isAvailabilityBundle } from '@/lib/validate';
 import AllocatorWorkspace from '@/components/workspace/AllocatorWorkspace';
 
@@ -39,7 +39,9 @@ if (!isAvailabilityBundle(availabilityData)) {
 }
 const availability = availabilityData;
 
-const { result, diagnostics } = scheduleWithDiagnostics(activities, availability);
+// 015: temporal scheduler — places actions into { date, startTime, endTime } around the
+// member's occupied blocks (availability.memberBusy) instead of date-only.
+const { result, diagnostics } = scheduleTemporal(activities, availability);
 
 export default function Page() {
   return (

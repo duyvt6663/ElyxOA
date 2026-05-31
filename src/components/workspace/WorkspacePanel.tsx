@@ -61,7 +61,7 @@ export default function WorkspacePanel({
   function renderTab() {
     switch (activeTab) {
       case 'calendar':
-        return <CalendarTab result={result} selection={selection} onSelect={onSelect} />;
+        return <CalendarTab result={result} availability={availability} selection={selection} onSelect={onSelect} />;
       case 'actions':
         return <ActionListTab activities={activities} result={result} selection={selection} onSelect={onSelect} />;
       case 'priority':

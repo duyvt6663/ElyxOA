@@ -19,7 +19,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import type { ScheduledOccurrence } from '@/lib/types';
+import type { ScheduledOccurrence, MemberBusyBlock } from '@/lib/types';
 import DayCell from './DayCell';
 import DayDetail from './DayDetail';
 
@@ -27,6 +27,8 @@ export interface MonthGridProps {
   occurrences: ScheduledOccurrence[];
   month: 'Jun' | 'Jul' | 'Aug';
   year: 2026;
+  /** 015 — member occupied blocks, passed to DayDetail's timeline. */
+  memberBusy?: MemberBusyBlock[];
   onSelect?: (occurrence: ScheduledOccurrence) => void;
 }
 
@@ -48,7 +50,7 @@ function weekdayOfYMD(s: string): number {
   return dow === 0 ? 7 : dow;
 }
 
-export default function MonthGrid({ occurrences, month, year, onSelect }: MonthGridProps) {
+export default function MonthGrid({ occurrences, month, year, memberBusy = [], onSelect }: MonthGridProps) {
   const [expandedDate, setExpandedDate] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement | null>(null);
 
@@ -113,6 +115,7 @@ export default function MonthGrid({ occurrences, month, year, onSelect }: MonthG
             key={`detail-${expandedDate}`}
             date={expandedDate}
             occurrences={byDate.get(expandedDate) ?? []}
+            memberBusy={memberBusy}
             onClose={() => setExpandedDate(null)}
             onSelect={onSelect}
           />

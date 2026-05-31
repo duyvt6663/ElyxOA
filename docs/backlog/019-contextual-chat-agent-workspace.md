@@ -1,5 +1,10 @@
 # 019 - Contextual chat agent workspace
 
+> **Status (2026-06-01):** Phases 1–3 shipped, deployed, and verified live (visible typed context +
+> `@`-mentions, tool-call navigation cards, and validated draft schedule/travel edits with
+> preview/Apply/undo). Phase 4 (ergonomics) is partly landed; the rest is planned. See
+> [Implementation phases](#implementation-phases) for per-phase status and deviations.
+
 ## Web review
 Reviewed the live app at `https://elyx-oa.vercel.app/` on 2026-05-31.
 
@@ -339,7 +344,18 @@ screen readers. None of this is free from the existing composer, so it is in-sco
 
 ## Implementation phases
 
+**Status (2026-06-01): Phases 1–3 shipped, deployed, and verified live** at
+https://elyx-oa.vercel.app/ (prod review 7/7; acceptance A1–A6 6/6 each phase; unit 67/69 — the 2
+failures are a pre-existing `bundle.test.ts` label drift, unrelated). Phase 4 remains planned.
+Commits: Phase 1 `c76fab9` · Phase 2 `0c3eef3` · Phase 3 `b13ae06` (setTemporalPolicy) + `a273902`
+(busy/travel).
+
 ### Phase 1 - Explicit context and `@` injection
+
+**✅ Shipped (`c76fab9`).** Built as scoped. One addition surfaced during integration: the calendar
+day-cell click only set local state, so it didn't create a day context — added an additive optional
+`onExpandDay` callback (CalendarTab → CalendarView → MonthGrid) so a bare day-click sets
+`selectedDate` and the tray shows a day block.
 
 Scope:
 
@@ -359,6 +375,14 @@ Verification:
 
 ### Phase 2 - Navigation actions
 
+**✅ Shipped (`0c3eef3`).** Migrated chat to the AI SDK tool-call channel (added `@ai-sdk/react`
+`useChat` + `toUIMessageStreamResponse`); nav tools render as click-to-execute `ChatActionCard`s.
+Two deviations: (1) switched the model to `openai.chat()` (stateless Chat Completions) — the default
+Responses API references prior tool-call items by id, which a Zero-Data-Retention org doesn't persist,
+breaking multi-turn (`Item ... not found`); (2) shipped `openTab` / `selectDate` / `selectOccurrence` /
+`focusResource` (opens the Resources tab); **`setFilters` deferred** (no shared filter state to drive —
+CalendarView owns filters locally) and granular resource focus deferred.
+
 Scope:
 
 - Add typed assistant navigation actions alongside existing markdown links.
@@ -372,6 +396,19 @@ Verification:
 - On mobile, navigation brings the workspace pane forward as current chat links already do.
 
 ### Phase 3 - Draft input edits
+
+**✅ Shipped (`b13ae06` setTemporalPolicy; `a273902` busy/travel).** All four input-edit patches on a
+preview → Apply → rerun → diff → undo rail (`schedule-patch.ts` pure core + tests, `DraftPatchPreview`
+card, workspace `previewPatch`/`applyPatch`/`undoLastEdit`). Key findings vs. this plan:
+- **Client-side `scheduleTemporal` was already proven** — the Data Import flow reruns it in the browser
+  (`ImportPanel.tsx`), so the linchpin needed no de-risking spike.
+- **No new seed id was needed.** The scheduler already keys occurrence ids on the stable `genDate`, not
+  the placed day (`temporal-scheduler.ts:615`), so a busy/travel edit that moves a placement keeps the
+  id; `diffResults` just gained a `movedDay` bucket (date change) alongside `retimed` (time change).
+- Patch validation lives in `schedule-patch.ts` (not `validate.ts`); `setTemporalPolicy` patches a copy
+  of `activity.temporalPolicy` directly (highest precedence).
+- **Rejection-explanation:** the draft card shows the *deterministic* outcome (validator error +
+  `now skipped` in the diff). The LLM second-turn narration (patch-flow step 6) is **deferred**.
 
 Scope (**input edits only** — `addBusyBlock`, `removeBusyBlock`, `editTravelWindow`,
 `setTemporalPolicy`; output overrides are deferred):
@@ -399,13 +436,19 @@ Verification:
 
 ### Phase 4 - Stronger agent ergonomics
 
+**◐ Partly landed early; remainder planned.** Pinned contexts (Phase 1: the tray pin toggle +
+persistent blocks) and single-step undo (Phase 3: `undoLastEdit` snapshot, distinct from
+`resetSchedule()`) already ship. Still open: command history, "why-not" alternatives, multi-patch
+batching, JSON export, and the deferred `OutputOverride` class. Also still open from Phase 3: the
+LLM rejection-explanation loop.
+
 Scope:
 
-- Add pinned contexts that survive tab/date changes.
+- ~~Add pinned contexts that survive tab/date changes.~~ **(done — Phase 1)**
 - Add command history and reusable prompts for common review flows.
 - Add "why not" alternatives: when a requested move fails, show the nearest feasible options.
-- Add a patch-apply **undo stack** (snapshot-before-apply) so an applied edit reverts in one step,
-  distinct from `resetSchedule()` which nukes all edits back to the build fixture.
+- ~~Add a patch-apply **undo stack** (snapshot-before-apply) so an applied edit reverts in one step,
+  distinct from `resetSchedule()`.~~ **(done — Phase 3, single-step)**
 - Allow **batching** multiple input patches into one preview/apply ("block dinner *and* extend the
   Singapore trip") instead of one-patch-at-a-time.
 - (Optional, gated by demand) the deferred `OutputOverride` class — `moveOccurrence` /

@@ -34,6 +34,18 @@
  */
 
 /**
+ * DECISION RECAP — 019 Phase 1 Explicit Context
+ * - Accepts the build-time `contextIndex` (page.tsx) and threads it + the held `result` to
+ *   ChatSurface so @-autocomplete + ref navigation work with no API key (019 degraded mode).
+ * - Owns the attached ContextBlock[] in TWO layers:
+ *     ACTIVE (provenance 'selected'): DERIVED from `selection` each render — a `day` block from
+ *       selectedDate and an `occurrence` block from selectedOccurrenceId — so they track selection.
+ *     PERSISTENT (`extraBlocks`): pinned + @-mention blocks held in state until removed.
+ *   A `dismissedSelectedKeys` set lets the user remove an active block; it reappears on the next
+ *   selection change (per 019 open-decision 1 default: auto-add current day/action as active).
+ */
+
+/**
  * BEHAVIOR SKETCH
  * 1. Initialize selection = { selectedOccurrenceId: null, selectedDate: null, activeTab: 'calendar' }.
  * 2. Initialize mobilePanel = 'chat'.
@@ -43,8 +55,9 @@
  * 6. <md: render MobileSwitch, then the active panel only (ChatSurface OR WorkspacePanel).
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics } from '@/lib/types';
+import type { ContextBlock, ContextIndex } from '@/lib/chat-context';
 import AppHeader from './AppHeader';
 import WindowLayout from './WindowLayout';
 import MobileSwitch from './MobileSwitch';
@@ -64,9 +77,18 @@ export interface AllocatorWorkspaceProps {
   activities: Activity[];
   availability: AvailabilityBundle;
   diagnostics?: ScheduleDiagnostics;
+  contextIndex: ContextIndex;
 }
 
-export default function AllocatorWorkspace({ result, activities, availability, diagnostics }: AllocatorWorkspaceProps) {
+/** 019: abbreviate a YYYY-MM-DD into "Jun 22" for a chip label (window is Jun/Jul/Aug 2026). */
+const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function shortDate(date: string): string {
+  const [, m, d] = date.split('-').map(Number);
+  const mon = MONTH_ABBR[(m ?? 1) - 1] ?? date;
+  return `${mon} ${d ?? ''}`.trim();
+}
+
+export default function AllocatorWorkspace({ result, activities, availability, diagnostics, contextIndex }: AllocatorWorkspaceProps) {
   const [displayedResult, setDisplayedResult] = useState<ScheduleResult>(result);
   const [displayedDiagnostics, setDisplayedDiagnostics] = useState<ScheduleDiagnostics | undefined>(diagnostics);
   const [selection, setSelection] = useState<WorkspaceSelection>({
@@ -76,12 +98,99 @@ export default function AllocatorWorkspace({ result, activities, availability, d
   });
   const [mobilePanel, setMobilePanel] = useState<'chat' | 'workspace'>('chat');
 
+  // 019: persistent context blocks (pinned + @-mention); survive selection/tab changes.
+  const [extraBlocks, setExtraBlocks] = useState<ContextBlock[]>([]);
+  // 019: active (selected) block keys the user explicitly removed; cleared on selection change.
+  const [dismissedSelectedKeys, setDismissedSelectedKeys] = useState<Set<string>>(new Set());
+
   const select = (partial: Partial<WorkspaceSelection>) => {
     setSelection((prev) => ({ ...prev, ...partial }));
     // 016 §8: a chat link (or any tab change) on mobile must bring the Workspace pane forward,
     // otherwise the navigation silently happens behind the Chat pane and feels like a no-op.
     if (partial.activeTab) setMobilePanel('workspace');
+    // 019: a new day/occurrence selection re-activates auto-added context blocks the user had
+    // dismissed for the previous selection.
+    if ('selectedDate' in partial || 'selectedOccurrenceId' in partial) {
+      setDismissedSelectedKeys((prev) => (prev.size === 0 ? prev : new Set()));
+    }
   };
+
+  // 019: ACTIVE blocks derived from selection. A `day` block from selectedDate and an
+  // `occurrence` block from selectedOccurrenceId; both auto-update as selection changes. Skipped
+  // when the user dismissed them, or when an equivalent persistent (pinned/@) block already holds it.
+  const selectedBlocks = useMemo<ContextBlock[]>(() => {
+    const out: ContextBlock[] = [];
+    const taken = new Set(extraBlocks.map((b) => b.key));
+    if (selection.selectedDate) {
+      const key = `day:${selection.selectedDate}`;
+      if (!taken.has(key) && !dismissedSelectedKeys.has(key)) {
+        out.push({
+          key,
+          ref: { type: 'day', date: selection.selectedDate },
+          provenance: 'selected',
+          pinned: false,
+          label: `Day ${shortDate(selection.selectedDate)}`,
+        });
+      }
+    }
+    if (selection.selectedOccurrenceId) {
+      const key = `occurrence:${selection.selectedOccurrenceId}`;
+      if (!taken.has(key) && !dismissedSelectedKeys.has(key)) {
+        const occ = displayedResult.occurrences.find((o) => o.id === selection.selectedOccurrenceId);
+        out.push({
+          key,
+          ref: { type: 'occurrence', occurrenceId: selection.selectedOccurrenceId },
+          provenance: 'selected',
+          pinned: false,
+          label: `Action ${occ?.title ?? selection.selectedOccurrenceId}`,
+        });
+      }
+    }
+    return out;
+  }, [selection.selectedDate, selection.selectedOccurrenceId, displayedResult, extraBlocks, dismissedSelectedKeys]);
+
+  const contextBlocks = useMemo<ContextBlock[]>(
+    () => [...selectedBlocks, ...extraBlocks],
+    [selectedBlocks, extraBlocks]
+  );
+
+  // 019: add a persistent block from an @-mention selection (provenance 'atMention'). Deduped by key.
+  const addContextBlock = useCallback((block: ContextBlock) => {
+    setExtraBlocks((prev) => (prev.some((b) => b.key === block.key) ? prev : [...prev, block]));
+  }, []);
+
+  // 019: removing a block guarantees it is NOT sent on the next request. Persistent blocks drop
+  // from state; an active (selected) block is recorded as dismissed so it stops deriving.
+  const removeContextBlock = useCallback((key: string) => {
+    let removedFromExtras = false;
+    setExtraBlocks((prev) => {
+      if (!prev.some((b) => b.key === key)) return prev;
+      removedFromExtras = true;
+      return prev.filter((b) => b.key !== key);
+    });
+    if (!removedFromExtras) {
+      setDismissedSelectedKeys((d) => {
+        if (d.has(key)) return d;
+        const next = new Set(d);
+        next.add(key);
+        return next;
+      });
+    }
+  }, []);
+
+  // 019: pin toggle. Pinning an active (selected) block promotes it into persistent state so it
+  // survives selection changes; unpinning a persistent block keeps it but clears the pin flag.
+  const toggleContextPin = useCallback((key: string) => {
+    setExtraBlocks((prev) => {
+      const existing = prev.find((b) => b.key === key);
+      if (existing) {
+        return prev.map((b) => (b.key === key ? { ...b, pinned: !b.pinned } : b));
+      }
+      const active = selectedBlocks.find((b) => b.key === key);
+      if (!active) return prev;
+      return [...prev, { ...active, provenance: 'pinned', pinned: true }];
+    });
+  }, [selectedBlocks]);
 
   const setSchedule = useCallback(
     (next: { result: ScheduleResult; diagnostics: ScheduleDiagnostics }) => {
@@ -103,6 +212,11 @@ export default function AllocatorWorkspace({ result, activities, availability, d
       diagnostics={displayedDiagnostics}
       activities={activities}
       onSelect={select}
+      contextIndex={contextIndex}
+      contextBlocks={contextBlocks}
+      onAddContext={addContextBlock}
+      onRemoveContext={removeContextBlock}
+      onTogglePin={toggleContextPin}
     />
   );
   const workspace = (

@@ -31,6 +31,7 @@ export default function CalendarTab({ result, availability, selection: _selectio
       onSelect={(occ: ScheduledOccurrence) =>
         onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date })
       }
+      onExpandDay={(date) => onSelect({ selectedDate: date })}
     />
   );
 }

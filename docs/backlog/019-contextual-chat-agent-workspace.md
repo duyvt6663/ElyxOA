@@ -45,15 +45,34 @@ block @Aug12 19:00-21:00 for dinner and reschedule affected actions
 3. **The LLM proposes; deterministic code validates.** The assistant can parse intent and draft
    changes, but `scheduleTemporal()`, validation guards, and local patch application decide what
    is actually feasible.
-4. **No silent mutations.** Navigation actions can happen directly after a user click. Schedule,
+4. **Edits are input edits, not output edits.** `scheduleTemporal(activities, availability, hints)`
+   is a pure function that re-derives every placement from policy on each run — it has no "pinned
+   occurrence" concept. So a draft edit must change an **input** (availability, travel, or an
+   activity's temporal policy/hint) and let the rerun derive the rest. Edits that try to pin a
+   single occurrence to a slot (`moveOccurrence`) or override scheduler-emitted output
+   (`setDisplayBundle`) do **not** compose with a rerun and are treated as a separate, lower-priority
+   class — see [Patch composability](#patch-composability). This keeps decision 3 honest: there is no
+   override path that bypasses `isFeasible`.
+5. **No silent mutations.** Navigation actions can happen directly after a user click. Schedule,
    availability, activity, or travel edits must be shown as a draft change card with an explicit
    Apply button.
-5. **Local workspace state first.** This take-home has no backend/database. Applied chat edits
+6. **Structured actions come from the model's tool-call channel, not in-band JSON.** Assistant
+   navigation and draft-patch actions are emitted via the Vercel AI SDK `tools` path (typed,
+   validated args), not a JSON block embedded in the prose stream. The current text stream
+   (`streamText().toTextStreamResponse()`) cannot be reliably parsed for a partial JSON block
+   mid-stream; tool calls give typed objects for free and remove the brittle in-band parser. The
+   existing markdown-link parser stays only as a backwards-compatible fallback.
+7. **Local workspace state first.** This take-home has no backend/database. Applied chat edits
    should update in-memory imported/workspace state and rerun the scheduler, matching the current
    Data Import behavior. Durable persistence stays out of scope.
-6. **Clinical content remains guarded.** The assistant may reschedule, explain, or propose
+8. **Clinical content remains guarded.** The assistant may reschedule, explain, or propose
    availability/travel edits. It should not rewrite medication/treatment content unless the user
    imports an updated action plan or explicitly confirms a practitioner-authored change.
+9. **The model never fabricates a fixture.** `importAvailability` / `importActivities` are **not**
+   LLM-emittable patches — a model emitting `availabilityJson: unknown` could fabricate an entire
+   data set. Imports stay strictly user-initiated through the existing Data tab (which already
+   validates). Chat may *suggest* "import an updated plan", but the JSON only ever enters through a
+   user action.
 
 ## Interaction design
 
@@ -99,6 +118,16 @@ Typing `@` opens an autocomplete popover backed by workspace objects:
 Selecting an `@` suggestion inserts a context chip, not just text. The visible prompt can still
 show a short token, but the request body should carry the canonical typed ref.
 
+**Title disambiguation.** A bare title like `@RemoteBriskWalk` is ambiguous — that activity recurs
+across ~90 dates, so it maps to one `activity` ref but many `occurrence` refs. The autocomplete must
+disambiguate explicitly rather than guess:
+
+- If a day is in context, rank that day's occurrence first, labelled with its date.
+- Always offer the **activity** ref (whole series) and the **selected/most-adapted occurrence** ref
+  as distinct suggestions, so the user picks the scope.
+- A title that resolves to zero current occurrences (e.g. fully skipped) still offers the activity
+  ref plus a `@trace:` ref, never an occurrence ref that doesn't exist.
+
 ### Command semantics
 Support natural language first, but allow slash-style shortcuts for precision:
 
@@ -107,18 +136,20 @@ Support natural language first, but allow slash-style shortcuts for precision:
 | Explain | `/explain @this`, "why here?" | Answer from trace, occupied blocks, temporal rules |
 | Navigate | `/open @SingaporeTrip`, "show this in resources" | Switch tab/date/filter/selection |
 | Compare | "compare @VO2MaxPrimer vs @RemoteBriskWalk" | Show priority, feasibility, score reasons |
-| Find | "find all actions affected by @TokyoTrip" | Open filtered list or return linked matches |
-| Reschedule | "move @this to Friday afternoon" | Draft patch, validate, preview, require Apply |
-| Block time | "block Jun 24 18:00-20:00 for dinner" | Draft availability patch, rerun preview |
-| Unblock time | "make Wednesday lunch available" | Draft busy-block edit, rerun preview |
-| Travel edit | "extend @SingaporeTrip by one day" | Draft travel/busy/resource patch, rerun preview |
-| Bundle | "group these morning meds as one routine" | Draft display-bundle label change |
-| Import/export | "import this availability JSON" | Reuse Data Import validation, then rerun |
+| Find | "find actions affected by @TokyoTrip", "what breaks during the @treadmill outage?" | Open filtered list or return linked matches (travel **and** equipment/specialist outages) |
+| Retime (preferred) | "put my brisk walks in the morning" | `setTemporalPolicy` draft, validate, preview, Apply — reruns cleanly |
+| Block time | "block Jun 24 18:00-20:00 for dinner" | `addBusyBlock` draft, rerun preview |
+| Unblock time | "make Wednesday lunch available" | `removeBusyBlock` (date-scoped) draft, rerun preview |
+| Travel edit | "extend @SingaporeTrip by one day" | `editTravelWindow` draft, rerun preview |
+| Move one occurrence | "move @this to Friday afternoon" | `OutputOverride` — deferred past Phase 3; won't survive rerun |
+| Bundle | "group these morning meds as one routine" | `OutputOverride` — deferred; relabel only |
+| Import | "import this availability JSON" | User-only via Data tab (decision 9); chat suggests, never emits the JSON |
 
 ## Agent action protocol
 
-Keep the current markdown link parsing as a fallback, but introduce a typed action protocol for
-assistant responses.
+Actions are emitted through the AI SDK **tool-call channel** (decision 6), not parsed out of the
+prose stream. Each tool has a typed argument schema; the client renders the tool call as an action
+card. Keep the current markdown link parsing only as a backwards-compatible fallback.
 
 ### Navigation actions
 Navigation actions can execute immediately when the user clicks the action card:
@@ -132,27 +163,101 @@ type ChatNavigationAction =
   | { kind: 'setFilters'; status?: string[]; activityType?: string[] };
 ```
 
-### Draft modification actions
-Modification actions must render as preview cards and require explicit user application:
+### Transport contract (how tool calls reach the client)
+
+Decision 6 is not free: today `/api/chat` returns plain text via `streamText().toTextStreamResponse()`
+(`route.ts:83`) and `ChatSurface` decodes UTF-8 chunks into `{ role, content }` bubbles
+(`ChatSurface.tsx:196`). Tool calls have nowhere to surface. The contract:
+
+- **Server:** switch the route to `streamText({ tools, ... }).toUIMessageStreamResponse()` (AI SDK
+  v6, `ai@6.0.193`). The UI-message stream carries ordered `text` / `tool-call` / `tool-result`
+  parts in one response — prose still streams; actions arrive as typed parts.
+- **Client message shape:** move from `{ role, content: string }` to a parts model
+  `{ role, parts: Array<{ type: 'text'; text } | { type: 'tool-<name>'; state; input; output }> }`.
+  Render text parts as today; render each tool-call part as a `ChatActionCard` / `DraftPatchPreview`
+  inline at its position in the stream.
+- **Client transport:** add `@ai-sdk/react` (not currently installed) and use `useChat` to consume the
+  UI-message stream — it handles partial tool-call assembly so we don't hand-roll a parser. (Fallback
+  if we refuse the dep: a thin manual reader of the UI-message-stream protocol, accepted as more
+  fragile.)
+- **Coexistence:** one assistant turn may contain prose **and** a navigation action **and** a draft
+  patch; parts render in stream order. Navigation cards are click-to-execute; patch cards gate on Apply.
+- **Sequencing:** this migration is the **first task of Phase 2**, bundled with navigation actions —
+  Phase 1 ships on the existing text transport (it adds context + grounding only, no assistant actions),
+  so the working chat (acceptance A5) is not disturbed until Phase 2 deliberately reworks it.
+
+### Patch composability
+
+The patch union is split by whether the edit composes with a deterministic rerun (decision 4).
+
+**Input edits — rerun-safe.** These change a scheduler *input*; the rerun derives every downstream
+placement. This is the default class and the only one Phase 3 ships:
 
 ```ts
-type SchedulePatch =
-  | { kind: 'moveOccurrence'; occurrenceId: string; targetDate: string; targetStartTime?: string }
-  | { kind: 'addBusyBlock'; date: string; startTime: string; endTime: string; title: string; category: string }
-  | { kind: 'removeBusyBlock'; busyBlockId: string }
+type InputPatch =
+  // Add a one-off busy block (single TimeBlock) OR a recurring one (repeat across the window).
+  | { kind: 'addBusyBlock'; date: string; startTime: string; endTime: string; title: string;
+      category: string; recurrence?: 'once' | 'weekly' }
+  // A MemberBusyBlock has ONE id but MANY TimeBlocks (e.g. every breakfast). `date` scopes the
+  // removal to one instance; omitting it removes the whole recurring group. TimeBlocks have no
+  // id of their own, so the (busyBlockId, date) pair is the instance key.
+  | { kind: 'removeBusyBlock'; busyBlockId: string; date?: string }
   | { kind: 'editTravelWindow'; travelId: string; startDate: string; endDate: string }
-  | { kind: 'setDisplayBundle'; occurrenceIds: string[]; label: string }
-  | { kind: 'importAvailability'; availabilityJson: unknown }
-  | { kind: 'importActivities'; activitiesJson: unknown };
+  // The most natural schedule edit for this architecture: change an activity's preferred window /
+  // anchor. Patches a COPY of `activity.temporalPolicy` directly (see note below); reruns cleanly.
+  | { kind: 'setTemporalPolicy'; activityId: string; preferredWindows?: TimeBlockPreference[];
+      anchor?: ActivityTemporalPolicy['anchor'] };
 ```
 
-Patch flow:
+**Output overrides — do NOT survive a rerun.** These pin or relabel a specific occurrence and are a
+separate, lower-priority class. They must define what happens on the *next* rerun (they are dropped
+unless re-expressed as an input constraint). Deferred past Phase 3 unless explicitly prioritized:
 
-1. Chat parses intent and returns a candidate patch with rationale.
-2. Client validates the patch shape and shows a diff card.
-3. Deterministic scheduler reruns in preview mode.
-4. Preview shows affected actions, newly skipped/substituted actions, and constraint failures.
+```ts
+type OutputOverride =
+  | { kind: 'moveOccurrence'; occurrenceId: string; targetDate: string; targetStartTime?: string }
+  | { kind: 'setDisplayBundle'; occurrenceIds: string[]; label: string };
+```
+
+`moveOccurrence` is the awkward case: honoring it needs either a new *pin* input to the scheduler
+(contradicts "not a constraint-solver rewrite") or a post-scheduler override (contradicts "code
+validates feasibility"). Prefer steering users toward `setTemporalPolicy` ("put my walks in the
+morning") which reruns cleanly, and treat a literal one-occurrence move as an explicit override the
+next rerun will discard.
+
+**`setTemporalPolicy` must patch the activity, not a hint.** `buildPolicyResolver` resolves
+`activity.temporalPolicy` (source `explicit`) *before* it ever consults the hint map
+(`temporal-scheduler.ts:116`), and the demo-critical activities all carry explicit fixture policies —
+so a hint-path override would be **silently ignored** for exactly the activities a user is most likely
+to retime. Resolution: `setTemporalPolicy` mutates a **copy of `activity.temporalPolicy`** on a patched
+activities array (the highest-precedence layer, an *input* per decision 4) and reruns. This needs **no
+scheduler change** and no new override layer.
+
+`importAvailability` / `importActivities` are intentionally **absent** from this protocol (decision 9).
+
+### Patch flow
+
+1. Chat parses intent and emits a candidate patch (tool call) with rationale.
+2. Client validates the patch shape (reuse the `validate.ts` guards) and shows a diff card.
+3. Deterministic scheduler reruns in preview mode over the patched inputs.
+4. Preview shows affected actions, newly skipped/substituted actions, and constraint failures —
+   diffed against the current result.
 5. User clicks Apply to update local workspace state, or Discard to leave current state unchanged.
+6. **Rejection-explanation loop.** If the preview shows the requested change as infeasible (e.g. the
+   moved/blocked action ends up skipped), feed the preview's `failedConstraints` + nearest-feasible
+   slots back into a second assistant turn so the explanation comes from deterministic validator
+   output, not model intuition. This loop is what backs the "explain rejected edits" prompt rule.
+
+### Preview diff identity
+
+Occurrence ids are `occ-<activityId>-<date>`, so a date change *changes the id* — a naive id diff
+reads a move as delete+add. "Source activity + nearest prior slot" works as a first heuristic but is
+fragile once a whole series retimes across days or several related occurrences move together.
+**Implementation task:** have the scheduler emit a **stable expansion-seed id** per occurrence (the
+deterministic frequency-expansion index for its source activity, independent of the chosen date), and
+diff on that seed. Then bucket each occurrence as
+`unchanged | moved | newly-substituted | newly-skipped | newly-scheduled`. Until the seed exists, fall
+back to the activity+slot heuristic and flag any ambiguous matches in the preview.
 
 ## Grounding model
 
@@ -165,7 +270,9 @@ type ContextRef =
   | { type: 'occurrence'; occurrenceId: string }
   | { type: 'activity'; activityId: string }
   | { type: 'bundle'; date: string; label: string }
-  | { type: 'busyBlock'; busyBlockId: string }
+  // A MemberBusyBlock id is recurring; a clicked block is one instance, so carry the instance fields.
+  | { type: 'busyBlock'; busyBlockId: string; date: string; startTime: string; endTime: string;
+      title: string; category: string }
   | { type: 'resource'; kind: string; role: string }
   | { type: 'travelWindow'; travelId: string }
   | { type: 'trace'; occurrenceId: string }
@@ -182,13 +289,53 @@ Resolution rules:
 - If a ref cannot be resolved, fail visibly in the UI before sending. Do not let stale ids become
   silent hallucination fuel.
 
+**Resolution is layered, not split by location.** Two concerns that the original "client vs server"
+framing conflated:
+
+- **Navigable identity (client, always available).** Thread a lightweight **context index** into
+  `ChatSurface` alongside the schedule: travel windows (`{id, destination, startDate, endDate}`),
+  busy-block catalog (`{busyBlockId, title, category}`), resource roles, and bundle labels — a few KB,
+  derived at build next to `result`. This index powers `@`-autocomplete and lets a resolved ref drive
+  **deterministic navigation with no API key** (clicking `@SingaporeTrip` selects its date range
+  purely client-side). Today `ChatSurface` does not receive `availability` at all
+  (`AllocatorWorkspace.tsx:99`) — adding this compact index, not the full 1000-block fixture, is the fix.
+- **Rich grounding summaries (server, needs the request to run).** The server still owns the canonical
+  `availability` and resolves `ContextRef[]` into the capped, summarized grounding the model reads
+  (`route.ts`). `occurrence`/`activity`/`trace`/`day`/`scheduleRange` come from the `result` the client
+  already ships; `busyBlock`/`timeBlock`/`bundle`/`resource`/`travelWindow` summaries come from the
+  server's `availability`.
+
+So the `/api/chat` body must carry the typed `ContextRef[]`, and the client must hold the small context
+index. The `ContextResolver` in [UI components](#ui-components) is the client half (identity + nav); the
+server half builds the grounding summaries.
+
+**Replace the hardcoded travel constant.** `buildGrounding()` currently hardcodes `TRAVEL_WINDOWS`
+(Singapore Jun 22–29 / Tokyo Aug 10–14) to bias its adaptation sample. That duplicates
+`availability.travel` and will desync the moment `editTravelWindow` mutates a trip — the assistant
+would reason about stale dates right after editing one. Phase 3 must read the live `availability.travel`
+array instead of the constant.
+
+**Day-level grounding for absence.** A `day` ref with no selected occurrence must resolve to "what is
+scheduled here **and what is missing and why**" (that day's occurrences + the skipped/substituted ones
+with reasons), so the assistant can answer "why is this day empty?" — not just explain a single
+selected occurrence.
+
 ## UI components
 
 1. `ContextTray` - renders context blocks above the composer, supports remove/pin/focus.
-2. `AtMentionMenu` - opens from textarea on `@`, ranks suggestions by current tab/selection/date.
-3. `ChatActionCard` - renders assistant-proposed navigation, explain, and draft patch actions.
+2. `AtMentionMenu` - opens from textarea on `@`, ranks suggestions by current tab/selection/date,
+   keyboard-navigable (↑/↓/Enter/Esc) with ARIA `listbox`/`option` roles.
+3. `ChatActionCard` - renders assistant tool-call actions (navigation, explain, draft patch).
 4. `DraftPatchPreview` - shows before/after schedule deltas and validation failures.
-5. `ContextResolver` utilities - convert `ContextRef[]` into compact LLM grounding payload.
+5. `ContextResolver` utilities - convert `ContextRef[]` into a compact grounding payload; runs as a
+   client half (occurrence/activity/trace/day/range) + a server half (busy/time/bundle/resource/travel).
+6. `GroundingDisclosure` - a collapsed "what chat sees" panel that expands to the exact typed refs +
+   resolved summaries actually sent. The strongest expression of "visible beats hidden" (decision 1)
+   and success criterion 1; cheap to add and a clear reviewer demo.
+
+**Accessibility.** Context chips are removable via keyboard (focusable, Delete/Backspace removes);
+the `@`-menu is a proper combobox/listbox; draft-diff cards announce added/removed/moved counts to
+screen readers. None of this is free from the existing composer, so it is in-scope, not assumed.
 
 ## Implementation phases
 
@@ -224,22 +371,31 @@ Verification:
 - Asking "show Singapore trip conflicts" opens the relevant date range/filter.
 - On mobile, navigation brings the workspace pane forward as current chat links already do.
 
-### Phase 3 - Draft schedule and availability edits
+### Phase 3 - Draft input edits
 
-Scope:
+Scope (**input edits only** — `addBusyBlock`, `removeBusyBlock`, `editTravelWindow`,
+`setTemporalPolicy`; output overrides are deferred):
 
-- Add `SchedulePatch` draft objects for move occurrence, add/remove busy block, edit travel window,
-  and import availability/activities.
-- Validate patch shape before preview.
-- Rerun `scheduleTemporal()` in preview mode and show changed/skipped/substituted occurrences.
-- Require explicit Apply before mutating local workspace state.
+- Add the `InputPatch` draft objects and emit them via the tool-call channel.
+- Validate patch shape with `validate.ts` guards before preview.
+- Apply the patch to a *copy of the inputs*, rerun `scheduleTemporal()` in preview, diff against the
+  current result (per [Preview diff identity](#preview-diff-identity)), and show
+  changed/skipped/substituted occurrences.
+- Wire the rejection-explanation loop (patch-flow step 6).
+- Replace `buildGrounding`'s hardcoded `TRAVEL_WINDOWS` with a read of live `availability.travel`.
+- Require explicit Apply before mutating local workspace state; snapshot the pre-apply state for undo.
+- Confirm `scheduleTemporal` runs browser-side within an acceptable interactive budget before
+  committing to a full client-side preview rerun (it runs at build today, not in the browser).
 
 Verification:
 
-- "Move this to Friday afternoon" produces a preview card, not an immediate mutation.
-- Invalid moves explain the blocking constraints.
+- "Put my brisk walks in the morning" (`setTemporalPolicy`) produces a preview card, not an immediate
+  mutation, and the rerun moves the series.
+- "Block Jun 24 18:00–20:00 for dinner" reruns and shows which actions got displaced.
+- An infeasible request explains the blocking constraints from the preview's `failedConstraints`,
+  not from model intuition.
 - Applying a valid busy-block edit reruns the scheduler and updates Calendar, Activities,
-  Resources, Trace, and chat grounding consistently.
+  Resources, Trace, and chat grounding consistently; Undo restores the prior schedule.
 
 ### Phase 4 - Stronger agent ergonomics
 
@@ -248,12 +404,20 @@ Scope:
 - Add pinned contexts that survive tab/date changes.
 - Add command history and reusable prompts for common review flows.
 - Add "why not" alternatives: when a requested move fails, show the nearest feasible options.
+- Add a patch-apply **undo stack** (snapshot-before-apply) so an applied edit reverts in one step,
+  distinct from `resetSchedule()` which nukes all edits back to the build fixture.
+- Allow **batching** multiple input patches into one preview/apply ("block dinner *and* extend the
+  Singapore trip") instead of one-patch-at-a-time.
+- (Optional, gated by demand) the deferred `OutputOverride` class — `moveOccurrence` /
+  `setDisplayBundle` — with an explicit "won't survive the next rerun" badge.
 - Add export of draft/imported state as JSON for reproducible teammate review.
 
 Verification:
 
 - Pinned `@SingaporeTrip` remains in the tray while browsing other dates.
 - Failed reschedule requests provide top feasible alternatives with trace links.
+- A two-patch batch previews as one combined diff and applies atomically.
+- Undo after an apply restores the exact prior schedule; redo is not required.
 - Exported JSON can be re-imported through the Data tab and produce the same schedule.
 
 ## Prompt and safety updates
@@ -266,6 +430,45 @@ Update the system prompt so the assistant:
 - Never claims a schedule edit has been applied until the app confirms Apply succeeded.
 - Explains rejected edits using deterministic validator output, not model intuition.
 - Keeps clinical plan content stable unless the user provides an updated source plan.
+
+## Degraded mode (no API key)
+
+The `@`-menu, context tray, and ref navigation run off the **client context index** (see
+[Grounding model](#grounding-model)) — not the server — so they keep working when `/api/chat` returns
+503 (missing `OPENAI_API_KEY`). In that state:
+
+- Context blocks still build and a resolved `@`-ref can still drive **deterministic navigation**
+  (clicking `@SingaporeTrip` selects its date range) without the model.
+- Only intent parsing (explain / draft patch) and the server-side grounding summaries are disabled,
+  surfaced as the existing inline notice.
+
+This keeps the workspace useful for reviewers running without a key, matching the current "rest of the
+app keeps working" contract.
+
+## Testing & acceptance
+
+019 reshapes the composer DOM; the 018 change already broke the A5 selector once, so new cases are
+mandatory, not optional.
+
+Playwright (`tests/drive-acceptance.mjs`), additive:
+
+- **A7** — clicking a calendar time block renders a rectangular context block near the composer;
+  its remove control drops it from the next request payload.
+- **A8** — typing `@Remote` and selecting a suggestion inserts a canonical ref (assert the request
+  body carries a typed `ContextRef`, not just text).
+- **A9** — a reschedule/block request renders a `DraftPatchPreview` and does **not** mutate the
+  schedule until Apply.
+- **A10** — Apply reruns the scheduler and Calendar/Activities/Resources/Trace all reflect the change;
+  Undo restores the prior schedule.
+- Existing A1–A6 must still pass unchanged.
+
+Unit (Vitest):
+
+- `ContextResolver` — each `ContextRef` type resolves to its compact summary; unresolvable ids fail
+  loudly.
+- Patch validation + preview diff — shape guards reject malformed patches; the diff buckets
+  occurrences as unchanged/moved/newly-substituted/newly-skipped/newly-scheduled (per
+  [Preview diff identity](#preview-diff-identity)).
 
 ## What this is not
 
@@ -282,13 +485,16 @@ Update the system prompt so the assistant:
    contexts.
 3. Chat can navigate to Calendar, Activities, Resources, Trace, and Data with typed actions.
 4. A selected calendar time block appears as a small rectangular context block near the chat bar.
-5. A reschedule/travel/availability request produces a preview card and cannot mutate the schedule
+5. A retime/travel/availability **input edit** produces a preview card and cannot mutate the schedule
    without Apply.
-6. Applied preview changes rerun the scheduler and update all right-side tabs consistently.
-7. Invalid edits explain the violated constraints and offer nearest feasible alternatives when
-   available.
-8. Existing chat Q&A behavior, starter chips, rate-limit handling, and import rerun behavior remain
-   intact.
+6. Applied preview changes rerun the scheduler and update all right-side tabs consistently; an applied
+   edit can be undone in one step.
+7. Invalid edits explain the violated constraints from deterministic validator output and offer
+   nearest feasible alternatives when available.
+8. The context tray and `@`-resolution still build context and drive deterministic navigation when no
+   API key is configured.
+9. Existing chat Q&A behavior, starter chips, rate-limit handling, and import rerun behavior remain
+   intact (acceptance A1–A6 unchanged; A7–A10 added).
 
 ## Open decisions
 
@@ -296,8 +502,14 @@ Update the system prompt so the assistant:
    and require pinning for anything that should survive navigation.
 2. **Apply scope:** recommended default is local in-memory workspace apply only; no committed fixture
    rewrite from the UI.
-3. **LLM response format:** simplest first step is text plus a constrained JSON action block parsed
-   client-side. A Vercel AI SDK tool-call path can come later if the JSON block becomes brittle.
-4. **Drag-to-select timeline:** implement only if the day timeline already exposes stable slot
-   geometry. Otherwise start with click-to-select occupied/action slots and a small "Add time range"
-   control.
+3. **LLM response format:** *resolved (decision 6)* — use the AI SDK tool-call path from the start,
+   not an in-band JSON block. The text stream can't be reliably parsed for a partial JSON block
+   mid-stream, and tool calls give typed/validated args for free. Markdown links stay only as a
+   compatibility fallback.
+4. **Drag-to-select timeline:** the 018 DayTimeline is two parts — proportional lane-packed **bars**
+   (which have stable slot geometry) and a chronological **list** (which does not). Start with
+   click-to-select on bars/list rows plus a small "Add time range" control; only add drag-select over
+   the bars if their geometry proves stable enough.
+5. **`moveOccurrence` support:** *recommended default* — defer the whole `OutputOverride` class past
+   Phase 3 and steer users to `setTemporalPolicy` instead. Revisit only if a literal single-occurrence
+   move is explicitly requested, and ship it with a "won't survive the next rerun" badge.

@@ -49,9 +49,12 @@ export interface CalendarViewProps {
   memberBusy?: MemberBusyBlock[];
   /** 011: optional selection callback fired when a chip is clicked. Wired in 011 impl: forwarded down to MonthGrid + AgendaList → OccurrenceCard. */
   onSelect?: (occurrence: ScheduledOccurrence) => void;
+  /** 019: fired when a day is expanded (not collapsed), so the workspace can set selectedDate and
+   * the chat context tray shows an active day block before any action is selected. */
+  onExpandDay?: (date: string) => void;
 }
 
-export default function CalendarView({ result, memberBusy = [], onSelect }: CalendarViewProps) {
+export default function CalendarView({ result, memberBusy = [], onSelect, onExpandDay }: CalendarViewProps) {
   // 011 impl: onSelect is forwarded to MonthGrid + AgendaList; chips invoke it on click.
   const [month, setMonth] = useState<'Jun' | 'Jul' | 'Aug'>('Jun');
   const [statusFilters, setStatusFilters] = useState<Set<ScheduledOccurrence['status']>>(() => new Set(ALL_STATUSES));
@@ -79,7 +82,7 @@ export default function CalendarView({ result, memberBusy = [], onSelect }: Cale
         onReset={resetFilters}
       />
       <div className="hidden md:block">
-        <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} onSelect={onSelect} />
+        <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} onSelect={onSelect} onExpandDay={onExpandDay} />
       </div>
       <div className="block md:hidden">
         <AgendaList occurrences={filtered} month={month} memberBusy={memberBusy} onSelect={onSelect} />

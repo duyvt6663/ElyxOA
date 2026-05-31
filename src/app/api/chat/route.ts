@@ -31,6 +31,7 @@ import availabilityData from '@/data/availability.json';
 import { hasApiKey, getModelId } from '@/lib/llm/config';
 import { SYSTEM_PROMPT, buildGrounding, type ChatMessage } from '@/lib/llm/prompt';
 import { checkRateLimit } from '@/lib/llm/rate-limit';
+import { resolveContextRefs, type ChatContextItem } from '@/lib/chat-context';
 import type { AvailabilityBundle } from '@/lib/types';
 
 // 015: the server holds the canonical availability fixture so it can slice the member's
@@ -42,6 +43,8 @@ export const runtime = 'nodejs'; // edge optional; keep nodejs for AI SDK compat
 interface ChatRequestBody {
   messages: ChatMessage[];
   selection: { selectedOccurrenceId: string | null; selectedDate: string | null };
+  // 019 Phase 1 — typed contexts attached to this turn (visible context blocks).
+  contexts: ChatContextItem[];
   // Slim payload: client sends only what the server needs to build grounding.
   result: import('@/lib/types').ScheduleResult;
   traces: import('@/lib/types').AllocationTrace[];
@@ -72,12 +75,21 @@ export async function POST(req: NextRequest): Promise<Response> {
     return new Response(JSON.stringify({ error: 'invalid JSON body' }), { status: 400, headers: { 'content-type': 'application/json' } });
   }
 
+  const contexts = resolveContextRefs({
+    refs: body.contexts ?? [],
+    result: body.result,
+    traces: body.traces,
+    activities: body.activities,
+    availability,
+  });
+
   const grounding = buildGrounding({
     selection: body.selection,
     result: body.result,
     traces: body.traces,
     activities: body.activities,
     availability,
+    contexts,
   });
 
   try {

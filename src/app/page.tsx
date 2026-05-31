@@ -28,6 +28,7 @@ import activitiesData from '@/data/activities.json';
 import availabilityData from '@/data/availability.json';
 import schedulingHintsData from '@/data/scheduling-hints.json';
 import { scheduleTemporal } from '@/lib/temporal-scheduler';
+import { buildContextIndex } from '@/lib/chat-context';
 import {
   isActivity,
   isAvailabilityBundle,
@@ -61,6 +62,11 @@ if (hintRefErrors.length > 0) {
 // policies for activities without an explicit override (merge: explicit > hint > default).
 const { result, diagnostics } = scheduleTemporal(activities, availability, schedulingHintsData);
 
+// 019 Phase 1: build the lightweight client context index next to `result` (this Server
+// Component already holds the canonical availability). Threaded down so @-autocomplete and
+// deterministic ref navigation work without shipping the full availability fixture or an API key.
+const contextIndex = buildContextIndex({ result, availability });
+
 export default function Page() {
   return (
     <main className="min-h-dvh">
@@ -69,6 +75,7 @@ export default function Page() {
         activities={activities}
         availability={availability}
         diagnostics={diagnostics}
+        contextIndex={contextIndex}
       />
     </main>
   );

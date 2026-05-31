@@ -30,6 +30,8 @@ export interface MonthGridProps {
   /** 015 — member occupied blocks, passed to DayDetail's timeline. */
   memberBusy?: MemberBusyBlock[];
   onSelect?: (occurrence: ScheduledOccurrence) => void;
+  /** 019 — fired with the date when a day is expanded (not when collapsed). */
+  onExpandDay?: (date: string) => void;
 }
 
 const WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -50,7 +52,7 @@ function weekdayOfYMD(s: string): number {
   return dow === 0 ? 7 : dow;
 }
 
-export default function MonthGrid({ occurrences, month, year, memberBusy = [], onSelect }: MonthGridProps) {
+export default function MonthGrid({ occurrences, month, year, memberBusy = [], onSelect, onExpandDay }: MonthGridProps) {
   const [expandedDate, setExpandedDate] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement | null>(null);
 
@@ -104,7 +106,10 @@ export default function MonthGrid({ occurrences, month, year, memberBusy = [], o
             date={date}
             occurrences={byDate.get(date) ?? []}
             expanded={expandedDate === date}
-            onExpand={(d) => setExpandedDate((prev) => (prev === d ? null : d))}
+            onExpand={(d) => {
+              setExpandedDate((prev) => (prev === d ? null : d));
+              if (expandedDate !== d) onExpandDay?.(d); // fire on expand, not on collapse
+            }}
             onSelect={onSelect}
           />
         ))}

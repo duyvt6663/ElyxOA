@@ -315,6 +315,7 @@ function evaluateCandidates(
   resourceLedger: PerDayLedger,
   actionLedger: ActionLedger,
   availability: AvailabilityBundle,
+  excludeDays: Set<string>,
 ): { feasible: FeasibleCandidate[]; fails: FailedConstraint[] } {
   const policy = resolved.policy;
   const duration = Math.max(activity.durationMinutes, 1);
@@ -326,6 +327,9 @@ function evaluateCandidates(
   };
 
   for (const day of candidateDays(activity, genDate, availability.windowStart, availability.windowEnd)) {
+    // Don't place a second occurrence of the same source activity on a day it already occupies
+    // (movement windows could otherwise collide two due-dates onto one day).
+    if (excludeDays.has(day)) continue;
     // Resource + travel feasibility is date-granular (005 model), evaluated once per day.
     const rf = isFeasible(activity, day, resourceLedger, availability);
     if (!rf.feasible) {
@@ -490,6 +494,7 @@ function allocateTemporal(
   resourceLedger: PerDayLedger,
   actionLedger: ActionLedger,
   availability: AvailabilityBundle,
+  excludeDays: Set<string>,
 ): { occurrence: ScheduledOccurrence; trace: AllocationTrace } {
   const attempts: AllocationAttempt[] = [];
 
@@ -533,6 +538,7 @@ function allocateTemporal(
       resourceLedger,
       actionLedger,
       availability,
+      excludeDays,
     );
     const best = pickBest(feasible);
     if (best) {
@@ -567,6 +573,10 @@ function allocateTemporal(
       occ.startTime = minToTime(best.startMin);
       occ.endTime = minToTime(best.endMin);
       occ.timeZone = availability.timeZone;
+      // ID derives from the stable due-date (genDate), NOT the placed day: with movement
+      // windows two occurrences of the same activity can land on the same day, which would
+      // collide if keyed by placed day (duplicate React keys + broken trace lockstep).
+      occ.id = `occ-${slot.activity.id}-${slot.genDate}`;
       return { occ, chosen: best };
     }
     attempts.push({
@@ -662,10 +672,16 @@ export function scheduleTemporal(
 
   const resourceLedger: PerDayLedger = new Map();
   const actionLedger: ActionLedger = new Map();
+  const placedDays = new Map<string /* sourceActivityId */, Set<string /* day */>>();
   const occurrences: ScheduledOccurrence[] = [];
   const traces: AllocationTrace[] = [];
 
   for (const slot of slots) {
+    let excl = placedDays.get(slot.activity.id);
+    if (!excl) {
+      excl = new Set();
+      placedDays.set(slot.activity.id, excl);
+    }
     const { occurrence, trace } = allocateTemporal(
       slot,
       activitiesById,
@@ -673,7 +689,9 @@ export function scheduleTemporal(
       resourceLedger,
       actionLedger,
       availability,
+      excl,
     );
+    if (occurrence.status !== 'skipped') excl.add(occurrence.date);
     occurrences.push(occurrence);
     traces.push(trace);
   }

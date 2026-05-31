@@ -29,9 +29,14 @@ async function gotoTab(page, name) {
 
 async function runA1(page) {
   await page.goto(BASE, { waitUntil: 'networkidle' });
-  const chip = page.getByRole('button', { name: 'Select Cardiology Review on 2026-06-01' }).first();
-  await chip.waitFor({ timeout: 10000 });
-  await chip.click();
+  // Open the Jun 1 cell -> day timeline, then click the skipped Cardiology Review.
+  const cell = page.locator('[data-testid="day-cell-chips"]').first();
+  await cell.waitFor({ timeout: 10000 });
+  await cell.click();
+  await page.waitForTimeout(600);
+  const skip = page.getByRole('button', { name: /Cardiology Review/ }).first();
+  await skip.waitFor({ timeout: 5000 });
+  await skip.click();
   await gotoTab(page, 'Trace');
   await page.waitForSelector('text=occ-act-003-2026-06-01', { timeout: 5000 });
   const lower = (await page.locator('body').innerText()).toLowerCase();
@@ -51,10 +56,10 @@ async function runA2(page) {
 
 async function runA3(page) {
   await page.goto(BASE, { waitUntil: 'networkidle' });
-  // Open the first day with a "+N more" to reveal the DayTimeline.
-  const more = page.locator('button:has-text("more")').first();
-  await more.waitFor({ timeout: 8000 });
-  await more.click();
+  // Click a day cell to reveal the DayTimeline.
+  const cell = page.locator('[data-testid="day-cell-chips"]').first();
+  await cell.waitFor({ timeout: 8000 });
+  await cell.click();
   await page.waitForTimeout(600);
   const toggle = page.getByText('Show occupied slots').first();
   await toggle.waitFor({ timeout: 5000 });
@@ -88,9 +93,14 @@ async function runA5(page) {
     return;
   }
   await page.goto(BASE, { waitUntil: 'networkidle' });
-  const chip = page.getByRole('button', { name: /^Select / }).first();
-  await chip.waitFor({ timeout: 8000 });
-  await chip.click();
+  // Open a day timeline and select a scheduled action bar.
+  const cell = page.locator('[data-testid="day-cell-chips"]').first();
+  await cell.waitFor({ timeout: 8000 });
+  await cell.click();
+  await page.waitForTimeout(1200); // let the DayDetail scroll-into-view animation settle
+  const action = page.locator('aside button[title]').first();
+  await action.waitFor({ timeout: 5000 });
+  await action.click({ force: true }); // bypass the smooth-scroll stability wait
   await page.waitForTimeout(300);
   const ta = page.locator('textarea:visible').first();
   await ta.click();

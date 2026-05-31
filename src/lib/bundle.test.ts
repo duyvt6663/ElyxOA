@@ -28,7 +28,9 @@ const pol = (anchor: ActivityTemporalPolicy['anchor']): ActivityTemporalPolicy =
 describe('bundleAssignment', () => {
   it('bundles a daily no-resource medication into the morning bucket', () => {
     const a = act({ id: 'm1', type: 'medication', title: 'Morning Antihypertensive', frequency: { count: 1, period: 'day' } });
-    expect(bundleAssignment(a, pol('breakfast'))).toEqual({ bundleId: 'medication-morning', label: 'Morning meds' });
+    // Assert the BUCKET (logic); the label is fixture content (calendar-bundles.json overrides) and is
+    // covered by the labelOverrides test below — asserting it here couples the test to mutable data.
+    expect(bundleAssignment(a, pol('breakfast'))!.bundleId).toBe('medication-morning');
   });
 
   it('keys wake + breakfast meds to the SAME bundle', () => {
@@ -39,7 +41,7 @@ describe('bundleAssignment', () => {
 
   it('bundles daily food by canonical bucket', () => {
     const a = act({ id: 'f', type: 'food', title: 'Fiber Booster', frequency: { count: 1, period: 'day' } });
-    expect(bundleAssignment(a, pol('lunch'))).toEqual({ bundleId: 'food-midday', label: 'Lunch nutrition' });
+    expect(bundleAssignment(a, pol('lunch'))!.bundleId).toBe('food-midday');
   });
 
   it('does NOT bundle a monitoring med (has a device resource)', () => {

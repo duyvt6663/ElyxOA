@@ -16,11 +16,12 @@ exposes them.
 > work, treat ownership as:
 > - **Already fixed:** #2 (Data-tab duplication + import isolation) — closed via the 009
 >   state hoist + ImportPanel-as-toolbar refactor.
-> - **Superseded by 015 (do NOT fix standalone):** #1 calendar density (015 replaces the
->   chip pile with a summarized month view + day timeline), #3 Resources date axis (015
->   adds it to the new Member lane), #4 Trace whitespace (015's candidate-rejection tables
->   fill the panel), #9 Priority count wrap + #6 Priority row hover (015 reworks the
->   Priority rows; fold both into that pass).
+> - **Resolved by 015 (implemented + verified):** #1 calendar density (DayCell now shows
+>   per-type count pills with ⟳/✕ adaptation badges, ≤5/cell, + the day timeline — see 016 §2),
+>   #3 Resources date axis + Member lane, #6 Priority row hover, #9 Priority count wrap
+>   (whitespace-nowrap), #11 Upper Body Strength (re-verified under the temporal scheduler).
+>   #4 Trace whitespace is partially addressed (slot/score/provenance fill feasible traces;
+>   short/skipped traces still sparse — tracked in 016 §4).
 > - **Independent polish — still valid regardless of 015:** #5 Trace empty-state guide,
 >   #7 AppHeader mobile, #8 Actions title column, #10 chat starter-chip disabled cue.
 > - **Re-verify after 015:** #11 Upper Body Strength over-substitution — 015 rewrites the

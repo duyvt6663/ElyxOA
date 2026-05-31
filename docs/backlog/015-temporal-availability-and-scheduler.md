@@ -20,9 +20,13 @@
 - **Task 9 (core)** temporal `tests/drive-acceptance.mjs` A1–A6 → 6/6; `docs/context/index.md`
   + `docs/prompts/015-temporal-llm.md` updated. 24 unit tests / build static / lint clean.
 
-**Remaining:** Task 6 trace provenance tags + capped rejected-candidate grouping (the 8-cap
-+ slot/score already land); Task 8 leftovers (Resources "Member" lane, Priority time-aware
-outcome fields); migrating the 18 date-only unit tests to assert temporal placement.
+All 9 tasks landed (Task 6 provenance + Resources Member lane + Priority off-window done after
+the status above). A post-implementation UI/UX verification pass (**016**) then found + fixed two
+severe issues the temporal scale exposed: duplicate occurrence ids (movement-window collisions →
+console errors + broken trace lockstep) and the month-cell chip flood (redesigned to per-type
+count pills). See `016-temporal-ui-ux-verification.md` for the full feature-by-feature audit and
+the remaining tracked items (Monday therapy pile-up, trace whitespace, overlapping-quick-action
+rendering).
 
 ## Goal
 Upgrade the allocator from a whole-day, priority-only planner into a time-aware schedule

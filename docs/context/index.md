@@ -113,15 +113,17 @@ hoist closed the verification gap) · 011 workspace shell · 012 scheduler diagn
   Priority hover; §7-§10 cosmetic; §11 data quirk (Upper Body Strength all-substituted).
 - `008` — **DEPLOYED**: https://elyx-oa.vercel.app/ (README hosted URL filled). Vercel
   Git integration on `main`; `OPENAI_API_KEY` set as a project env var for `/api/chat`.
-- `015-temporal-availability-and-scheduler.md` — **IN PROGRESS (live)**. Done: Task 1 data
-  contract + validators; Task 2 `getDefaultTemporalPolicy` + demo overrides; Task 3
-  LLM-generated member busy fixture (`generate:availability`); Task 5 temporal scheduler
-  core (24 tests; real-fixture profile 2900 scheduled / 492 substituted / 166 skipped, 4.7%);
-  Task 7 wired `scheduleTemporal` into the app + calendar density fix + DayTimeline +
-  occupied-slots toggle; Task 8 (partial) Trace shows slot+score + chat temporal grounding.
-  June cardiology skip + Singapore/Tokyo travel adaptation preserved.
-  **Remaining:** Task 4 LLM semantic compiler + `scheduling-hints.json` + `generate:hints`;
-  Task 6 diagnostics provenance/cap polish; Task 8 leftovers (Resources Member lane,
-  Priority time-fields); Task 9 acceptance-suite refresh + prompts/run records.
+- `015-temporal-availability-and-scheduler.md` — **DONE (live).** All 9 tasks: data contract +
+  validators; `getDefaultTemporalPolicy` + overrides; LLM-generated busy fixture
+  (`generate:availability`); LLM semantic compiler + committed `scheduling-hints.json` +
+  build-time staleness check (`generate:hints`); temporal scheduler core; calendar density fix +
+  DayTimeline + occupied toggle; Resources Member lane + Priority off-window + Trace
+  slot/score/provenance + chat temporal grounding; acceptance A1–A6 + docs. Real-fixture profile
+  2900 / 490 / 168 (4.7% skip); June cardiology skip + Singapore/Tokyo travel adaptation preserved.
+- `016-temporal-ui-ux-verification.md` — full post-015 Playwright UI/UX audit. Fixed two severe
+  issues (duplicate occurrence ids from movement-window day collisions; month-cell chip flood →
+  per-type count pills with ⟳/✕ badges). Tracks remaining quality/cosmetic items (Monday therapy
+  pile-up, trace whitespace, overlapping-quick-action rendering).
 
-The take-home is live with the temporal upgrade. Remaining: 015 Tasks 4/6/8-leftovers/9.
+015 is fully implemented + UI/UX-verified (9 tasks + the 016 audit). 26 unit tests, 6/6
+acceptance, 0 console errors. Remaining items are quality/cosmetic (016 §3–6).

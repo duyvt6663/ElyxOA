@@ -2,7 +2,7 @@
 
 Transforms a priority-ordered health action plan (>=100 activities) into a personalized 3-month calendar that adapts to travel, equipment, specialist, and allied-health availability.
 
-**Hosted:** _TODO once deployed — see [`docs/DEPLOY.md`](docs/DEPLOY.md)._
+**Hosted:** https://elyx-oa.vercel.app/
 
 ## Quick Start
 

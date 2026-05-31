@@ -289,6 +289,7 @@ export function isScheduledOccurrence(x: unknown): x is ScheduledOccurrence {
   if (!isStr(x.status) || !STATUSES.has(x.status)) return false;
   if (!isStr(x.sourceActivityId)) return false;
   if (typeof x.effectiveActivityId !== 'undefined' && !isStr(x.effectiveActivityId)) return false;
+  if (typeof x.sourceTitle !== 'undefined' && !isStr(x.sourceTitle)) return false;
   if (!isStr(x.title)) return false;
   if (!isStr(x.type) || !ACTIVITY_TYPES.has(x.type)) return false;
   if (!isStr(x.details)) return false;

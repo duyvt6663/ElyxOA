@@ -219,6 +219,9 @@ export interface ScheduledOccurrence {
   status: 'scheduled' | 'substituted' | 'skipped';
   sourceActivityId: string;
   effectiveActivityId?: string;
+  /** 016 §10 — the source activity's title; set on substituted occurrences so the UI can show
+   * "Fallback ← Source" instead of several identical fallback titles looking like duplicates. */
+  sourceTitle?: string;
   title: string;
   type: ActivityType;
   details: string;

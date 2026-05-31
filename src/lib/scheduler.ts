@@ -540,6 +540,8 @@ export function buildOccurrence(args: {
   };
   if (args.status === 'substituted') {
     occ.effectiveActivityId = eff.id;
+    // 016 §10 — keep the source title so the UI can disambiguate reused fallbacks.
+    occ.sourceTitle = args.sourceActivity.title;
   }
   if (args.status === 'skipped') {
     occ.skipAdjustment = args.sourceActivity.skipAdjustment;

@@ -166,7 +166,11 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
                   left: `${colLeftPct + lane * laneWidthPct}%`,
                   width: `calc(${laneWidthPct}% - 2px)`,
                 }}
-                title={isGroup ? `${slot.items.length} actions at ${single.startTime}` : `${single.title} ${single.startTime}-${single.endTime}`}
+                title={
+                  isGroup
+                    ? `${slot.items.length} actions at ${single.startTime}`
+                    : `${single.title}${single.sourceTitle ? ` (substitutes ${single.sourceTitle})` : ''} ${single.startTime}-${single.endTime}`
+                }
               >
                 {label}
               </button>
@@ -190,7 +194,11 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
                   <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[o.type]}`} />
                   <span className="font-mono text-gray-500">{o.startTime}</span>
                   <span className="truncate">{o.title}</span>
-                  {o.status === 'substituted' && <span className="text-amber-600">⟳</span>}
+                  {o.status === 'substituted' && (
+                    <span className="text-amber-600 shrink-0">
+                      ⟳{o.sourceTitle ? <span className="ml-1 text-gray-400">← {o.sourceTitle}</span> : null}
+                    </span>
+                  )}
                   {o.outsidePreferredWindow && <span className="text-amber-500" title="outside preferred window">◷</span>}
                 </button>
               </li>

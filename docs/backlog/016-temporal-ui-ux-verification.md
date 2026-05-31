@@ -106,30 +106,74 @@ scale. The two **severe** ones were fixed in the same pass; the rest are tracked
    is compacted on small screens (`px-2 text-xs`) so all six tabs are visible/scrollable (rightmost
    edge 458px → 361px).
 
+10. **Substitution action-list labels hide the source activity.**
+    Deployed verification found four separate `08:00 Remote Brisk Walk Fallback` rows on Jun 1.
+    These are not duplicate occurrence IDs: they are distinct substituted occurrences from
+    `act-010` Lower Body Strength, `act-024` Row Erg Intervals, `act-049` VO2 Max Primer, and
+    `act-060` Loaded Carry Session, all using backup-only `act-103` Remote Brisk Walk Fallback.
+    The UI currently renders only the effective fallback title, so legitimate reused fallbacks look
+    like accidental duplicates.
+    → *Option:* for substituted rows, render `08:00 Remote Brisk Walk Fallback ← Lower Body
+    Strength` (or source title/id in a second muted line) and include the source in the title/trace
+    affordance. Same issue applies to repeated `Adherence Log Fallback`, `Async Physician Review
+    Fallback`, and `Travel Protein Plate Fallback` rows.
+
+11. **Food/medication micro-actions need scheduler-emitted display bundles.**
+    Jun 1 visibly carries `Food 15` and `Meds 16`; the action list then exposes every hydration,
+    fiber, caffeine, supplement, monitoring, and medication check as its own row. The scheduler is
+    applying temporal safety rules (anchors, member-busy overlap, temporalRule checks), but it does
+    **not** apply a hard "max visible food/med actions per day" cap. This was an explicit 015 V1
+    decision: `maxPerDay` was excluded; daily overload is only a soft score, and UI summarization
+    was expected to collapse low-risk daily actions.
+    → *Root cause:* the data fixture models many lifestyle micro-habits as separate daily
+    `food`/`medication` activities (12 daily food + 9 daily medication primaries), and quick
+    actions under 20 minutes are allowed to share time slots. That is fine for an allocator trace
+    ledger, but too noisy for a customer-facing calendar.
+    → *Direction:* introduce scheduler-emitted display bundles, not bland `06:30 ×10` groups.
+    The customer-facing Calendar should show named bundles such as `Morning meds`, `Breakfast
+    setup`, `Lunch nutrition checks`, `Dinner routine`, and `Bedtime meds`; clicking a bundle
+    expands the raw actions and trace links inside it. Keep the raw occurrence ledger intact for
+    Trace/debug mode.
+    → *LLM-assisted compiler:* use a cheap/fast model pass (for example `gpt-5-mini` if available
+    in the configured provider) to generate durable bundle metadata from `activities.json`:
+    `bundleId`, member-facing `label`, description, semantic category, anchor/window, and the
+    activity ids that belong in the bundle. Commit this as a fixture, e.g.
+    `src/data/calendar-bundles.json`, with schema validation and deterministic fallback rules when
+    no model/key is available.
+    → *Scheduler responsibility:* after `scheduleTemporal` places raw occurrences, run a pure
+    bundling step in `src/lib/` that assigns `displayBundleId` / `displayBundleLabel` per
+    occurrence and emits `CalendarDisplayBundle[]` per day. The UI should render these scheduler
+    bundles by default, not infer grouping from titles/times in React. This keeps import/rerun,
+    chat grounding, Trace, Priority, and Calendar all aligned.
+    → *Acceptance target:* default Jun 1 customer view should have a small number of named bundles
+    instead of `06:30 ×14`, `12:00 ×14`, `Food 15`, `Meds 16`; expanding bundles should still reveal
+    all 47 raw actions and preserve individual Trace selection.
+
 ## Cosmetic
 
-10. **⟳ glyph legibility.** The substituted badge `⟳N` renders small; the tooltip clarifies
+12. **⟳ glyph legibility.** The substituted badge `⟳N` renders small; the tooltip clarifies
     ("N substituted"). Acceptable; could swap for a clearer mark if a reviewer trips on it.
 
 ## What works well (verified)
 
 - **Day timeline** (the headline): member's real day (sleep/work/commute/meals/family) in gray,
   health actions placed around it at real times, substituted actions amber-ringed, skipped listed
-  below. The overall structure lands; same-slot action stacking is the blocker in #5.
+  below. Same-slot grouping + the chronological list make all actions reachable; substituted rows
+  still need source labels (#10), and food/med micro-actions need bundling (#11).
 - **Show occupied slots** toggle: flips 10 busy bars → 0 without moving the actions.
 - **Resources Member lane**: 8 category rows (sleep solid, work/commute weekday gaps, travel
   amber bands aligned to the Singapore/Tokyo trips) above equipment/specialist lanes; Jun|Jul|Aug
   date axis. Equipment maintenance (treadmill, ice-bath) bands preserved.
-- **Priority**: per-activity scheduled/substituted/skipped bar; rows hover + click → Trace.
-  `off-window` count rendering exists, but the count semantics need #6.
+- **Priority**: per-activity scheduled/substituted/skipped bar; rows hover + click → Trace;
+  `off-window` now reads scheduler-emitted semantics.
 - **Trace**: chosen slot + score + `policy: explicit/default/llm-hint` provenance; failure kinds
   (memberBusy/temporalRule/...) with detail.
 - **Chat**: grounded with the selected occurrence's trace + occupied blocks (date ±1 day); answers
   selected-occurrence timing questions ("scheduled at 06:30–07:00 …"). Starter scoping needs #8.
 - **Calendar controls**: month switcher (Jun/Jul/Aug), status+type filters, reset, summary header
   totals (2900 / 490 / 168).
-- **Mobile (360px)**: Chat | Workspace switch works and produces no page errors. Navigation and
-  calendar density need #9 before mobile is demo-ready.
+- **Mobile (360px)**: Chat | Workspace switch works, tab strip is compacted, and the Calendar uses
+  per-day summary rows with expandable timelines.
 
 ## Verification evidence
 - `/tmp/elyx-ux2/calendar-v3.png` — clean per-type pill month overview.
@@ -138,6 +182,10 @@ scale. The two **severe** ones were fixed in the same pass; the rest are tracked
 - Deployed audit (2026-05-31): public Vercel URL, `npm test` → **26/26**,
   `BASE_URL=https://elyx-oa.vercel.app/ node tests/drive-acceptance.mjs` → **6/6**,
   manual desktop/mobile pass → 0 console warnings/errors; new findings #5-#9.
+- Deployed duplicate-label check (2026-05-31): Jun 1 has four `08:00 Remote Brisk Walk Fallback`
+  rows, traced to distinct sources `act-010`, `act-024`, `act-049`, `act-060`; logged as #10.
+- Calendar density root-cause check (2026-05-31): fixture has 12 daily food + 9 daily medication
+  primary activities; Jun 1 renders `Food 15` / `Meds 16`; logged as #11.
 
 ## Fix pass (2026-05-31) — addressed #5, #6, #7, #8 (mobile nav), #9
 
@@ -156,4 +204,6 @@ Driven + verified on a local dev server; acceptance A1–A6 → 6/6, 26 unit tes
 - **#3** Monday weekly pile-up (scheduling quality) — stagger weekly expansion across the week.
 - **#4** Trace whitespace for short/skipped traces.
 - **#8 (starter scope)** explicit selected-vs-global chat starters.
-- **#10** ⟳ glyph polish.
+- **#10** substituted action-list rows should show source activity, not only fallback title.
+- **#11** food/medication display bundling for customer-facing calendar density.
+- **#12** ⟳ glyph polish.

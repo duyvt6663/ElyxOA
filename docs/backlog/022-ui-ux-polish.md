@@ -8,6 +8,10 @@ proposed fix, and adds a few adjacent gaps found during the pass.
 
 Severity: **P1** = hurts the core demo / first impression; **P2** = noticeable; **P3** = minor polish.
 
+> **Status (2026-06-01):** All P1s + G3 shipped & verified. **G4** reorder + **G2** chat formatting +
+> **G3** answer-with-nav (`2f03790`); **G1** tooltip portal/flip + **G5** interactive tour (`9bb1613`).
+> Acceptance now A1–A9 9/9. **Remaining:** G6–G8 (P3 minor polish).
+
 ---
 
 ## G1 [P1] Glossary tooltip is clipped by the tab bar / header

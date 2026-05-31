@@ -33,15 +33,18 @@ const dow = (s) => new Date(toUTC(s)).getUTCDay(); // 0=Sun..6=Sat
 
 // ---------- deterministic fallback pattern ----------
 const BASE = {
+  // 016 §3: realistic, NOT artificially hostile. Real lunch gap (12:00-13:30 free around a short
+  // meal), earlier work end, NO family in the base (added per-day Mon/Wed/Fri only) so Tue/Thu
+  // evenings are open recovery windows. Sleep/work/commute preserved. This weekday template is
+  // forced deterministically (see main) so the structure is reproducible regardless of the LLM.
   weekday: [
     { category: 'sleep', title: 'Sleep', start: '00:00', end: '06:30' },
     { category: 'meal', title: 'Breakfast', start: '07:30', end: '08:00' },
     { category: 'commute', title: 'Commute to office', start: '08:30', end: '09:00' },
     { category: 'work', title: 'Morning work block', start: '09:00', end: '12:00' },
-    { category: 'meal', title: 'Lunch', start: '12:15', end: '13:00' },
-    { category: 'work', title: 'Afternoon work block', start: '13:00', end: '17:30' },
-    { category: 'commute', title: 'Commute home', start: '17:30', end: '18:15' },
-    { category: 'family', title: 'Family time', start: '18:30', end: '20:00' },
+    { category: 'meal', title: 'Lunch', start: '12:30', end: '13:00' },
+    { category: 'work', title: 'Afternoon work block', start: '13:30', end: '17:00' },
+    { category: 'commute', title: 'Commute home', start: '17:00', end: '17:45' },
     { category: 'meal', title: 'Dinner', start: '19:00', end: '19:45' },
     { category: 'sleep', title: 'Sleep', start: '22:30', end: '23:59' },
   ],
@@ -73,6 +76,10 @@ const BASE = {
   // Extra blocks layered onto meeting-heavy weekdays (Tue/Thu).
   meetingHeavyExtra: [{ category: 'work', title: 'Standing meetings', start: '08:00', end: '08:30' }],
 };
+
+// 016 §3: family on Mon/Wed/Fri evenings only (Tue/Thu evenings stay free for recovery).
+const FAMILY_EVENING = { category: 'family', title: 'Family time', start: '18:30', end: '20:00' };
+const FAMILY_DOWS = new Set([1, 3, 5]); // Mon, Wed, Fri
 
 // ---------- semantics by category ----------
 const BLOCKS_SCHEDULING = new Set(['sleep', 'work', 'commute', 'family', 'travel', 'personal', 'clinical']);
@@ -174,7 +181,10 @@ async function main() {
   } else {
     console.warn('No OPENAI_API_KEY; using deterministic fallback.');
   }
-  console.log('pattern source:', source);
+  // 016 §3: force the realistic weekday template deterministically (lunch gap, no base family,
+  // earlier work end) regardless of the LLM pattern; keep LLM flavor for weekend/travel.
+  pattern.weekday = BASE.weekday;
+  console.log('pattern source:', source, '(weekday forced deterministic for 016 §3)');
 
   const tRanges = travelRanges(availability);
   // group key -> { category, title, blocks: [] }
@@ -192,6 +202,8 @@ async function main() {
     else if (dow(date) === 0) blocks = pattern.weekendSun;
     else {
       blocks = pattern.weekday;
+      // 016 §3: family only Mon/Wed/Fri evenings; Tue/Thu carry meetings but free evenings.
+      if (FAMILY_DOWS.has(dow(date))) blocks = blocks.concat([FAMILY_EVENING]);
       if ((dow(date) === 2 || dow(date) === 4) && Array.isArray(pattern.meetingHeavyExtra)) {
         blocks = blocks.concat(pattern.meetingHeavyExtra);
       }

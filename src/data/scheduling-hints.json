@@ -4,7 +4,7 @@
   "activityPolicies": [
     {
       "activityId": "act-001",
-      "confidence": 0.94,
+      "confidence": 0.95,
       "rationale": "morning BP meds",
       "temporalPolicy": {
         "preferredWindows": [
@@ -20,7 +20,7 @@
     },
     {
       "activityId": "act-002",
-      "confidence": 0.96,
+      "confidence": 0.98,
       "rationale": "with breakfast",
       "temporalPolicy": {
         "preferredWindows": [
@@ -52,7 +52,7 @@
     },
     {
       "activityId": "act-007",
-      "confidence": 0.88,
+      "confidence": 0.85,
       "rationale": "daily quick check",
       "temporalPolicy": {
         "preferredWindows": [
@@ -68,19 +68,14 @@
     },
     {
       "activityId": "act-005",
-      "confidence": 0.85,
-      "rationale": "zone2 cardio typical",
+      "confidence": 0.9,
+      "rationale": "zone 2 cardio ideal morning",
       "temporalPolicy": {
         "preferredWindows": [
           {
             "label": "morning",
             "startTime": "07:00",
-            "endTime": "10:00"
-          },
-          {
-            "label": "afternoon",
-            "startTime": "16:00",
-            "endTime": "18:30"
+            "endTime": "10:30"
           }
         ],
         "anchor": "any",
@@ -89,15 +84,10 @@
     },
     {
       "activityId": "act-010",
-      "confidence": 0.87,
-      "rationale": "strength training",
+      "confidence": 0.88,
+      "rationale": "strength training slot",
       "temporalPolicy": {
         "preferredWindows": [
-          {
-            "label": "morning",
-            "startTime": "07:00",
-            "endTime": "11:00"
-          },
           {
             "label": "afternoon",
             "startTime": "16:00",
@@ -110,15 +100,10 @@
     },
     {
       "activityId": "act-015",
-      "confidence": 0.87,
-      "rationale": "strength training",
+      "confidence": 0.88,
+      "rationale": "strength split session",
       "temporalPolicy": {
         "preferredWindows": [
-          {
-            "label": "morning",
-            "startTime": "07:00",
-            "endTime": "11:00"
-          },
           {
             "label": "afternoon",
             "startTime": "16:00",
@@ -130,66 +115,8 @@
       }
     },
     {
-      "activityId": "act-036",
-      "confidence": 0.9,
-      "rationale": "daily mobility",
-      "temporalPolicy": {
-        "preferredWindows": [
-          {
-            "label": "morning",
-            "startTime": "07:00",
-            "endTime": "08:30"
-          },
-          {
-            "label": "evening",
-            "startTime": "20:30",
-            "endTime": "21:30"
-          }
-        ],
-        "anchor": "wake",
-        "intensity": "low"
-      }
-    },
-    {
-      "activityId": "act-041",
-      "confidence": 0.82,
-      "rationale": "short daily core",
-      "temporalPolicy": {
-        "preferredWindows": [
-          {
-            "label": "morning",
-            "startTime": "07:00",
-            "endTime": "09:00"
-          }
-        ],
-        "anchor": "any",
-        "intensity": "moderate"
-      }
-    },
-    {
-      "activityId": "act-044",
-      "confidence": 0.88,
-      "rationale": "daily walk flexible",
-      "temporalPolicy": {
-        "preferredWindows": [
-          {
-            "label": "morning",
-            "startTime": "07:30",
-            "endTime": "10:00"
-          },
-          {
-            "label": "evening",
-            "startTime": "17:00",
-            "endTime": "19:00"
-          }
-        ],
-        "anchor": "any",
-        "intensity": "low"
-      }
-    },
-    {
       "activityId": "act-013",
-      "confidence": 0.95,
+      "confidence": 0.97,
       "rationale": "breakfast meal",
       "temporalPolicy": {
         "preferredWindows": [
@@ -205,7 +132,7 @@
     },
     {
       "activityId": "act-016",
-      "confidence": 0.95,
+      "confidence": 0.97,
       "rationale": "lunch meal",
       "temporalPolicy": {
         "preferredWindows": [
@@ -221,8 +148,8 @@
     },
     {
       "activityId": "act-025",
-      "confidence": 0.95,
-      "rationale": "dinner meal",
+      "confidence": 0.97,
+      "rationale": "dinner timing",
       "temporalPolicy": {
         "preferredWindows": [
           {
@@ -237,7 +164,7 @@
     },
     {
       "activityId": "act-030",
-      "confidence": 0.93,
+      "confidence": 0.92,
       "rationale": "with lunch",
       "temporalPolicy": {
         "preferredWindows": [
@@ -253,8 +180,8 @@
     },
     {
       "activityId": "act-011",
-      "confidence": 0.92,
-      "rationale": "evening calming supplement",
+      "confidence": 0.9,
+      "rationale": "evening relaxation supplement",
       "temporalPolicy": {
         "preferredWindows": [
           {
@@ -268,25 +195,9 @@
       }
     },
     {
-      "activityId": "act-039",
-      "confidence": 0.9,
-      "rationale": "pre-sleep decision",
-      "temporalPolicy": {
-        "preferredWindows": [
-          {
-            "label": "evening",
-            "startTime": "21:00",
-            "endTime": "22:30"
-          }
-        ],
-        "anchor": "bedtime",
-        "intensity": "none"
-      }
-    },
-    {
       "activityId": "act-022",
-      "confidence": 0.86,
-      "rationale": "downshift breathwork",
+      "confidence": 0.85,
+      "rationale": "downshift breathing",
       "temporalPolicy": {
         "preferredWindows": [
           {
@@ -302,7 +213,7 @@
     {
       "activityId": "act-018",
       "confidence": 0.8,
-      "rationale": "recovery session",
+      "rationale": "recovery session evening",
       "temporalPolicy": {
         "preferredWindows": [
           {
@@ -316,35 +227,104 @@
       }
     },
     {
-      "activityId": "act-003",
-      "confidence": 0.91,
-      "rationale": "clinic hours",
+      "activityId": "act-044",
+      "confidence": 0.9,
+      "rationale": "daily walk flexible",
       "temporalPolicy": {
         "preferredWindows": [
           {
-            "label": "midday",
-            "startTime": "09:00",
-            "endTime": "17:00"
+            "label": "morning",
+            "startTime": "07:00",
+            "endTime": "09:00"
+          },
+          {
+            "label": "afternoon",
+            "startTime": "16:30",
+            "endTime": "18:30"
           }
         ],
         "anchor": "any",
-        "intensity": "none"
+        "intensity": "low"
       }
     },
     {
-      "activityId": "act-014",
-      "confidence": 0.91,
-      "rationale": "clinic hours",
+      "activityId": "act-036",
+      "confidence": 0.9,
+      "rationale": "daily mobility",
       "temporalPolicy": {
         "preferredWindows": [
           {
-            "label": "midday",
+            "label": "morning",
+            "startTime": "06:30",
+            "endTime": "08:00"
+          }
+        ],
+        "anchor": "wake",
+        "intensity": "low"
+      }
+    },
+    {
+      "activityId": "act-041",
+      "confidence": 0.85,
+      "rationale": "short daily core",
+      "temporalPolicy": {
+        "preferredWindows": [
+          {
+            "label": "morning",
+            "startTime": "06:30",
+            "endTime": "08:30"
+          }
+        ],
+        "anchor": "any",
+        "intensity": "moderate"
+      }
+    },
+    {
+      "activityId": "act-040",
+      "confidence": 0.8,
+      "rationale": "post-training recovery",
+      "temporalPolicy": {
+        "preferredWindows": [
+          {
+            "label": "evening",
+            "startTime": "19:00",
+            "endTime": "21:30"
+          }
+        ],
+        "anchor": "any",
+        "intensity": "low"
+      }
+    },
+    {
+      "activityId": "act-029",
+      "confidence": 0.85,
+      "rationale": "weekly prep weekend",
+      "temporalPolicy": {
+        "preferredWindows": [
+          {
+            "label": "morning",
             "startTime": "09:00",
+            "endTime": "12:00"
+          }
+        ],
+        "anchor": "any",
+        "intensity": "low"
+      }
+    },
+    {
+      "activityId": "act-046",
+      "confidence": 0.85,
+      "rationale": "therapy daytime",
+      "temporalPolicy": {
+        "preferredWindows": [
+          {
+            "label": "afternoon",
+            "startTime": "13:00",
             "endTime": "17:00"
           }
         ],
         "anchor": "any",
-        "intensity": "none"
+        "intensity": "low"
       }
     }
   ],
@@ -355,14 +335,14 @@
       "blocksScheduling": true,
       "visibleByDefault": true,
       "confidence": 0.99,
-      "rationale": "sleep period"
+      "rationale": "core sleep"
     },
     {
       "busyBlockId": "mb-meal-breakfast",
       "category": "meal",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.99,
+      "confidence": 0.95,
       "rationale": "breakfast"
     },
     {
@@ -374,28 +354,28 @@
       "rationale": "commute"
     },
     {
-      "busyBlockId": "mb-work-morning-work",
+      "busyBlockId": "mb-work-morning-work-block",
       "category": "work",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.97,
-      "rationale": "work hours"
+      "confidence": 0.98,
+      "rationale": "focused work"
     },
     {
       "busyBlockId": "mb-meal-lunch",
       "category": "meal",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.99,
+      "confidence": 0.95,
       "rationale": "lunch"
     },
     {
-      "busyBlockId": "mb-work-afternoon-work",
+      "busyBlockId": "mb-work-afternoon-work-block",
       "category": "work",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.97,
-      "rationale": "work hours"
+      "confidence": 0.98,
+      "rationale": "work block"
     },
     {
       "busyBlockId": "mb-commute-commute-home",
@@ -406,55 +386,15 @@
       "rationale": "commute"
     },
     {
-      "busyBlockId": "mb-family-family-time",
-      "category": "family",
-      "blocksScheduling": true,
-      "visibleByDefault": true,
-      "confidence": 0.96,
-      "rationale": "family"
-    },
-    {
       "busyBlockId": "mb-meal-dinner",
       "category": "meal",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.99,
+      "confidence": 0.95,
       "rationale": "dinner"
     },
     {
-      "busyBlockId": "mb-personal-personal-recovery",
-      "category": "personal",
-      "blocksScheduling": false,
-      "visibleByDefault": true,
-      "confidence": 0.8,
-      "rationale": "flexible recovery"
-    },
-    {
-      "busyBlockId": "mb-work-early-calls",
-      "category": "work",
-      "blocksScheduling": true,
-      "visibleByDefault": true,
-      "confidence": 0.94,
-      "rationale": "work calls"
-    },
-    {
-      "busyBlockId": "mb-work-late-follow-ups",
-      "category": "work",
-      "blocksScheduling": true,
-      "visibleByDefault": true,
-      "confidence": 0.94,
-      "rationale": "work tasks"
-    },
-    {
-      "busyBlockId": "mb-personal-morning-routine",
-      "category": "personal",
-      "blocksScheduling": false,
-      "visibleByDefault": true,
-      "confidence": 0.9,
-      "rationale": "routine flexible"
-    },
-    {
-      "busyBlockId": "mb-family-family-activities",
+      "busyBlockId": "mb-family-family-time",
       "category": "family",
       "blocksScheduling": true,
       "visibleByDefault": true,
@@ -462,31 +402,87 @@
       "rationale": "family"
     },
     {
-      "busyBlockId": "mb-personal-personal-time",
-      "category": "personal",
-      "blocksScheduling": false,
-      "visibleByDefault": true,
-      "confidence": 0.85,
-      "rationale": "flexible time"
-    },
-    {
-      "busyBlockId": "mb-personal-relaxation",
-      "category": "personal",
-      "blocksScheduling": false,
-      "visibleByDefault": true,
-      "confidence": 0.88,
-      "rationale": "relaxation"
-    },
-    {
-      "busyBlockId": "mb-clinical-health-review-coaching",
-      "category": "clinical",
+      "busyBlockId": "mb-work-early-calls",
+      "category": "work",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.93,
-      "rationale": "health session"
+      "confidence": 0.9,
+      "rationale": "calls"
     },
     {
-      "busyBlockId": "mb-personal-prep-planning",
+      "busyBlockId": "mb-work-late-follow-ups",
+      "category": "work",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.9,
+      "rationale": "late work"
+    },
+    {
+      "busyBlockId": "mb-sleep-sleep-night",
+      "category": "sleep",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.99,
+      "rationale": "night sleep"
+    },
+    {
+      "busyBlockId": "mb-personal-morning-workout-outdoors",
+      "category": "personal",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.85,
+      "rationale": "exercise slot"
+    },
+    {
+      "busyBlockId": "mb-family-family-outing-activities",
+      "category": "family",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.9,
+      "rationale": "outing"
+    },
+    {
+      "busyBlockId": "mb-personal-personal-time-hobbies",
+      "category": "personal",
+      "blocksScheduling": false,
+      "visibleByDefault": true,
+      "confidence": 0.8,
+      "rationale": "flexible"
+    },
+    {
+      "busyBlockId": "mb-family-evening-family-time",
+      "category": "family",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.95,
+      "rationale": "evening family"
+    },
+    {
+      "busyBlockId": "mb-personal-wind-down",
+      "category": "personal",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.9,
+      "rationale": "pre-sleep"
+    },
+    {
+      "busyBlockId": "mb-personal-recovery-light-movement",
+      "category": "personal",
+      "blocksScheduling": false,
+      "visibleByDefault": true,
+      "confidence": 0.8,
+      "rationale": "light activity"
+    },
+    {
+      "busyBlockId": "mb-family-family-time-brunch-outing",
+      "category": "family",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.9,
+      "rationale": "brunch"
+    },
+    {
+      "busyBlockId": "mb-personal-planning-prep-for-week",
       "category": "personal",
       "blocksScheduling": false,
       "visibleByDefault": true,
@@ -494,44 +490,52 @@
       "rationale": "planning"
     },
     {
-      "busyBlockId": "mb-family-family-dinner-time",
+      "busyBlockId": "mb-family-relaxed-family-time",
       "category": "family",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.96,
-      "rationale": "family dinner"
+      "confidence": 0.9,
+      "rationale": "family"
     },
     {
-      "busyBlockId": "mb-personal-wind-down",
+      "busyBlockId": "mb-personal-morning-routine",
       "category": "personal",
-      "blocksScheduling": false,
+      "blocksScheduling": true,
       "visibleByDefault": true,
       "confidence": 0.9,
-      "rationale": "wind down"
+      "rationale": "routine"
     },
     {
-      "busyBlockId": "mb-travel-transit",
+      "busyBlockId": "mb-travel-airport-transfer-security",
       "category": "travel",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.92,
-      "rationale": "travel"
+      "confidence": 0.95,
+      "rationale": "airport"
     },
     {
-      "busyBlockId": "mb-family-family-check-in",
-      "category": "family",
+      "busyBlockId": "mb-travel-flight-transit",
+      "category": "travel",
       "blocksScheduling": true,
       "visibleByDefault": true,
-      "confidence": 0.9,
-      "rationale": "family check"
+      "confidence": 0.95,
+      "rationale": "flight"
     },
     {
-      "busyBlockId": "mb-personal-recovery",
-      "category": "personal",
+      "busyBlockId": "mb-travel-ground-transport-to-destination",
+      "category": "travel",
+      "blocksScheduling": true,
+      "visibleByDefault": true,
+      "confidence": 0.95,
+      "rationale": "transport"
+    },
+    {
+      "busyBlockId": "mb-work-light-work-emails",
+      "category": "work",
       "blocksScheduling": false,
       "visibleByDefault": true,
       "confidence": 0.85,
-      "rationale": "recovery"
+      "rationale": "light work"
     }
   ],
   "globalRules": [],

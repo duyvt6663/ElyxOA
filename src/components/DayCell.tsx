@@ -16,7 +16,8 @@
  * 4. Pill click -> onExpand(date) opens the DayDetail timeline.
  */
 
-import type { ScheduledOccurrence, ActivityType } from '@/lib/types';
+import type { ScheduledOccurrence, ActivityType, TravelPlan } from '@/lib/types';
+import { travelDestinationForDate, TravelBadge } from './travelMarker';
 
 export interface DayCellProps {
   date: string;
@@ -24,6 +25,8 @@ export interface DayCellProps {
   expanded?: boolean;
   onExpand?: (date: string) => void;
   onSelect?: (occurrence: ScheduledOccurrence) => void;
+  /** 019 follow-up — travel windows, to flag trip days on the month grid. */
+  travel?: TravelPlan[];
 }
 
 const TYPE_SUMMARY: Record<ActivityType, { label: string; cls: string }> = {
@@ -48,7 +51,8 @@ interface Tally {
   skipped: number;
 }
 
-export default function DayCell({ date, occurrences, expanded, onExpand }: DayCellProps) {
+export default function DayCell({ date, occurrences, expanded, onExpand, travel }: DayCellProps) {
+  const tripDestination = travelDestinationForDate(travel, date);
   const byType = new Map<ActivityType, Tally>();
   for (const o of occurrences) {
     const t = byType.get(o.type) ?? { happening: 0, substituted: 0, skipped: 0 };
@@ -67,7 +71,10 @@ export default function DayCell({ date, occurrences, expanded, onExpand }: DayCe
       onClick={() => onExpand?.(date)}
       className={`bg-white p-2 min-h-24 flex flex-col gap-1 text-left w-full ${expanded ? 'ring-2 ring-blue-400' : ''} hover:bg-gray-50`}
     >
-      <div className="text-xs font-semibold text-gray-700">{parseYMD(date).d}</div>
+      <div className="flex items-center gap-1">
+        <span className="text-xs font-semibold text-gray-700">{parseYMD(date).d}</span>
+        {tripDestination && <TravelBadge destination={tripDestination} className="ml-auto" />}
+      </div>
       <div data-testid="day-cell-chips" className="flex flex-col gap-1">
         {pills.map((p) => {
           const meta = TYPE_SUMMARY[p.type];

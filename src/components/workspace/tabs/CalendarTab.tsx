@@ -28,6 +28,7 @@ export default function CalendarTab({ result, availability, selection: _selectio
     <CalendarView
       result={result}
       memberBusy={availability.memberBusy}
+      travel={availability.travel}
       onSelect={(occ: ScheduledOccurrence) =>
         onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date })
       }

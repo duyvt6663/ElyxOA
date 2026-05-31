@@ -19,7 +19,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import type { ScheduledOccurrence, MemberBusyBlock } from '@/lib/types';
+import type { ScheduledOccurrence, MemberBusyBlock, TravelPlan } from '@/lib/types';
 import DayCell from './DayCell';
 import DayDetail from './DayDetail';
 
@@ -29,6 +29,8 @@ export interface MonthGridProps {
   year: 2026;
   /** 015 — member occupied blocks, passed to DayDetail's timeline. */
   memberBusy?: MemberBusyBlock[];
+  /** 019 follow-up — travel windows, to flag trip days on the grid. */
+  travel?: TravelPlan[];
   onSelect?: (occurrence: ScheduledOccurrence) => void;
   /** 019 — fired with the date when a day is expanded (not when collapsed). */
   onExpandDay?: (date: string) => void;
@@ -52,7 +54,7 @@ function weekdayOfYMD(s: string): number {
   return dow === 0 ? 7 : dow;
 }
 
-export default function MonthGrid({ occurrences, month, year, memberBusy = [], onSelect, onExpandDay }: MonthGridProps) {
+export default function MonthGrid({ occurrences, month, year, memberBusy = [], travel, onSelect, onExpandDay }: MonthGridProps) {
   const [expandedDate, setExpandedDate] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement | null>(null);
 
@@ -105,6 +107,7 @@ export default function MonthGrid({ occurrences, month, year, memberBusy = [], o
             key={date}
             date={date}
             occurrences={byDate.get(date) ?? []}
+            travel={travel}
             expanded={expandedDate === date}
             onExpand={(d) => {
               setExpandedDate((prev) => (prev === d ? null : d));

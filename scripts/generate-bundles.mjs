@@ -13,15 +13,17 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const MODEL = 'gpt-5.3-chat-latest';
-const KEY_RE = /^(food|medication):(wake|breakfast|lunch|dinner|bedtime|any)$/;
+// Keys are the canonical (type, bucket) — buckets: morning, midday, evening, bedtime, any.
+const KEY_RE = /^(food|medication):(morning|midday|evening|bedtime|any)$/;
 const DEFAULTS = {
-  'medication:breakfast': 'Morning meds',
-  'medication:dinner': 'Evening meds',
+  'medication:morning': 'Morning meds',
+  'medication:midday': 'Midday meds',
+  'medication:evening': 'Evening meds',
   'medication:bedtime': 'Bedtime meds',
   'medication:any': 'Daily meds',
-  'food:breakfast': 'Breakfast nutrition',
-  'food:lunch': 'Lunch nutrition',
-  'food:dinner': 'Dinner nutrition',
+  'food:morning': 'Breakfast nutrition',
+  'food:midday': 'Lunch nutrition',
+  'food:evening': 'Dinner nutrition',
   'food:any': 'Daily nutrition',
 };
 

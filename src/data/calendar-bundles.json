@@ -2,13 +2,14 @@
   "generatedAt": "2026-05-31T00:00:00Z",
   "model": "gpt-5.3-chat-latest",
   "labels": {
-    "medication:breakfast": "Morning Medications",
-    "medication:dinner": "Evening Medications",
+    "medication:morning": "Morning Medications",
+    "medication:midday": "Midday Medications",
+    "medication:evening": "Evening Medications",
     "medication:bedtime": "Bedtime Medications",
     "medication:any": "Daily Medications",
-    "food:breakfast": "Breakfast Nourishment",
-    "food:lunch": "Lunch Nourishment",
-    "food:dinner": "Dinner Nourishment",
+    "food:morning": "Breakfast Nourishment",
+    "food:midday": "Lunch Nourishment",
+    "food:evening": "Dinner Nourishment",
     "food:any": "Daily Nourishment"
   }
 }

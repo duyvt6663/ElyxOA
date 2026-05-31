@@ -23,18 +23,27 @@ import bundlesFixture from '@/data/calendar-bundles.json';
 // default → the deterministic map below is used. An explicit labelOverrides arg still wins.
 const FIXTURE_LABELS: Record<string, string> = (bundlesFixture as { labels?: Record<string, string> }).labels ?? {};
 
-/** Member-facing label per `${type}:${anchor}` bucket. */
+// Canonical time bucket per anchor — wake+breakfast collapse to one bucket so a wake-anchored
+// med and a breakfast-anchored med always land in the SAME bundle (regardless of label).
+const ANCHOR_BUCKET: Record<string, string> = {
+  wake: 'morning',
+  breakfast: 'morning',
+  lunch: 'midday',
+  dinner: 'evening',
+  bedtime: 'bedtime',
+  any: 'any',
+};
+
+/** Member-facing label per `${type}:${bucket}`. */
 const BUNDLE_LABELS: Record<string, string> = {
-  'medication:wake': 'Morning meds',
-  'medication:breakfast': 'Morning meds',
-  'medication:lunch': 'Midday meds',
-  'medication:dinner': 'Evening meds',
+  'medication:morning': 'Morning meds',
+  'medication:midday': 'Midday meds',
+  'medication:evening': 'Evening meds',
   'medication:bedtime': 'Bedtime meds',
   'medication:any': 'Daily meds',
-  'food:wake': 'Early nutrition',
-  'food:breakfast': 'Breakfast nutrition',
-  'food:lunch': 'Lunch nutrition',
-  'food:dinner': 'Dinner nutrition',
+  'food:morning': 'Breakfast nutrition',
+  'food:midday': 'Lunch nutrition',
+  'food:evening': 'Dinner nutrition',
   'food:bedtime': 'Evening nutrition',
   'food:any': 'Daily nutrition',
 };
@@ -60,16 +69,15 @@ export function bundleAssignment(
   // those individual (monitoring readings are demo-critical and shouldn't be collapsed).
   if (activity.resources.length > 0) return null;
 
-  const anchor = policy.anchor ?? 'any';
-  const key = `${activity.type}:${anchor}`;
+  const bucket = ANCHOR_BUCKET[policy.anchor ?? 'any'] ?? 'any';
+  const key = `${activity.type}:${bucket}`;
+  // Bundle id is the canonical (type, bucket) — stable regardless of label, so wake/breakfast
+  // always share one bundle even if an LLM relabels only one anchor.
+  const bundleId = `${activity.type}-${bucket}`;
   const label =
     labelOverrides?.[key] ??
     FIXTURE_LABELS[key] ??
     BUNDLE_LABELS[key] ??
-    BUNDLE_LABELS[`${activity.type}:any`] ??
     (activity.type === 'medication' ? 'Daily meds' : 'Daily nutrition');
-  // Key the bundle by its LABEL, not the raw anchor — different anchors that share a label
-  // (e.g. medication 'wake' and 'breakfast' both → "Morning meds") must land in one bundle.
-  const bundleId = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   return { bundleId, label };
 }

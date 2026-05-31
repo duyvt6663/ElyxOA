@@ -176,7 +176,13 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
   for (let h = 6; h <= 22; h++) hours.push(h);
 
   // Chronological list rows: bundles + slot-groups + singles, sorted by start.
-  const listEntries = [...entries].sort((a, b) => a.startMin - b.startMin || a.label.localeCompare(b.label));
+  // List rows: SEMANTIC bundles stay collapsed (named + timestamped); everything else (monitoring,
+  // substituted, blocking) lists INDIVIDUALLY — they're heterogeneous and not nameable as one
+  // bundle, so a bland "07:30 ×9" helps no one. Merge + sort by start time.
+  const listRows: Array<{ sort: number; bundle: Entry | null; occ: ScheduledOccurrence | null }> = [
+    ...entries.filter((e) => e.kind === 'bundle').map((e) => ({ sort: e.startMin, bundle: e, occ: null })),
+    ...loose.map((o) => ({ sort: toMin(o.startTime)!, bundle: null as Entry | null, occ: o })),
+  ].sort((a, b) => a.sort - b.sort);
 
   return (
     <div>
@@ -235,29 +241,28 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
         <div className="mt-3">
           <div className="mb-1 text-xs font-medium text-gray-500">Scheduled actions ({timed.length})</div>
           <ul className="flex flex-col gap-0.5">
-            {listEntries.map((en) => {
-              if (en.items.length === 1) return <ActionRow key={en.key} occ={en.items[0]!} onSelect={onSelect} />;
-              const isOpen = openEntries.has(en.key);
-              const subN = en.items.filter((o) => o.status === 'substituted').length;
-              const labelText =
-                en.kind === 'bundle'
-                  ? `${en.items[0]!.displayBundleLabel} ×${en.items.length}`
-                  : `${en.items[0]!.startTime} · ${en.items.length} actions${subN > 0 ? ` (${subN} sub)` : ''}`;
+            {listRows.map((r) => {
+              if (!r.bundle) return <ActionRow key={r.occ!.id} occ={r.occ!} onSelect={onSelect} />;
+              const e = r.bundle;
+              const isOpen = openEntries.has(e.key);
               return (
-                <li key={en.key}>
+                <li key={e.key}>
                   <button
                     type="button"
-                    onClick={() => toggle(en.key)}
+                    onClick={() => toggle(e.key)}
                     className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
                   >
-                    <span className="text-gray-400">{isOpen ? '▾' : '▸'}</span>
-                    {en.kind === 'bundle' && <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[en.type]}`} />}
-                    <span className="font-medium">{labelText}</span>
+                    <span className="w-3 shrink-0 text-center text-gray-400">{isOpen ? '▾' : '▸'}</span>
+                    <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[e.type]}`} />
+                    <span className="font-mono text-gray-500">{e.items[0]!.startTime}</span>
+                    <span className="font-medium">
+                      {e.items[0]!.displayBundleLabel} ×{e.items.length}
+                    </span>
                   </button>
                   {isOpen && (
-                    <ul className="ml-4 border-l border-gray-200 pl-2">
-                      {en.items.map((o) => (
-                        <ActionRow key={o.id} occ={o} onSelect={onSelect} />
+                    <ul className="ml-3 border-l border-gray-200 pl-2">
+                      {e.items.map((o) => (
+                        <ActionRow key={o.id} occ={o} onSelect={onSelect} nested />
                       ))}
                     </ul>
                   )}
@@ -289,7 +294,16 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
   );
 }
 
-function ActionRow({ occ, onSelect }: { occ: ScheduledOccurrence; onSelect?: (o: ScheduledOccurrence) => void }) {
+function ActionRow({
+  occ,
+  onSelect,
+  nested,
+}: {
+  occ: ScheduledOccurrence;
+  onSelect?: (o: ScheduledOccurrence) => void;
+  /** Inside a bundle's expansion (already indented), so skip the leading chevron-width spacer. */
+  nested?: boolean;
+}) {
   return (
     <li>
       <button
@@ -297,6 +311,8 @@ function ActionRow({ occ, onSelect }: { occ: ScheduledOccurrence; onSelect?: (o:
         onClick={() => onSelect?.(occ)}
         className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
       >
+        {/* 016 §2: spacer matching the bundle toggle's chevron so single rows align by time column. */}
+        {!nested && <span className="w-3 shrink-0" />}
         <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[occ.type]}`} />
         <span className="font-mono text-gray-500">{occ.startTime}</span>
         <span className="truncate">{occ.title}</span>

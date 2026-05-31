@@ -26,19 +26,20 @@ function act(overrides: Partial<Activity> & Pick<Activity, 'id' | 'type' | 'titl
 const pol = (anchor: ActivityTemporalPolicy['anchor']): ActivityTemporalPolicy => ({ preferredWindows: [], anchor });
 
 describe('bundleAssignment', () => {
-  it('bundles a daily no-resource medication into Morning meds', () => {
+  it('bundles a daily no-resource medication into the morning bucket', () => {
     const a = act({ id: 'm1', type: 'medication', title: 'Morning Antihypertensive', frequency: { count: 1, period: 'day' } });
-    expect(bundleAssignment(a, pol('breakfast'))).toEqual({ bundleId: 'morning-meds', label: 'Morning meds' });
+    expect(bundleAssignment(a, pol('breakfast'))).toEqual({ bundleId: 'medication-morning', label: 'Morning meds' });
   });
 
-  it('keys wake + breakfast meds to the SAME bundle (same label)', () => {
+  it('keys wake + breakfast meds to the SAME bundle', () => {
     const a = act({ id: 'm', type: 'medication', title: 'Pill', frequency: { count: 1, period: 'day' } });
     expect(bundleAssignment(a, pol('wake'))!.bundleId).toBe(bundleAssignment(a, pol('breakfast'))!.bundleId);
+    expect(bundleAssignment(a, pol('wake'))!.bundleId).toBe('medication-morning');
   });
 
-  it('bundles daily food by anchor', () => {
+  it('bundles daily food by canonical bucket', () => {
     const a = act({ id: 'f', type: 'food', title: 'Fiber Booster', frequency: { count: 1, period: 'day' } });
-    expect(bundleAssignment(a, pol('lunch'))).toEqual({ bundleId: 'lunch-nutrition', label: 'Lunch nutrition' });
+    expect(bundleAssignment(a, pol('lunch'))).toEqual({ bundleId: 'food-midday', label: 'Lunch nutrition' });
   });
 
   it('does NOT bundle a monitoring med (has a device resource)', () => {
@@ -57,9 +58,9 @@ describe('bundleAssignment', () => {
     expect(bundleAssignment(act({ id: 'z', type: 'consultation', title: 'Review', frequency: { count: 1, period: 'day' } }), pol('any'))).toBeNull();
   });
 
-  it('honors label overrides', () => {
+  it('honors label overrides (keyed by canonical bucket)', () => {
     const a = act({ id: 'm', type: 'medication', title: 'Pill', frequency: { count: 1, period: 'day' } });
-    const r = bundleAssignment(a, pol('breakfast'), { 'medication:breakfast': 'AM pills' });
-    expect(r).toEqual({ bundleId: 'am-pills', label: 'AM pills' });
+    const r = bundleAssignment(a, pol('breakfast'), { 'medication:morning': 'AM pills' });
+    expect(r).toEqual({ bundleId: 'medication-morning', label: 'AM pills' });
   });
 });

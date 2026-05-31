@@ -12,6 +12,7 @@ import { useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock, TravelPlan } from '@/lib/types';
 import DayTimeline from './DayTimeline';
 import { travelDestinationForDate, TravelBadge } from './travelMarker';
+import GlossaryTooltip from './GlossaryTooltip';
 
 export interface AgendaListProps {
   occurrences: ScheduledOccurrence[];
@@ -99,8 +100,16 @@ export default function AgendaList({ occurrences, onSelect, month, memberBusy = 
                 return (
                   <span key={p.type} className={`rounded px-1.5 py-0.5 text-[10px] ${meta.cls}`}>
                     {meta.label} {p.happening}
-                    {p.substituted > 0 && <span className="ml-1 font-semibold text-amber-700">B{p.substituted}</span>}
-                    {p.skipped > 0 && <span className="ml-1 font-semibold text-gray-500">X{p.skipped}</span>}
+                    {p.substituted > 0 && (
+                      <GlossaryTooltip term="statusGlyph.B">
+                        <span className="ml-1 font-semibold text-amber-700">B{p.substituted}</span>
+                      </GlossaryTooltip>
+                    )}
+                    {p.skipped > 0 && (
+                      <GlossaryTooltip term="statusGlyph.X">
+                        <span className="ml-1 font-semibold text-gray-500">X{p.skipped}</span>
+                      </GlossaryTooltip>
+                    )}
                   </span>
                 );
               })}

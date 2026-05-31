@@ -7,6 +7,7 @@
  */
 
 import type { TravelPlan } from '@/lib/types';
+import GlossaryTooltip from './GlossaryTooltip';
 
 /** The destination of the trip covering `date` (YYYY-MM-DD), or null. String date compare is safe. */
 export function travelDestinationForDate(travel: TravelPlan[] | undefined, date: string): string | null {
@@ -21,12 +22,11 @@ export function travelDestinationForDate(travel: TravelPlan[] | undefined, date:
 
 export function TravelBadge({ destination, className = '' }: { destination: string; className?: string }) {
   return (
-    <span
-      title={`Travel: ${destination} — in-person actions may be substituted or skipped`}
-      className={`inline-flex max-w-full items-center gap-0.5 rounded bg-amber-100 px-1 py-0.5 text-[10px] font-medium text-amber-800 ${className}`}
-    >
-      <span aria-hidden>✈</span>
-      <span className="truncate">{destination}</span>
-    </span>
+    <GlossaryTooltip term="travel.badge" className={className}>
+      <span className="inline-flex max-w-full items-center gap-0.5 rounded bg-amber-100 px-1 py-0.5 text-[10px] font-medium text-amber-800">
+        <span aria-hidden>✈</span>
+        <span className="truncate">{destination}</span>
+      </span>
+    </GlossaryTooltip>
   );
 }

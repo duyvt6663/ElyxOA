@@ -14,6 +14,7 @@
 
 import { useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock } from '@/lib/types';
+import GlossaryTooltip from './GlossaryTooltip';
 
 const DAY_START = 6 * 60;
 const DAY_END = 22 * 60 + 30;
@@ -357,8 +358,16 @@ function ActionRow({
         {isSub && <span className="shrink-0 text-amber-600">↳</span>}
         <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[occ.type]}`} />
         <span className="truncate">{occ.title}</span>
-        {isSub && occ.sourceTitle && <span className="shrink-0 text-gray-400">← {occ.sourceTitle}</span>}
-        {occ.outsidePreferredWindow && <span className="text-amber-500" title="outside preferred window">◷</span>}
+        {isSub && occ.sourceTitle && (
+          <GlossaryTooltip term="timeline.substitutionArrow" className="shrink-0">
+            <span className="text-gray-400">← {occ.sourceTitle}</span>
+          </GlossaryTooltip>
+        )}
+        {occ.outsidePreferredWindow && (
+          <GlossaryTooltip term="time.outsidePreferredWindow">
+            <span className="text-amber-500">◷</span>
+          </GlossaryTooltip>
+        )}
       </button>
     </li>
   );

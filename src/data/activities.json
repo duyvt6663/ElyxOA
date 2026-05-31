@@ -278,7 +278,22 @@
       "adherence",
       "side-effects"
     ],
-    "isBackupOnly": false
+    "isBackupOnly": false,
+    "temporalPolicy": {
+      "preferredWindows": [
+        { "label": "morning", "startTime": "06:30", "endTime": "08:30" }
+      ],
+      "anchor": "breakfast",
+      "intensity": "none",
+      "avoidAfter": [
+        {
+          "activityType": "fitness",
+          "intensity": "high",
+          "withinMinutes": 120,
+          "reason": "blood-pressure reading should not follow high-intensity exertion"
+        }
+      ]
+    }
   },
   {
     "id": "act-009",
@@ -1758,7 +1773,20 @@
       "minutes-completed",
       "readiness-score"
     ],
-    "isBackupOnly": false
+    "isBackupOnly": false,
+    "temporalPolicy": {
+      "preferredWindows": [
+        { "label": "morning", "startTime": "07:00", "endTime": "08:00" }
+      ],
+      "intensity": "high",
+      "avoidAfter": [
+        {
+          "category": "meal",
+          "withinMinutes": 90,
+          "reason": "high-intensity training should not start within 90 min after a meal"
+        }
+      ]
+    }
   },
   {
     "id": "act-050",
@@ -3134,7 +3162,22 @@
       "recovery-score",
       "minutes-completed"
     ],
-    "isBackupOnly": false
+    "isBackupOnly": false,
+    "temporalPolicy": {
+      "preferredWindows": [
+        { "label": "evening", "startTime": "20:30", "endTime": "22:00" }
+      ],
+      "anchor": "bedtime",
+      "intensity": "low",
+      "avoidAfter": [
+        {
+          "activityType": "fitness",
+          "intensity": "high",
+          "withinMinutes": 120,
+          "reason": "evening downshift should not follow high-intensity training too closely"
+        }
+      ]
+    }
   },
   {
     "id": "act-089",

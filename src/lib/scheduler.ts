@@ -87,7 +87,7 @@ export type FeasibilityResult =
 
 // ---------- Internal date helpers (UTC-only) ----------
 
-function parseYMD(s: string): { y: number; m: number; d: number } {
+export function parseYMD(s: string): { y: number; m: number; d: number } {
   return { y: Number(s.slice(0, 4)), m: Number(s.slice(5, 7)), d: Number(s.slice(8, 10)) };
 }
 
@@ -103,14 +103,14 @@ function weekdayOfYMD(s: string): number {
   return dow === 0 ? 7 : dow;
 }
 
-function addDaysYMD(s: string, n: number): string {
+export function addDaysYMD(s: string, n: number): string {
   const { y, m, d } = parseYMD(s);
   const t = new Date(Date.UTC(y, m - 1, d));
   t.setUTCDate(t.getUTCDate() + n);
   return formatYMD(t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate());
 }
 
-function daysBetweenYMD(a: string, b: string): number {
+export function daysBetweenYMD(a: string, b: string): number {
   const pa = parseYMD(a);
   const pb = parseYMD(b);
   const ta = Date.UTC(pa.y, pa.m - 1, pa.d);
@@ -118,7 +118,7 @@ function daysBetweenYMD(a: string, b: string): number {
   return Math.round((tb - ta) / 86400000);
 }
 
-function isDateInRange(date: string, start: string, end: string): boolean {
+export function isDateInRange(date: string, start: string, end: string): boolean {
   return date >= start && date <= end;
 }
 

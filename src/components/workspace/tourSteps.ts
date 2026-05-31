@@ -17,6 +17,9 @@ export interface TourStep {
   body: string;
   /** optional workspace action to run before showing the step. */
   prepare?: TourPrepare;
+  /** 022 G5 — when true, the spotlighted target stays interactive (the dimmer cuts a hole), so the
+   * user can do the step themselves (hover a tag, pick a draft-edit chip and Send). */
+  interactive?: boolean;
 }
 
 export const TOUR_VERSION = 'v1';
@@ -28,8 +31,9 @@ export const TOUR_STEPS: TourStep[] = [
   {
     tourId: 'calendar-summary',
     title: 'A plan becomes a 3-month calendar',
-    body: 'A priority-ordered action plan is allocated across three months. These counts are the scheduled, substituted, and skipped outcomes — hover any tag to learn what it means.',
+    body: 'A priority-ordered action plan is allocated across three months. These are the scheduled, substituted, and skipped outcomes — hover a tag right now to see what it means.',
     prepare: 'calendar',
+    interactive: true,
   },
   {
     tourId: 'calendar-grid',
@@ -50,8 +54,9 @@ export const TOUR_STEPS: TourStep[] = [
   },
   {
     tourId: 'chat-panel',
-    title: 'Now, ask the assistant',
-    body: 'With that context: ask why something moved, jump to the right view with its links, or propose a schedule edit you preview before applying.',
+    title: 'Now, ask the assistant — try it',
+    body: 'Ask why something moved, or pick one of the amber "Try a schedule edit" chips and press Send: you’ll get a preview to Apply. Go ahead, then Finish.',
     prepare: 'chat',
+    interactive: true,
   },
 ];

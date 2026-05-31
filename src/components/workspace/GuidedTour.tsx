@@ -78,7 +78,7 @@ export default function GuidedTour({ stepIndex, onPrepare, onBack, onNext, onSki
   const isLast = stepIndex === TOUR_STEPS.length - 1;
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={`Guided tour: ${step.title}`}>
+    <div className="pointer-events-none fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={`Guided tour: ${step.title}`}>
       {rect ? (
         <div
           className="pointer-events-none fixed rounded ring-2 ring-blue-400"
@@ -91,12 +91,23 @@ export default function GuidedTour({ stepIndex, onPrepare, onBack, onNext, onSki
           }}
         />
       ) : (
-        <div className="fixed inset-0 bg-slate-900/55" />
+        <div className="pointer-events-auto fixed inset-0 bg-slate-900/55" />
       )}
-      {/* Click blocker so the app isn't interactable mid-tour. */}
-      <div className="fixed inset-0" />
+      {/* Click blocker (pointer-events-auto). For an interactive step with a located target, cut a hole
+          (4 strips around the rect) — the container is pointer-events-none, so the un-blocked rect passes
+          clicks/hovers through to the spotlighted element; otherwise block the whole screen. */}
+      {step.interactive && rect ? (
+        <>
+          <div className="pointer-events-auto fixed left-0 right-0 top-0" style={{ height: Math.max(0, rect.top - 4) }} />
+          <div className="pointer-events-auto fixed bottom-0 left-0 right-0" style={{ top: rect.bottom + 4 }} />
+          <div className="pointer-events-auto fixed left-0" style={{ top: rect.top - 4, height: rect.height + 8, width: Math.max(0, rect.left - 4) }} />
+          <div className="pointer-events-auto fixed right-0" style={{ top: rect.top - 4, height: rect.height + 8, left: rect.right + 4 }} />
+        </>
+      ) : (
+        <div className="pointer-events-auto fixed inset-0" />
+      )}
 
-      <section className="fixed bottom-4 left-1/2 z-10 w-[min(92vw,28rem)] -translate-x-1/2 rounded-lg border border-gray-200 bg-white p-4 shadow-xl">
+      <section className="pointer-events-auto fixed bottom-4 left-1/2 z-10 w-[min(92vw,28rem)] -translate-x-1/2 rounded-lg border border-gray-200 bg-white p-4 shadow-xl">
         <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-blue-600">
           Step {stepIndex + 1} of {TOUR_STEPS.length}
         </div>

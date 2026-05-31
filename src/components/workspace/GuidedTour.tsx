@@ -11,7 +11,7 @@
  * - Respects prefers-reduced-motion implicitly (instant scroll/positioning, no animation).
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { TOUR_STEPS, type TourStep } from './tourSteps';
 
 export interface GuidedTourProps {
@@ -26,6 +26,30 @@ export interface GuidedTourProps {
 function visibleTarget(tourId: string): HTMLElement | null {
   const els = Array.from(document.querySelectorAll<HTMLElement>(`[data-tour-id="${tourId}"]`));
   return els.find((el) => el.offsetParent !== null) ?? els[0] ?? null;
+}
+
+const CALLOUT_W = 448; // px (matches w-[min(92vw,28rem)] at desktop)
+const CALLOUT_H = 200; // approx; used only to choose a side
+
+/**
+ * 022 follow-up: place the callout ADJACENT to the spotlighted target (below it when there's room,
+ * else above, else beside) so guidance sits next to what it describes instead of pinned to the bottom.
+ * Falls back to bottom-center when nothing else fits or there is no target.
+ */
+function calloutStyle(rect: DOMRect | null): CSSProperties {
+  if (typeof window === 'undefined' || !rect) {
+    return { bottom: 16, left: '50%', transform: 'translateX(-50%)' };
+  }
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const gap = 12;
+  const clampX = (x: number) => Math.max(8, Math.min(x, vw - CALLOUT_W - 8));
+  const clampY = (y: number) => Math.max(8, Math.min(y, vh - CALLOUT_H - 8));
+  if (rect.bottom + gap + CALLOUT_H <= vh) return { top: rect.bottom + gap, left: clampX(rect.left) };
+  if (rect.top - gap - CALLOUT_H >= 0) return { top: rect.top - gap - CALLOUT_H, left: clampX(rect.left) };
+  if (rect.right + gap + CALLOUT_W <= vw) return { top: clampY(rect.top), left: rect.right + gap };
+  if (rect.left - gap - CALLOUT_W >= 0) return { top: clampY(rect.top), left: rect.left - gap - CALLOUT_W };
+  return { bottom: 16, left: '50%', transform: 'translateX(-50%)' };
 }
 
 export default function GuidedTour({ stepIndex, onPrepare, onBack, onNext, onSkip, onFinish }: GuidedTourProps) {
@@ -107,7 +131,10 @@ export default function GuidedTour({ stepIndex, onPrepare, onBack, onNext, onSki
         <div className="pointer-events-auto fixed inset-0" />
       )}
 
-      <section className="pointer-events-auto fixed bottom-4 left-1/2 z-10 w-[min(92vw,28rem)] -translate-x-1/2 rounded-lg border border-gray-200 bg-white p-4 shadow-xl">
+      <section
+        style={calloutStyle(rect)}
+        className="pointer-events-auto fixed z-10 w-[min(92vw,28rem)] rounded-lg border border-gray-200 bg-white p-4 shadow-xl"
+      >
         <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-blue-600">
           Step {stepIndex + 1} of {TOUR_STEPS.length}
         </div>

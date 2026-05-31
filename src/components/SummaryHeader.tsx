@@ -12,6 +12,7 @@
  */
 
 import type { ScheduleResult, ScheduledOccurrence, ActivityType } from '@/lib/types';
+import GlossaryTooltip from './GlossaryTooltip';
 
 const STATUS_STYLES: Record<ScheduledOccurrence['status'], { badge: string; row: string }> = {
   scheduled:   { badge: 'bg-emerald-100 text-emerald-800 border-emerald-200', row: 'border-emerald-200' },
@@ -46,15 +47,21 @@ export default function SummaryHeader({ result, visibleCount }: SummaryHeaderPro
       <div className="text-sm font-medium">
         Window: {result.windowStart} → {result.windowEnd}
       </div>
-      <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.scheduled.badge}`}>
-        Scheduled · {nScheduled}
-      </span>
-      <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.substituted.badge}`}>
-        Substituted · {nSubstituted}
-      </span>
-      <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.skipped.badge}`}>
-        Skipped · {nSkipped}
-      </span>
+      <GlossaryTooltip term="status.scheduled">
+        <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.scheduled.badge}`}>
+          Scheduled · {nScheduled}
+        </span>
+      </GlossaryTooltip>
+      <GlossaryTooltip term="status.substituted">
+        <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.substituted.badge}`}>
+          Substituted · {nSubstituted}
+        </span>
+      </GlossaryTooltip>
+      <GlossaryTooltip term="status.skipped">
+        <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.skipped.badge}`}>
+          Skipped · {nSkipped}
+        </span>
+      </GlossaryTooltip>
       {filtered && (
         <span className="w-full text-xs text-gray-500">
           Showing {visibleCount} of {total} occurrences (filters active)

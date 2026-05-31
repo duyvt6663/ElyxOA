@@ -127,7 +127,7 @@ export default function AllocationTraceTab({ selection, diagnostics, activities 
         <p className="mb-2 font-medium text-gray-700">See how any occurrence was allocated.</p>
         <ul className="list-disc space-y-1 pl-5 text-gray-500">
           <li>Click any action in the <span className="font-medium">Calendar</span> day timeline.</li>
-          <li>Click any row in the <span className="font-medium">Priority</span> tab to jump to its first occurrence.</li>
+          <li>Click any outcome bar in the <span className="font-medium">Activities</span> tab to jump to its most-adapted occurrence.</li>
           <li>Click a band in the <span className="font-medium">Resources</span> tab.</li>
         </ul>
         <p className="mt-3 text-xs text-gray-400">

@@ -27,8 +27,7 @@ import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics 
 import type { TabId, WorkspaceSelection } from './AllocatorWorkspace';
 import TabNav from './TabNav';
 import CalendarTab from './tabs/CalendarTab';
-import ActionListTab from './tabs/ActionListTab';
-import PriorityQueueTab from './tabs/PriorityQueueTab';
+import ActivitiesTab from './tabs/ActivitiesTab';
 import ResourcesTab from './tabs/ResourcesTab';
 import AllocationTraceTab from './tabs/AllocationTraceTab';
 import DataImportTab from './tabs/DataImportTab';
@@ -62,17 +61,8 @@ export default function WorkspacePanel({
     switch (activeTab) {
       case 'calendar':
         return <CalendarTab result={result} availability={availability} selection={selection} onSelect={onSelect} />;
-      case 'actions':
-        return <ActionListTab activities={activities} result={result} selection={selection} onSelect={onSelect} />;
-      case 'priority':
-        return (
-          <PriorityQueueTab
-            activities={activities}
-            result={result}
-            selection={selection}
-            onSelect={onSelect}
-          />
-        );
+      case 'activities':
+        return <ActivitiesTab activities={activities} result={result} selection={selection} onSelect={onSelect} />;
       case 'resources':
         return <ResourcesTab availability={availability} selection={selection} onSelect={onSelect} />;
       case 'trace':

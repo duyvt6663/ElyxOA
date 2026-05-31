@@ -1,5 +1,14 @@
 # 017 - Merge the Actions + Priority tabs into one "Activities" tab
 
+> **IMPLEMENTED + verified (2026-05-31).** `ActivitiesTab.tsx` (renamed from ActionListTab;
+> PriorityQueueTab deleted). Single sort-only view (Priority/Type/Outcome/Frequency, tie-break
+> priority→id); outcome bar + S·B·X + off-window; explicit hit targets (chevron/title expand,
+> outcome→representative-occurrence Trace, occurrence→Trace); desktop sticky table + mobile stacked
+> cards. Tab nav 6 → 5 (Calendar · Activities · Resources · Trace · Data). Static copy updated
+> (ChatSurface tooltip, Trace empty-state). Verified: 5 tabs / no Actions·Priority, sort, expand,
+> representative-Trace opens a skipped occurrence, mobile cards, 34 unit tests, 6/6 acceptance,
+> 0 console errors. Archived.
+
 ## Goal
 The workspace has SIX right-panel tabs: Calendar, **Actions**, **Priority**, Resources, Trace,
 Data. Actions and Priority are two views of the *same list* — every primary activity — and they

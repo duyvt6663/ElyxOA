@@ -51,7 +51,7 @@ import MobileSwitch from './MobileSwitch';
 import ChatSurface from './ChatSurface';
 import WorkspacePanel from './WorkspacePanel';
 
-export type TabId = 'calendar' | 'actions' | 'priority' | 'resources' | 'trace' | 'data';
+export type TabId = 'calendar' | 'activities' | 'resources' | 'trace' | 'data';
 
 export interface WorkspaceSelection {
   selectedOccurrenceId: string | null;

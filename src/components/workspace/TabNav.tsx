@@ -22,8 +22,7 @@ export interface TabNavProps {
 
 const TABS: ReadonlyArray<{ id: TabId; label: string }> = [
   { id: 'calendar', label: 'Calendar' },
-  { id: 'actions', label: 'Actions' },
-  { id: 'priority', label: 'Priority' },
+  { id: 'activities', label: 'Activities' },
   { id: 'resources', label: 'Resources' },
   { id: 'trace', label: 'Trace' },
   { id: 'data', label: 'Data' },

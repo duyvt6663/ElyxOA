@@ -53,7 +53,9 @@ gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallba
   src/components/   workspace/ — AllocatorWorkspace (selection state + diagnostics threading),
                     AppHeader, WindowLayout, MobileSwitch, ChatSurface (real streamText round-trip
                     with markdown link-button parsing → workspace navigation), WorkspacePanel,
-                    TabNav, tabs/{Calendar,ActionList,PriorityQueue,Resources,AllocationTrace,DataImport}Tab.
+                    TabNav (5 tabs: Calendar·Activities·Resources·Trace·Data),
+                    tabs/{Calendar,Activities,Resources,AllocationTrace,DataImport}Tab (017 merged
+                    Actions+Priority → ActivitiesTab: sortable outcome bars + def columns).
                     Plus the 006 calendar primitives (CalendarView/MonthGrid/DayCell/DayDetail/
                     AgendaList/OccurrenceCard/SummaryHeader/FilterBar/Legend) plus DayTimeline (015:
                     chronological lane, actions interleaved with occupied blocks) and ImportPanel (009).

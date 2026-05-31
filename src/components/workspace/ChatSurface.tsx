@@ -268,7 +268,7 @@ export default function ChatSurface({ selection, result, diagnostics, activities
                     key={chip.label}
                     type="button"
                     disabled={!hasSelection}
-                    title={hasSelection ? undefined : 'Select an occurrence in the Calendar/Priority/Resources tab first'}
+                    title={hasSelection ? undefined : 'Select an occurrence in the Calendar/Activities/Resources tab first'}
                     onClick={() => onChipClick(chip.label)}
                     className="px-3 py-1 rounded-full border text-xs bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
                   >

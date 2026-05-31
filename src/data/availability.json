@@ -5017,6 +5017,7 @@
     {
       "id": "travel-01",
       "destination": "Singapore",
+      "timeZone": "Asia/Singapore",
       "blocked": [
         {
           "start": "2026-06-22",
@@ -5027,6 +5028,7 @@
     {
       "id": "travel-02",
       "destination": "Tokyo",
+      "timeZone": "Asia/Tokyo",
       "blocked": [
         {
           "start": "2026-08-10",

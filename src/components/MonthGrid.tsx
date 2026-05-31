@@ -31,6 +31,8 @@ export interface MonthGridProps {
   memberBusy?: MemberBusyBlock[];
   /** 019 follow-up — travel windows, to flag trip days on the grid. */
   travel?: TravelPlan[];
+  /** home IANA tz, for the travel badge offset annotation. */
+  homeTimeZone?: string;
   onSelect?: (occurrence: ScheduledOccurrence) => void;
   /** 019 — fired with the date when a day is expanded (not when collapsed). */
   onExpandDay?: (date: string) => void;
@@ -54,7 +56,7 @@ function weekdayOfYMD(s: string): number {
   return dow === 0 ? 7 : dow;
 }
 
-export default function MonthGrid({ occurrences, month, year, memberBusy = [], travel, onSelect, onExpandDay }: MonthGridProps) {
+export default function MonthGrid({ occurrences, month, year, memberBusy = [], travel, homeTimeZone, onSelect, onExpandDay }: MonthGridProps) {
   const [expandedDate, setExpandedDate] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement | null>(null);
 
@@ -108,6 +110,7 @@ export default function MonthGrid({ occurrences, month, year, memberBusy = [], t
             date={date}
             occurrences={byDate.get(date) ?? []}
             travel={travel}
+            homeTimeZone={homeTimeZone}
             expanded={expandedDate === date}
             onExpand={(d) => {
               setExpandedDate((prev) => (prev === d ? null : d));

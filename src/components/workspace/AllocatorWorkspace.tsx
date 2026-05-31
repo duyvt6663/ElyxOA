@@ -401,7 +401,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
 
   return (
     <>
-      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} onOpenHelp={() => setHelpOpen(true)} />
+      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} onOpenHelp={() => setHelpOpen(true)} homeTimeZone={availability.timeZone} />
       {/* md+: side-by-side */}
       <WindowLayout left={chat} right={workspace} />
       {/* <md: switch + single panel */}

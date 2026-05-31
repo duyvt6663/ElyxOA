@@ -22,7 +22,8 @@ export type GlossaryKey =
   | 'chat.draftEdit'
   | 'chat.editedBadge'
   | 'chat.pinnedContext'
-  | 'chat.contextBlock';
+  | 'chat.contextBlock'
+  | 'time.homeZone';
 
 export interface GlossaryEntry {
   /** Short human label shown as the tooltip title. */
@@ -93,5 +94,10 @@ export const GLOSSARY: Record<GlossaryKey, GlossaryEntry> = {
   'chat.contextBlock': {
     label: 'Chat context',
     explanation: 'A schedule object (day, action, trip, …) attached to the next assistant turn, so the answer is about exactly that.',
+  },
+  'time.homeZone': {
+    label: 'Times are in the member’s home timezone',
+    explanation:
+      'Every time shown is the member’s home timezone; services and resources are at the home location, so their availability is in home time too. On travel days the member is in another zone — in-person home actions are dropped or substituted, and the ✈ badge shows the destination’s offset.',
   },
 };

@@ -11,7 +11,7 @@
 import { useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock, TravelPlan } from '@/lib/types';
 import DayTimeline from './DayTimeline';
-import { travelDestinationForDate, TravelBadge } from './travelMarker';
+import { travelForDate, TravelBadge } from './travelMarker';
 import GlossaryTooltip from './GlossaryTooltip';
 
 export interface AgendaListProps {
@@ -23,6 +23,8 @@ export interface AgendaListProps {
   memberBusy?: MemberBusyBlock[];
   /** 019 follow-up — travel windows, to flag trip days. */
   travel?: TravelPlan[];
+  /** home IANA tz, for the travel badge's offset annotation. */
+  homeTimeZone?: string;
 }
 
 const MONTH_PREFIX: Record<'Jun' | 'Jul' | 'Aug', string> = {
@@ -46,7 +48,7 @@ interface Tally {
   skipped: number;
 }
 
-export default function AgendaList({ occurrences, onSelect, month, memberBusy = [], travel }: AgendaListProps) {
+export default function AgendaList({ occurrences, onSelect, month, memberBusy = [], travel, homeTimeZone }: AgendaListProps) {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const filtered = month ? occurrences.filter((o) => o.date.startsWith(MONTH_PREFIX[month])) : occurrences;
@@ -92,8 +94,8 @@ export default function AgendaList({ occurrences, onSelect, month, memberBusy = 
             >
               <span className="mr-1 text-xs font-medium text-gray-700">{date}</span>
               {(() => {
-                const dest = travelDestinationForDate(travel, date);
-                return dest ? <TravelBadge destination={dest} /> : null;
+                const trip = travelForDate(travel, date);
+                return trip ? <TravelBadge trip={trip} date={date} homeTimeZone={homeTimeZone} /> : null;
               })()}
               {pills.map((p) => {
                 const meta = TYPE_SUMMARY[p.type];

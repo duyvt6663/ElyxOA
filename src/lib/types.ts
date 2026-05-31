@@ -153,6 +153,8 @@ export interface Activity {
 export interface TravelPlan {
   id: string;
   destination: string;
+  /** Destination IANA timezone (e.g. "Asia/Singapore"); used to annotate the offset vs home. */
+  timeZone?: string;
   blocked: DateRange[];
 }
 

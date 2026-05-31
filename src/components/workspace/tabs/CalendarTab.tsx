@@ -29,6 +29,7 @@ export default function CalendarTab({ result, availability, selection: _selectio
       result={result}
       memberBusy={availability.memberBusy}
       travel={availability.travel}
+      homeTimeZone={availability.timeZone}
       onSelect={(occ: ScheduledOccurrence) =>
         onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date })
       }

@@ -226,6 +226,7 @@ export function isTravelPlan(x: unknown): x is TravelPlan {
   if (!isObj(x)) return false;
   if (!isStr(x.id)) return false;
   if (!isStr(x.destination)) return false;
+  if (x.timeZone !== undefined && !isStr(x.timeZone)) return false;
   if (!isArr(x.blocked) || !x.blocked.every(isDateRange)) return false;
   return true;
 }

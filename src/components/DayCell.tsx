@@ -17,7 +17,7 @@
  */
 
 import type { ScheduledOccurrence, ActivityType, TravelPlan } from '@/lib/types';
-import { travelDestinationForDate, TravelBadge } from './travelMarker';
+import { travelForDate, TravelBadge } from './travelMarker';
 import GlossaryTooltip from './GlossaryTooltip';
 
 export interface DayCellProps {
@@ -28,6 +28,8 @@ export interface DayCellProps {
   onSelect?: (occurrence: ScheduledOccurrence) => void;
   /** 019 follow-up — travel windows, to flag trip days on the month grid. */
   travel?: TravelPlan[];
+  /** home IANA tz, for the travel badge's offset annotation. */
+  homeTimeZone?: string;
 }
 
 const TYPE_SUMMARY: Record<ActivityType, { label: string; cls: string }> = {
@@ -52,8 +54,8 @@ interface Tally {
   skipped: number;
 }
 
-export default function DayCell({ date, occurrences, expanded, onExpand, travel }: DayCellProps) {
-  const tripDestination = travelDestinationForDate(travel, date);
+export default function DayCell({ date, occurrences, expanded, onExpand, travel, homeTimeZone }: DayCellProps) {
+  const trip = travelForDate(travel, date);
   const byType = new Map<ActivityType, Tally>();
   for (const o of occurrences) {
     const t = byType.get(o.type) ?? { happening: 0, substituted: 0, skipped: 0 };
@@ -74,7 +76,7 @@ export default function DayCell({ date, occurrences, expanded, onExpand, travel 
     >
       <div className="flex items-center gap-1">
         <span className="text-xs font-semibold text-gray-700">{parseYMD(date).d}</span>
-        {tripDestination && <TravelBadge destination={tripDestination} className="ml-auto" />}
+        {trip && <TravelBadge trip={trip} date={date} homeTimeZone={homeTimeZone} className="ml-auto" />}
       </div>
       <div data-testid="day-cell-chips" className="flex flex-col gap-1">
         {pills.map((p) => {

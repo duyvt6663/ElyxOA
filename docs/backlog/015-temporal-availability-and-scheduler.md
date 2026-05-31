@@ -1,5 +1,29 @@
 # 015 - Temporal Availability, Scheduling Semantics, and Calendar Presentation
 
+## Implementation status (2026-05-31)
+
+**Live on https://elyx-oa.vercel.app/** (built on `main`). Done:
+- **Task 1** data contract + validators (LocalTime/TimeBlock/MemberBusyBlock/
+  ActivityTemporalPolicy/SchedulingSemanticHints; 24:00 rejected).
+- **Task 2** `getDefaultTemporalPolicy` (type+title) + explicit overrides on act-008/049/088.
+- **Task 3** LLM-generated member busy fixture (`generate:availability`, 23 groups / ~1006
+  blocks); travel demo preserved.
+- **Task 4** LLM semantic compiler (`generate:hints`) + committed `scheduling-hints.json`
+  (20 policies + 23 classifications) + build-time staleness check; merge explicit > hint(≥0.7) > default.
+- **Task 5** temporal scheduler core (`temporal-scheduler.ts`): broad 30-min candidates →
+  hard feasibility (member-busy/action overlap, bidirectional avoidAfter/avoidBefore) →
+  scored allocation → ledgers. Real-fixture profile 2900 / 492 / 166 (4.7% skip).
+- **Task 7** wired `scheduleTemporal` into the app + DayCell density fix (≤8 nodes,
+  skipped-first) + DayTimeline (actions interleaved with occupied blocks) + occupied toggle.
+- **Task 8 (core)** Trace shows chosen slot + score; chat grounded with occupiedBlocks
+  (selected date ±1) + temporal trace.
+- **Task 9 (core)** temporal `tests/drive-acceptance.mjs` A1–A6 → 6/6; `docs/context/index.md`
+  + `docs/prompts/015-temporal-llm.md` updated. 24 unit tests / build static / lint clean.
+
+**Remaining:** Task 6 trace provenance tags + capped rejected-candidate grouping (the 8-cap
++ slot/score already land); Task 8 leftovers (Resources "Member" lane, Priority time-aware
+outcome fields); migrating the 18 date-only unit tests to assert temporal placement.
+
 ## Goal
 Upgrade the allocator from a whole-day, priority-only planner into a time-aware schedule
 that respects realistic member availability, temporal action rules, and a clearer UI for

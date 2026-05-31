@@ -10,8 +10,8 @@
 /**
  * BEHAVIOR SKETCH
  * 1. Render the day number.
- * 2. adaptation = skipped + substituted occurrences, sorted by startTime — rendered as
- *    individual chips (the auditable adaptation).
+ * 2. adaptation = skipped + substituted occurrences, SKIPPED FIRST (headline), then by
+ *    startTime — rendered as individual chips (the auditable adaptation).
  * 3. scheduled occurrences -> one summary pill per ActivityType ("Meds 7", "Fitness 3").
  * 4. Concatenate [adaptation chips, summary pills]; cap at 8 nodes; trailing "+N more".
  */
@@ -45,9 +45,15 @@ function parseYMD(s: string): { y: number; m: number; d: number } {
 }
 
 export default function DayCell({ date, occurrences, expanded, onExpand, onSelect }: DayCellProps) {
+  // Skipped first (the headline — and skipped have no startTime), then substituted by time.
+  const STATUS_RANK: Record<string, number> = { skipped: 0, substituted: 1 };
   const adaptation = occurrences
     .filter((o) => o.status !== 'scheduled')
-    .sort((a, b) => (a.startTime ?? '99:99').localeCompare(b.startTime ?? '99:99'));
+    .sort(
+      (a, b) =>
+        (STATUS_RANK[a.status] ?? 9) - (STATUS_RANK[b.status] ?? 9) ||
+        (a.startTime ?? '99:99').localeCompare(b.startTime ?? '99:99'),
+    );
   const scheduled = occurrences.filter((o) => o.status === 'scheduled');
 
   const counts = new Map<ActivityType, number>();

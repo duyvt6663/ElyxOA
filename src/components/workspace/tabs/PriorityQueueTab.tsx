@@ -27,6 +27,9 @@
 import { useMemo } from 'react';
 import type { Activity, ActivityType, ScheduleResult } from '@/lib/types';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
+import { getDefaultTemporalPolicy } from '@/lib/temporal-policy';
+
+const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
 
 export interface PriorityQueueTabProps {
   activities: Activity[];
@@ -47,6 +50,8 @@ interface Counts {
   scheduled: number;
   substituted: number;
   skipped: number;
+  /** 015 — timed occurrences placed outside the activity's preferred window. */
+  offWindow: number;
   firstOccId: string | null;
 }
 
@@ -57,20 +62,31 @@ export default function PriorityQueueTab({ activities, result, selection: _selec
   );
 
   const counts = useMemo(() => {
+    const byId = new Map(activities.map((a) => [a.id, a]));
     const m = new Map<string, Counts>();
     for (const occ of result.occurrences) {
       const c = m.get(occ.sourceActivityId) ?? {
         scheduled: 0,
         substituted: 0,
         skipped: 0,
+        offWindow: 0,
         firstOccId: null,
       };
       c[occ.status] += 1;
+      if (occ.startTime) {
+        const act = byId.get(occ.sourceActivityId);
+        const policy = act?.temporalPolicy ?? (act ? getDefaultTemporalPolicy(act) : null);
+        if (policy) {
+          const s = toMin(occ.startTime);
+          const inWindow = policy.preferredWindows.some((w) => s >= toMin(w.startTime) && s < toMin(w.endTime));
+          if (!inWindow) c.offWindow += 1;
+        }
+      }
       if (c.firstOccId === null) c.firstOccId = occ.id;
       m.set(occ.sourceActivityId, c);
     }
     return m;
-  }, [result]);
+  }, [result, activities]);
 
   function onRowClick(activityId: string) {
     const c = counts.get(activityId);
@@ -83,10 +99,10 @@ export default function PriorityQueueTab({ activities, result, selection: _selec
   return (
     <div className="p-4 text-sm">
       <h2 className="font-medium">Activities by Priority</h2>
-      <p className="text-xs text-gray-500 mb-3">scheduled / substituted / skipped</p>
+      <p className="text-xs text-gray-500 mb-3">scheduled / substituted / skipped · off-window = placed outside preferred time</p>
       <ul className="space-y-1">
         {sorted.map((a) => {
-          const c = counts.get(a.id) ?? { scheduled: 0, substituted: 0, skipped: 0, firstOccId: null };
+          const c = counts.get(a.id) ?? { scheduled: 0, substituted: 0, skipped: 0, offWindow: 0, firstOccId: null };
           const total = c.scheduled + c.substituted + c.skipped;
           const pct = (n: number) => (total === 0 ? 0 : (n / total) * 100);
           return (
@@ -103,8 +119,14 @@ export default function PriorityQueueTab({ activities, result, selection: _selec
                 <div className="h-full bg-amber-500" style={{ width: pct(c.substituted) + '%' }} />
                 <div className="h-full bg-gray-400" style={{ width: pct(c.skipped) + '%' }} />
               </div>
-              <span className="font-mono text-[11px] text-gray-600 w-28 text-right">
+              <span className="font-mono text-[11px] text-gray-600 w-28 text-right whitespace-nowrap">
                 S {c.scheduled} · B {c.substituted} · X {c.skipped}
+              </span>
+              <span
+                className="font-mono text-[11px] w-20 text-right whitespace-nowrap text-amber-600"
+                title="timed occurrences placed outside the preferred window"
+              >
+                {c.offWindow > 0 ? `${c.offWindow} off-win` : ''}
               </span>
             </li>
           );

@@ -249,22 +249,23 @@ function ruleMatches(
 
 /**
  * Returns a violated temporal rule between two non-overlapping events, or null.
- * Orders by start time (earlier=X, later=Y); checks X.avoidAfter vs Y and Y.avoidBefore vs X.
- * Inherently bidirectional: whichever side carries the rule fires it.
+ * 015 treats avoidAfter / avoidBefore as SYMMETRIC proximity bans ("these two should not be
+ * near each other") per the plan: a rule on EITHER event fires when the other event is within
+ * `withinMinutes`, in either order. This is the normalized-pairwise-predicate behavior — e.g.
+ * "BP avoids high-intensity fitness within 120m" rejects fitness whether it lands before or
+ * after the BP reading.
  */
 function temporalRuleViolation(a: ProtoEvent, b: ProtoEvent): FailedConstraint | null {
   const [x, y] = a.startMin <= b.startMin ? [a, b] : [b, a];
   const gap = y.startMin - x.endMin; // >= 0 when non-overlapping
   if (gap < 0) return null; // overlaps are handled by the hard overlap checks
-  for (const rule of x.policy?.avoidAfter ?? []) {
-    if (gap < rule.withinMinutes && ruleMatches(rule, y)) {
-      return { kind: 'temporalRule', detail: rule.reason };
-    }
+  const xRules = [...(x.policy?.avoidAfter ?? []), ...(x.policy?.avoidBefore ?? [])];
+  const yRules = [...(y.policy?.avoidAfter ?? []), ...(y.policy?.avoidBefore ?? [])];
+  for (const rule of xRules) {
+    if (gap < rule.withinMinutes && ruleMatches(rule, y)) return { kind: 'temporalRule', detail: rule.reason };
   }
-  for (const rule of y.policy?.avoidBefore ?? []) {
-    if (gap < rule.withinMinutes && ruleMatches(rule, x)) {
-      return { kind: 'temporalRule', detail: rule.reason };
-    }
+  for (const rule of yRules) {
+    if (gap < rule.withinMinutes && ruleMatches(rule, x)) return { kind: 'temporalRule', detail: rule.reason };
   }
   return null;
 }

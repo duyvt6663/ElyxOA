@@ -156,4 +156,40 @@ describe('scheduleTemporal', () => {
     const { result } = scheduleTemporal([act], av);
     expect(result.occurrences[0]!.status).toBe('skipped');
   });
+
+  it('high-intensity fitness is not placed within 90 min after a meal', () => {
+    const fit = makeActivity({
+      id: 'fit',
+      type: 'fitness',
+      title: 'VO2 Intervals',
+      frequency: { count: 1, period: 'day' },
+      priority: 1,
+      durationMinutes: 45,
+      temporalPolicy: {
+        preferredWindows: [{ label: 'morning', startTime: '07:00', endTime: '12:00' }],
+        intensity: 'high',
+        avoidAfter: [{ category: 'meal', withinMinutes: 90, reason: 'no high-intensity within 90 min after a meal' }],
+      },
+    });
+    // Breakfast meal 07:30-08:00 -> fitness cannot start before 09:30; mornings otherwise open.
+    const av = makeAvailability({ memberBusy: [busy('bfast', 'meal', '07:30', '08:00')] });
+    const { result } = scheduleTemporal([fit], av);
+    const occ = result.occurrences[0]!;
+    expect(occ.status).toBe('scheduled');
+    expect(occ.startTime! >= '09:30').toBe(true);
+  });
+
+  it('no two blocking actions overlap on the same day', () => {
+    const a = makeActivity({ id: 'a', type: 'fitness', title: 'Strength A', frequency: { count: 1, period: 'day' }, priority: 1, durationMinutes: 60, temporalPolicy: { preferredWindows: [{ label: 'morning', startTime: '06:00', endTime: '09:00' }], intensity: 'moderate' } });
+    const b = makeActivity({ id: 'b', type: 'fitness', title: 'Strength B', frequency: { count: 1, period: 'day' }, priority: 2, durationMinutes: 60, temporalPolicy: { preferredWindows: [{ label: 'morning', startTime: '06:00', endTime: '09:00' }], intensity: 'moderate' } });
+    const { result } = scheduleTemporal([a, b], makeAvailability());
+    const oa = result.occurrences.find((o) => o.sourceActivityId === 'a')!;
+    const ob = result.occurrences.find((o) => o.sourceActivityId === 'b')!;
+    const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
+    // Both 60-min blocking sessions scheduled; their [start,end) intervals do not overlap.
+    expect(oa.status).toBe('scheduled');
+    expect(ob.status).toBe('scheduled');
+    const overlap = toMin(oa.startTime!) < toMin(ob.endTime!) && toMin(ob.startTime!) < toMin(oa.endTime!);
+    expect(overlap).toBe(false);
+  });
 });

@@ -51,7 +51,7 @@ gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallba
                     AgendaList/OccurrenceCard/SummaryHeader/FilterBar/Legend) and ImportPanel (009).
   src/data/         activities.json (116 records), availability.json (complete).
   tests/            drive-acceptance.mjs (Playwright A1-A5; A4 hits live LLM when key present).
-  docs/             DEPLOY.md, prompts/, backlog/ (007-010, 014), archive/ (001-006, 011-013), context/.
+  docs/             DEPLOY.md, prompts/, backlog/ (007-010, 014-015), archive/ (001-006, 011-013), context/.
   .env.local        OPENAI_API_KEY (gitignored via .env*; mode 600).
   README.md         reviewer entry point with hosted-URL placeholder + 6-item assignment checklist.
 
@@ -100,7 +100,14 @@ hoist closed the verification gap) · 011 workspace shell · 012 scheduler diagn
   holding for an architectural decision: §1 calendar density blowout (medication chips
   dominate); §3 Resources axis labels; §4-§6 Trace whitespace / empty-state polish /
   Priority hover; §7-§10 cosmetic; §11 data quirk (Upper Body Strength all-substituted).
+- `015-temporal-availability-and-scheduler.md` — architectural plan for richer member
+  availability, optional LLM-assisted semantic compilation into typed scheduling hints,
+  30-minute local-time placement, temporal scheduling rules, diagnostics for rejected
+  time slots, and UI toggles to show/hide occupied member slots. This is a dedicated
+  robustness pass that supersedes the calendar-density part of 014 if implemented, but
+  it must not block 008 deploy. 015 explicitly preserves the existing travel-substitution
+  demo while making travel days more realistic.
 
-No new feature plans. The take-home is functionally complete at the live-server level.
-Remaining work: 014 architectural decisions (deferred), polish (010 leftovers), and
-deploy (008 + amend for `OPENAI_API_KEY`).
+The take-home is functionally complete at the live-server level. Remaining work: 015
+architectural robustness if chosen, 014/010 polish, and deploy (008 + amend for
+`OPENAI_API_KEY`).

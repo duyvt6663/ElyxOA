@@ -203,53 +203,75 @@ const STARTER_CHIPS: StarterChip[] = [
   { label: 'Walk me through this trace step by step', group: 'occurrence' },
 ];
 
+const MONTH_ABBR3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+/** "2026-06-22" -> "Jun 22" for a compact citation chip. */
+function shortCiteDate(d: string): string {
+  const [, m, day] = d.split('-').map(Number);
+  return `${MONTH_ABBR3[(m ?? 1) - 1] ?? ''} ${day ?? ''}`.trim();
+}
+
 /**
- * Parse assistant text for the 3 markdown link patterns and return a mixed array of strings and
- * <button> elements (the fallback navigation path; tool-call cards are the primary path now).
+ * 022 G2 — render assistant text with lightweight markdown (**bold**), the 3 markdown link patterns as
+ * buttons, and bare occurrence ids (occ-<activity>-<YYYY-MM-DD>) as compact, clickable Trace citation
+ * chips (instead of raw 25-char ids cluttering the prose). Plain segments keep their line breaks via
+ * the parent's whitespace-pre-wrap.
  */
 function renderMessageContent(text: string, onNavigate: (partial: Partial<WorkspaceSelection>) => void): ReactNode[] {
-  const pattern = /\[(Trace|Calendar|Resources)\]\((trace:\/\/occ-[^)]+|tab:\/\/calendar\?date=\d{4}-\d{2}-\d{2}|tab:\/\/resources)\)/g;
+  const re =
+    /\[(Trace|Calendar|Resources)\]\((trace:\/\/occ-[^)]+|tab:\/\/calendar\?date=\d{4}-\d{2}-\d{2}|tab:\/\/resources)\)|(occ-[a-z]+-\d+-\d{4}-\d{2}-\d{2})|\*\*([^*\n]+)\*\*/g;
   const out: ReactNode[] = [];
   let lastIndex = 0;
   let key = 0;
   let m: RegExpExecArray | null;
-  while ((m = pattern.exec(text)) !== null) {
-    if (m.index > lastIndex) {
-      out.push(text.slice(lastIndex, m.index));
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > lastIndex) out.push(text.slice(lastIndex, m.index));
+    if (m[1]) {
+      // Markdown link button.
+      const label = m[1];
+      const target = m[2];
+      let partial: Partial<WorkspaceSelection> | null = null;
+      if (target.startsWith('trace://')) {
+        const occId = target.slice('trace://'.length);
+        const dm = occId.match(/(\d{4}-\d{2}-\d{2})$/);
+        partial = { selectedOccurrenceId: occId, selectedDate: dm ? dm[1] : null, activeTab: 'trace' };
+      } else if (target.startsWith('tab://calendar?date=')) {
+        partial = { selectedDate: target.slice('tab://calendar?date='.length), activeTab: 'calendar' };
+      } else if (target === 'tab://resources') {
+        partial = { activeTab: 'resources' };
+      }
+      out.push(
+        <button
+          key={`lnk-${key++}`}
+          type="button"
+          onClick={() => partial && onNavigate(partial)}
+          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs"
+        >
+          {label}
+        </button>
+      );
+    } else if (m[3]) {
+      // Bare occurrence id -> compact clickable Trace citation chip.
+      const occId = m[3];
+      const dm = occId.match(/(\d{4}-\d{2}-\d{2})$/);
+      const date = dm ? dm[1] : null;
+      out.push(
+        <button
+          key={`cite-${key++}`}
+          type="button"
+          title={`Open trace · ${occId}`}
+          onClick={() => onNavigate({ selectedOccurrenceId: occId, selectedDate: date, activeTab: 'trace' })}
+          className="mx-0.5 inline-flex items-center gap-0.5 rounded bg-blue-50 px-1 py-0.5 align-baseline text-[11px] text-blue-700 hover:bg-blue-100"
+        >
+          <span aria-hidden>↪</span>
+          {date ? shortCiteDate(date) : 'trace'}
+        </button>
+      );
+    } else if (m[4]) {
+      out.push(<strong key={`b-${key++}`}>{m[4]}</strong>);
     }
-    const label = m[1];
-    const target = m[2];
-    let partial: Partial<WorkspaceSelection> | null = null;
-    if (target.startsWith('trace://')) {
-      const occId = target.slice('trace://'.length);
-      const dateMatch = occId.match(/(\d{4}-\d{2}-\d{2})$/);
-      partial = {
-        selectedOccurrenceId: occId,
-        selectedDate: dateMatch ? dateMatch[1] : null,
-        activeTab: 'trace',
-      };
-    } else if (target.startsWith('tab://calendar?date=')) {
-      const date = target.slice('tab://calendar?date='.length);
-      partial = { selectedDate: date, activeTab: 'calendar' };
-    } else if (target === 'tab://resources') {
-      partial = { activeTab: 'resources' };
-    }
-    const handler = partial;
-    out.push(
-      <button
-        key={`lnk-${key++}`}
-        type="button"
-        onClick={() => handler && onNavigate(handler)}
-        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs"
-      >
-        {label}
-      </button>
-    );
-    lastIndex = m.index + m[0].length;
+    lastIndex = re.lastIndex;
   }
-  if (lastIndex < text.length) {
-    out.push(text.slice(lastIndex));
-  }
+  if (lastIndex < text.length) out.push(text.slice(lastIndex));
   return out.length > 0 ? out : [text];
 }
 
@@ -476,6 +498,14 @@ export default function ChatSurface({
                       : 'max-w-[80%] rounded-lg bg-gray-100 text-gray-900 px-3 py-2'
                   }
                 >
+                  {/* 022 G3: a finished assistant turn with only tool cards (no prose) gets a lead-in
+                      so the bubble is never just a bare card. */}
+                  {m.role === 'assistant' &&
+                    !(isStreaming && m.id === lastId) &&
+                    m.parts.some((p) => isToolUIPart(p)) &&
+                    !m.parts.some((p) => p.type === 'text' && p.text.trim().length > 0) && (
+                      <span className="text-gray-500">Opening the requested view —</span>
+                    )}
                   {m.parts.map((part, idx) => {
                     if (part.type === 'text') {
                       return (

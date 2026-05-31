@@ -22,13 +22,9 @@ export interface TourStep {
 export const TOUR_VERSION = 'v1';
 export const TOUR_DONE_KEY = `elyx-guided-tour-${TOUR_VERSION}-complete`;
 
+// 022 G4: core features first, chat last — so the reviewer understands the allocation story before
+// the assistant that explains/edits it.
 export const TOUR_STEPS: TourStep[] = [
-  {
-    tourId: 'chat-panel',
-    title: 'Your allocator assistant',
-    body: 'Ask why something moved, jump to the right view with its links, or propose a schedule edit you preview before applying.',
-    prepare: 'chat',
-  },
   {
     tourId: 'calendar-summary',
     title: 'A plan becomes a 3-month calendar',
@@ -51,5 +47,11 @@ export const TOUR_STEPS: TourStep[] = [
     tourId: 'workspace-tabs',
     title: 'The five views',
     body: 'Calendar, Activities (priority vs outcome), Resources (equipment / specialist / travel availability), Trace, and Data (import to rerun) — switch anytime.',
+  },
+  {
+    tourId: 'chat-panel',
+    title: 'Now, ask the assistant',
+    body: 'With that context: ask why something moved, jump to the right view with its links, or propose a schedule edit you preview before applying.',
+    prepare: 'chat',
   },
 ];

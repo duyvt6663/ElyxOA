@@ -55,6 +55,75 @@ export interface ResourceRequirement {
   id?: string;
 }
 
+/**
+ * DECISION RECAP — 015 Temporal Availability & Scheduling
+ * - Local wall-clock time at 30-minute granularity; no cross-timezone conversion in V1.
+ * - TimeBlock never crosses midnight; split overnight (22:30-23:59 + 00:00-06:30).
+ * - AvailabilityBundle gains `timeZone` (home default) + `memberBusy` occupied blocks.
+ * - Activity gains optional `temporalPolicy`; getDefaultTemporalPolicy() supplies the rest.
+ * - ScheduledOccurrence gains startTime/endTime/timeZone (scheduled/substituted only).
+ * - Diagnostics gain candidate times, score, and temporal FailedConstraint kinds.
+ */
+
+/** HH:MM 24-hour local wall-clock time. Validator rejects hh>23 / mm>59 (incl. 24:00). See 015. */
+export type LocalTime = `${number}${number}:${number}${number}`;
+
+/** A bounded interval on one date; never crosses midnight. `timeZone` overrides the bundle default. See 015. */
+export interface TimeBlock {
+  /** YYYY-MM-DD */
+  date: string;
+  startTime: LocalTime;
+  endTime: LocalTime;
+  /** Defaults to AvailabilityBundle.timeZone; set for travel-local blocks. */
+  timeZone?: string;
+}
+
+/** Member occupied time (sleep/work/meal/...). `blocksScheduling` gates overlap rejection. See 015. */
+export interface MemberBusyBlock {
+  id: string;
+  title: string;
+  category:
+    | 'sleep'
+    | 'work'
+    | 'commute'
+    | 'meal'
+    | 'family'
+    | 'travel'
+    | 'personal'
+    | 'clinical'
+    | 'buffer';
+  blocks: TimeBlock[];
+  blocksScheduling: boolean;
+  visibleByDefault: boolean;
+}
+
+/** A named preferred placement window for an activity. See 015. */
+export interface TimeBlockPreference {
+  label: 'morning' | 'midday' | 'afternoon' | 'evening';
+  startTime: LocalTime;
+  endTime: LocalTime;
+}
+
+/** A proximity-avoidance rule: this activity avoids matching events within `withinMinutes`. See 015. */
+export interface TemporalAvoidRule {
+  activityType?: ActivityType;
+  intensity?: 'moderate' | 'high';
+  category?: MemberBusyBlock['category'];
+  withinMinutes: number;
+  reason: string;
+}
+
+/** Optional time-placement policy for an Activity; merged explicit > hint > default. See 015. */
+export interface ActivityTemporalPolicy {
+  preferredWindows: TimeBlockPreference[];
+  anchor?: 'wake' | 'breakfast' | 'lunch' | 'dinner' | 'bedtime' | 'any';
+  intensity?: 'none' | 'low' | 'moderate' | 'high';
+  minGapBeforeMinutes?: number;
+  minGapAfterMinutes?: number;
+  avoidAfter?: TemporalAvoidRule[];
+  avoidBefore?: TemporalAvoidRule[];
+}
+
 /** Activity declared in 003's action plan. See 002. */
 export interface Activity {
   id: string;
@@ -76,6 +145,8 @@ export interface Activity {
   metrics: string[];
   /** D5 — when true, this activity is only used as a backup target and never expanded as a primary. */
   isBackupOnly: boolean;
+  /** 015 — optional explicit time-placement policy; getDefaultTemporalPolicy() fills the rest. */
+  temporalPolicy?: ActivityTemporalPolicy;
 }
 
 /** Travel block making the member unavailable. See 002. */
@@ -110,10 +181,14 @@ export interface AlliedHealthAvailability {
   available: DateRange[];
 }
 
-/** Bundled availability inputs spanning the scheduling window. See 002. */
+/** Bundled availability inputs spanning the scheduling window. See 002 + 015. */
 export interface AvailabilityBundle {
   windowStart: string;
   windowEnd: string;
+  /** 015 — home/default IANA timezone; TimeBlock.timeZone overrides per-block for travel. */
+  timeZone: string;
+  /** 015 — member occupied blocks (sleep/work/meal/...); empty array in the date-only baseline. */
+  memberBusy: MemberBusyBlock[];
   travel: TravelPlan[];
   equipment: EquipmentAvailability[];
   specialists: SpecialistAvailability[];
@@ -132,6 +207,12 @@ export interface ScheduledOccurrence {
   id: string;
   /** YYYY-MM-DD */
   date: string;
+  /** 015 — local start time; present on scheduled/substituted, omitted on skipped. */
+  startTime?: LocalTime;
+  /** 015 — local end time = start + durationMinutes, snapped up to 30-min for occupancy. */
+  endTime?: LocalTime;
+  /** 015 — which local clock startTime/endTime are in; defaults to AvailabilityBundle.timeZone. */
+  timeZone?: string;
   status: 'scheduled' | 'substituted' | 'skipped';
   sourceActivityId: string;
   effectiveActivityId?: string;
@@ -163,7 +244,17 @@ export interface ScheduleResult {
 /** 012: Scheduler diagnostics — see docs/backlog/012-scheduler-diagnostics.md */
 
 export interface FailedConstraint {
-  kind: 'travel' | 'equipment' | 'specialist' | 'alliedHealth' | 'remoteRequired';
+  kind:
+    | 'travel'
+    | 'equipment'
+    | 'specialist'
+    | 'alliedHealth'
+    | 'remoteRequired'
+    // 015 — temporal failure kinds.
+    | 'memberBusy'
+    | 'actionOverlap'
+    | 'temporalRule'
+    | 'outsidePreferredWindow';
   role?: string;
   resourceId?: string;
   detail: string;
@@ -177,6 +268,12 @@ export interface AllocationAttempt {
   failedConstraints: FailedConstraint[];
   isRemote?: boolean;
   location?: string;
+  /** 015 — candidate slot under evaluation (date always set by the temporal scheduler). */
+  candidateDate?: string;
+  candidateStartTime?: LocalTime;
+  candidateEndTime?: LocalTime;
+  /** 015 — soft score for a feasible candidate; lower is better. */
+  score?: number;
 }
 
 export interface AllocationTrace {
@@ -197,4 +294,54 @@ export interface ScheduleDiagnostics {
 export interface ScheduleDebugResult {
   result: ScheduleResult;
   diagnostics: ScheduleDiagnostics;
+}
+
+/**
+ * 015: LLM-Assisted Semantic Compiler hint contract.
+ * Generated offline (npm run generate:hints) and committed to src/data/scheduling-hints.json.
+ * Validated against the live fixtures; dangling refs / low-confidence hints are rejected.
+ */
+
+/** Provenance tag for a merged policy or scored constraint. See 015. */
+export type PolicySource = 'explicit' | 'default' | 'llm-hint';
+
+export interface ActivityTemporalPolicyHint {
+  activityId: string;
+  temporalPolicy: ActivityTemporalPolicy;
+  /** 0..1; hints below the code threshold (0.7) are ignored. */
+  confidence: number;
+  rationale: string;
+}
+
+export interface BusyBlockClassification {
+  busyBlockId: string;
+  category: MemberBusyBlock['category'];
+  blocksScheduling: boolean;
+  visibleByDefault: boolean;
+  confidence: number;
+  rationale: string;
+}
+
+export interface TemporalRuleHint {
+  id: string;
+  appliesToActivityIds: string[];
+  hard: boolean;
+  avoidAfter?: TemporalAvoidRule[];
+  avoidBefore?: TemporalAvoidRule[];
+  rationale: string;
+}
+
+export interface SemanticWarning {
+  severity: 'info' | 'warning' | 'error';
+  targetId?: string;
+  message: string;
+}
+
+export interface SchedulingSemanticHints {
+  generatedAt: string;
+  model?: string;
+  activityPolicies: ActivityTemporalPolicyHint[];
+  busyBlockClassifications: BusyBlockClassification[];
+  globalRules: TemporalRuleHint[];
+  warnings: SemanticWarning[];
 }

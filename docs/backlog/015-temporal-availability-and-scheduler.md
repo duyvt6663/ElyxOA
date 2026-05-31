@@ -149,7 +149,10 @@ Use local wall-clock time. `AvailabilityBundle.timeZone` is the default/home tim
 travel-local blocks can override it with `TimeBlock.timeZone`. The scheduler compares
 blocks only within the same date/timezone context in V1; no cross-timezone conversion
 is required for the demo. `TimeBlock` does not cross midnight; split overnight sleep into
-two blocks (`22:30-24:00` and `00:00-06:30`) so overlap math stays simple.
+two blocks (`22:30-23:59` and `00:00-06:30`) so overlap math stays simple. Use `23:59`
+rather than `24:00` — the template literal type technically matches `24:00` but string
+comparisons (`startTime < endTime`) will misbehave; the validator should explicitly reject
+`hh > 23` or `mm > 59`.
 
 ### Member Availability
 
@@ -225,7 +228,37 @@ export interface TemporalAvoidRule {
 }
 ```
 
-Recommended fixture defaults:
+### Deterministic Default Policy Compiler
+
+Do **not** hand-author `temporalPolicy` on all 116 activities — that is ~600 manual JSON
+fields. Instead, implement a `getDefaultTemporalPolicy` function as a first-class
+implementation step (Task 2a, before fixture authoring):
+
+```ts
+function getDefaultTemporalPolicy(activity: Activity): ActivityTemporalPolicy
+```
+
+Key on `activity.type` first, then pattern-match `activity.title.toLowerCase()` for
+overrides within the type. Examples:
+
+| Match | Result |
+|---|---|
+| `type === 'medication'` | `anchor: 'breakfast'`, preferred 07:00-09:00 |
+| `type === 'medication'` + title includes `evening` or `night` | `anchor: 'dinner'`, preferred 19:00-21:00 |
+| `type === 'fitness'` + title includes `vo2`, `hiit`, `sprint`, `interval` | `intensity: 'high'`, preferred 07:00-11:00 or 16:00-18:30 |
+| `type === 'fitness'` + title includes `mobility`, `stretch`, `foam` | `intensity: 'low'`, preferred any |
+| `type === 'food'` | `anchor: 'lunch'` or infer from title (`breakfast`/`lunch`/`dinner`) |
+| `type === 'therapy'` + title includes `downshift`, `sleep`, `breath`, `sauna` | `anchor: 'bedtime'`, preferred 20:30-22:00 |
+| `type === 'therapy'` + title includes `contrast`, `ice`, `cryo` | prefer post-fitness slot, min 30-min gap after |
+| `type === 'consultation'` | preferred 09:00-17:00 (business hours) |
+| fallback | `intensity: 'none'`, `anchor: 'any'`, preferred 08:00-20:00 |
+
+The fixture only needs explicit `temporalPolicy` overrides on the ~10 activities that
+matter for the demo (Morning BP, the high-intensity fitness used to engineer the conflict,
+downshift therapy). All other 106 activities inherit from this function. Policy merge
+order: explicit fixture field > this function's output.
+
+### Recommended fixture defaults (applies where no explicit override exists)
 
 - Morning medications: `anchor: 'breakfast'`, preferred 07:00-09:00.
 - BP readings: preferred 06:30-08:30, avoid after fitness within 120 minutes.
@@ -266,7 +299,7 @@ candidate dates/times.
 
 Update `src/data/availability.json` with realistic member availability:
 
-- Daily sleep: 22:30-06:30.
+- Daily sleep: 22:30-23:59 (night 1) + 00:00-06:30 (morning); split to avoid midnight crossing.
 - Weekday work blocks: 09:00-12:00 and 13:00-17:30, with selected meeting-heavy days.
 - Commute/personal logistics: 08:30-09:00 and 17:30-18:15 on office days.
 - Meal anchors: breakfast 07:30-08:00, lunch 12:15-13:00, dinner 19:00-19:45.
@@ -278,14 +311,35 @@ Update `src/data/availability.json` with realistic member availability:
 - Clinical fixed blocks: lab draw, existing specialist appointment holds, recovery suite
   maintenance if needed.
 
-Update `src/data/activities.json` with `temporalPolicy` metadata. Do this mechanically
-by category/title first, then hand-review high-impact activities:
+**Engineered demo conflict (required — do not leave to chance):**
+Pick a concrete day where the Reviewer Demo Moment is guaranteed. Recommended: `2026-06-03`
+(a weekday, no other engineered conflict). Author the fixture so:
+1. Commute block is `08:30-09:00`.
+2. An early high-intensity fitness session (`act-XXX`) is already committed at `07:00-08:00`
+   by queue priority.
+3. Morning BP reading (`act-YYY`, `anchor: 'breakfast'`, preferred `06:30-08:30`,
+   `avoidAfter: [{activityType: 'fitness', intensity: 'high', withinMinutes: 120}]`)
+   cannot take `06:30` (too early — waking), `07:00` (fitness blocks it), `07:30` (still
+   within 120-min gap), `08:00` (commute), `08:30` (commute ends but gap rule still
+   active). Earliest feasible slot is `09:00` (commute cleared + 120-min gap from 07:00
+   fitness satisfied at 09:00).
+4. The Trace tab for this occurrence should show: "06:30 rejected: outside waking hours /
+   07:00-08:30 rejected: high-intensity fitness within 120-min gap / 08:00-08:30 rejected:
+   commute overlap / 09:00 chosen (score: N)."
+The activity IDs in steps 2-3 must be real IDs from the committed fixture; update this
+doc when they're confirmed.
 
-- All daily medications and monitoring actions get anchors.
-- Fitness gets intensity and preferred windows.
-- Food activities get meal anchors.
-- Therapy gets recovery/downshift semantics.
-- Consultations get business-hour preferences and resource windows.
+Do **not** hand-author `temporalPolicy` on every activity — the `getDefaultTemporalPolicy`
+compiler (above) derives policy from `type` + title for all 116 records. `activities.json`
+gains an explicit `temporalPolicy` only on the ~10 demo-critical activities (Morning BP, the
+engineered high-intensity fitness, downshift therapy). The compiler owns the type-level
+defaults the bullets below describe:
+
+- All daily medications and monitoring actions get anchors (compiler default).
+- Fitness gets intensity and preferred windows (compiler default).
+- Food activities get meal anchors (compiler default).
+- Therapy gets recovery/downshift semantics (compiler default).
+- Consultations get business-hour preferences and resource windows (compiler default).
 
 The fixture tests should assert:
 
@@ -524,8 +578,19 @@ Recommended queue order:
 4. Food habits and flexible daily actions.
 5. Low-intensity recovery/mobility.
 
-This is still priority-aware, but not priority-only. Temporal rigidity and resource
-scarcity influence the queue.
+**Tier vs. priority interaction:** tiers determine the outer sort; within a tier, sort by
+`activity.priority` ascending (lower number = higher priority). An activity in tier 3
+(fitness) with `priority: 1` does NOT pre-empt a tier-1 (medications) activity —
+tier membership is fixed by temporal-rigidity classification, not by `priority` field.
+`priority` only breaks ties within a tier. This ensures that a high-priority fitness
+activity does not consume the morning slots needed by anchored medications before the
+medication pass runs.
+
+**Action ledger:** maintain a `Map<string, TimeBlock[]>` keyed by date (`YYYY-MM-DD`).
+When a slot is committed, push its `TimeBlock` onto that date's list. Candidate
+feasibility in Phase 2 checks whether the new candidate overlaps any existing block in
+the ledger for that date. Resource and action ledgers are both consulted; they are kept
+separate structures.
 
 ## Simple Temporal Rules for V1
 
@@ -655,6 +720,13 @@ Ground chat with busy blocks and temporal rules:
 - "Hide occupied slots"
 - "Show medication timing conflicts"
 
+**Grounding payload slice:** include only the busy blocks whose date falls within
+`[occurrence.date - 1 day, occurrence.date + 1 day]` (3 days max). Do not send all
+92 days of busy blocks — at 5+ blocks/day that is 460+ entries and will exceed the
+context window. For temporal rules, send only the rules that apply to the selected
+activity's type + the types of activities already scheduled on that date. The existing
+`scheduleSummary` truncation strategy (from 013) still applies.
+
 Do not let chat mutate the schedule in V1. It can navigate tabs and explain.
 
 ### Reviewer Demo Moment
@@ -705,7 +777,11 @@ Add tests for:
 Add checks for:
 
 - Calendar month view shows action summaries instead of medication chip blowout, with
-  visible items per day <= 8 when occupied slots are collapsed.
+  visible rendered chip elements per day-cell <= 8 when occupied slots are collapsed.
+  "Visible chip elements" counts each distinct DOM chip node (including summary chips like
+  `Meds × 7` as **1** and a "+N more" button as **1**); it does not count the collapsed
+  medications behind the summary. The Playwright assertion target is
+  `[data-testid="day-cell-chips"] > *` or equivalent, capped to the rendered node count.
 - Toggle hides occupied slots in the day timeline.
 - Toggle re-shows occupied slots without changing selected action.
 - Trace for a medication-after-sport conflict shows `temporalRule`.

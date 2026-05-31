@@ -11,6 +11,23 @@ tabs + LLM chat after 011/012/013 implementation landed. Driven via Playwright a
 These gaps were not visible at the 5-activity placeholder scale; the 116-activity fixture
 exposes them.
 
+> **Relationship to 015 (2026-05-31):** the temporal rewrite in
+> `015-temporal-availability-and-scheduler.md` absorbs several items here. To avoid double
+> work, treat ownership as:
+> - **Already fixed:** #2 (Data-tab duplication + import isolation) — closed via the 009
+>   state hoist + ImportPanel-as-toolbar refactor.
+> - **Superseded by 015 (do NOT fix standalone):** #1 calendar density (015 replaces the
+>   chip pile with a summarized month view + day timeline), #3 Resources date axis (015
+>   adds it to the new Member lane), #4 Trace whitespace (015's candidate-rejection tables
+>   fill the panel), #9 Priority count wrap + #6 Priority row hover (015 reworks the
+>   Priority rows; fold both into that pass).
+> - **Independent polish — still valid regardless of 015:** #5 Trace empty-state guide,
+>   #7 AppHeader mobile, #8 Actions title column, #10 chat starter-chip disabled cue.
+> - **Re-verify after 015:** #11 Upper Body Strength over-substitution — 015 rewrites the
+>   fixtures and scheduler, so the count quirk must be re-checked (it may vanish or move).
+> - **Interim option:** if 015 does not start immediately, 015 Review Decision #7 keeps a
+>   cheap version of #1 (status-first chip sort + medication collapse) as a standalone patch.
+
 ## Severe — fix before any reviewer demo
 
 1. **Calendar density blowout at 116-activity scale.**
@@ -33,7 +50,12 @@ exposes them.
    *Recommended default:* **(a) + (b)** stacked. Surface adaptation by sort, reduce
    medication noise by collapse. Easy to implement; review-friendly impact.
 
-2. **Data tab duplicates the calendar AND imports don't propagate.**
+2. **Fixed (2026-05-30) — Data tab duplicated the calendar AND imports didn't propagate.**
+   *Resolved:* `displayedResult` / `displayedDiagnostics` were hoisted into
+   `AllocatorWorkspace`; `ImportPanel` became a controlled toolbar (no internal
+   `CalendarView`); all tabs now read workspace-level state. Original analysis kept below
+   for the record.
+
    `ImportPanel` (009) renders its own `<CalendarView result={displayedResult} />` inside
    the Data tab. Two problems:
    - The Data tab visually duplicates the Calendar tab (same grid below the toolbar).
@@ -153,8 +175,9 @@ Screenshots:
 
 ## Suggested iteration order
 
-1. **Severe** first: #2 (lift import state into AllocatorWorkspace) then #1 (calendar density:
-   sort-by-status + collapse medications). Both are visible-on-first-impression bugs.
+1. **Severe** first: #2 (lift import state into AllocatorWorkspace) is **done**. #1 (calendar
+   density) is now owned by 015 — see the Relationship note above; only do the cheap interim
+   patch (status-first sort + medication collapse) if 015 is not starting immediately.
 2. **Trace polish**: #4 + #5. Cheap, makes the Trace tab feel populated even on simple cases.
 3. **Resources axis**: #3. Improves the most informative tab.
 4. **Discoverability**: #6 (priority hover) + #10 (chip disabled cue).
@@ -167,5 +190,7 @@ Screenshots:
 
 - Rewrite 011/012/013 (those are archived and were verified at 5-case acceptance).
 - Add new features. All findings are polish / density / discoverability.
-- Change the scheduler algorithm or `AllocationTrace` data shape (012 stays as-is).
+- Change the scheduler algorithm or `AllocationTrace` data shape — **within the scope of
+  this file** (012 stays as-is here). The separate `015` plan deliberately DOES extend both;
+  that is 015's job, not 014's. This file stays polish-only.
 - Add a real product header / member-switcher / brand work.

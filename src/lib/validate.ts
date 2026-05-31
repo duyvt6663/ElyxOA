@@ -23,6 +23,7 @@
 import { ALLIED_HEALTH_ROLES, EQUIPMENT_ROLES, SPECIALIST_ROLES } from './roles';
 import type {
   Activity,
+  ActivityTemporalPolicy,
   AllocationAttempt,
   AllocationTrace,
   AlliedHealthAvailability,
@@ -32,12 +33,17 @@ import type {
   EquipmentAvailability,
   FailedConstraint,
   Frequency,
+  LocalTime,
+  MemberBusyBlock,
   ResourceRequirement,
   ScheduleDebugResult,
   ScheduleDiagnostics,
   ScheduleResult,
   ScheduledOccurrence,
   SpecialistAvailability,
+  TemporalAvoidRule,
+  TimeBlock,
+  TimeBlockPreference,
   TravelPlan,
 } from './types';
 
@@ -49,6 +55,25 @@ const ACTIVITY_TYPES = new Set<string>(['fitness', 'food', 'medication', 'therap
 const RESOURCE_KINDS = new Set<string>(['equipment', 'specialist', 'alliedHealth'] as const);
 const PERIODS = new Set<string>(['day', 'week', 'month', 'year'] as const);
 const STATUSES = new Set<string>(['scheduled', 'substituted', 'skipped'] as const);
+
+// 015 — temporal enum sets.
+const MEMBER_BUSY_CATEGORIES = new Set<string>([
+  'sleep',
+  'work',
+  'commute',
+  'meal',
+  'family',
+  'travel',
+  'personal',
+  'clinical',
+  'buffer',
+] as const);
+const TIME_PREF_LABELS = new Set<string>(['morning', 'midday', 'afternoon', 'evening'] as const);
+const ANCHORS = new Set<string>(['wake', 'breakfast', 'lunch', 'dinner', 'bedtime', 'any'] as const);
+const INTENSITIES = new Set<string>(['none', 'low', 'moderate', 'high'] as const);
+const AVOID_INTENSITIES = new Set<string>(['moderate', 'high'] as const);
+// HH:MM with hh in 00-23 and mm in 00-59 — rejects 24:00 and any hh>23 / mm>59.
+const LOCAL_TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 function isObj(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null && !Array.isArray(x);
@@ -97,6 +122,78 @@ export function isResourceRequirement(x: unknown): x is ResourceRequirement {
   return true;
 }
 
+// === 015: temporal type guards ===
+
+export function isLocalTime(x: unknown): x is LocalTime {
+  return isStr(x) && LOCAL_TIME_RE.test(x);
+}
+
+export function isTimeBlock(x: unknown): x is TimeBlock {
+  if (!isObj(x)) return false;
+  if (!isDateStr(x.date)) return false;
+  if (!isLocalTime(x.startTime) || !isLocalTime(x.endTime)) return false;
+  // Zero-padded HH:MM compares lexicographically == chronologically; require start < end
+  // (also enforces no midnight crossing — split overnight blocks at 23:59 / 00:00).
+  if (!(x.startTime < x.endTime)) return false;
+  if (typeof x.timeZone !== 'undefined' && !isStr(x.timeZone)) return false;
+  return true;
+}
+
+export function isMemberBusyBlock(x: unknown): x is MemberBusyBlock {
+  if (!isObj(x)) return false;
+  if (!isStr(x.id) || x.id.length === 0) return false;
+  if (!isStr(x.title)) return false;
+  if (!isStr(x.category) || !MEMBER_BUSY_CATEGORIES.has(x.category)) return false;
+  if (!isArr(x.blocks) || !x.blocks.every(isTimeBlock)) return false;
+  if (!isBool(x.blocksScheduling)) return false;
+  if (!isBool(x.visibleByDefault)) return false;
+  return true;
+}
+
+export function isTimeBlockPreference(x: unknown): x is TimeBlockPreference {
+  if (!isObj(x)) return false;
+  if (!isStr(x.label) || !TIME_PREF_LABELS.has(x.label)) return false;
+  if (!isLocalTime(x.startTime) || !isLocalTime(x.endTime)) return false;
+  if (!(x.startTime < x.endTime)) return false;
+  return true;
+}
+
+export function isTemporalAvoidRule(x: unknown): x is TemporalAvoidRule {
+  if (!isObj(x)) return false;
+  if (typeof x.activityType !== 'undefined' && (!isStr(x.activityType) || !ACTIVITY_TYPES.has(x.activityType))) {
+    return false;
+  }
+  if (typeof x.intensity !== 'undefined' && (!isStr(x.intensity) || !AVOID_INTENSITIES.has(x.intensity))) {
+    return false;
+  }
+  if (typeof x.category !== 'undefined' && (!isStr(x.category) || !MEMBER_BUSY_CATEGORIES.has(x.category))) {
+    return false;
+  }
+  if (!isNum(x.withinMinutes) || x.withinMinutes < 0) return false;
+  if (!isStr(x.reason)) return false;
+  return true;
+}
+
+export function isActivityTemporalPolicy(x: unknown): x is ActivityTemporalPolicy {
+  if (!isObj(x)) return false;
+  if (!isArr(x.preferredWindows) || !x.preferredWindows.every(isTimeBlockPreference)) return false;
+  if (typeof x.anchor !== 'undefined' && (!isStr(x.anchor) || !ANCHORS.has(x.anchor))) return false;
+  if (typeof x.intensity !== 'undefined' && (!isStr(x.intensity) || !INTENSITIES.has(x.intensity))) return false;
+  if (typeof x.minGapBeforeMinutes !== 'undefined' && (!isNum(x.minGapBeforeMinutes) || x.minGapBeforeMinutes < 0)) {
+    return false;
+  }
+  if (typeof x.minGapAfterMinutes !== 'undefined' && (!isNum(x.minGapAfterMinutes) || x.minGapAfterMinutes < 0)) {
+    return false;
+  }
+  if (typeof x.avoidAfter !== 'undefined' && (!isArr(x.avoidAfter) || !x.avoidAfter.every(isTemporalAvoidRule))) {
+    return false;
+  }
+  if (typeof x.avoidBefore !== 'undefined' && (!isArr(x.avoidBefore) || !x.avoidBefore.every(isTemporalAvoidRule))) {
+    return false;
+  }
+  return true;
+}
+
 export function isActivity(x: unknown): x is Activity {
   if (!isObj(x)) return false;
   if (!isStr(x.id) || x.id.length === 0) return false;
@@ -115,6 +212,7 @@ export function isActivity(x: unknown): x is Activity {
   if (!isArr(x.backupActivityIds) || !x.backupActivityIds.every(isStr)) return false;
   if (!isArr(x.metrics) || !x.metrics.every(isStr)) return false;
   if (!isBool(x.isBackupOnly)) return false;
+  if (typeof x.temporalPolicy !== 'undefined' && !isActivityTemporalPolicy(x.temporalPolicy)) return false;
   return true;
 }
 
@@ -157,6 +255,8 @@ export function isAlliedHealthAvailability(x: unknown): x is AlliedHealthAvailab
 export function isAvailabilityBundle(x: unknown): x is AvailabilityBundle {
   if (!isObj(x)) return false;
   if (!isDateStr(x.windowStart) || !isDateStr(x.windowEnd)) return false;
+  if (!isStr(x.timeZone) || x.timeZone.length === 0) return false;
+  if (!isArr(x.memberBusy) || !x.memberBusy.every(isMemberBusyBlock)) return false;
   if (!isArr(x.travel) || !x.travel.every(isTravelPlan)) return false;
   if (!isArr(x.equipment) || !x.equipment.every(isEquipmentAvailability)) return false;
   if (!isArr(x.specialists) || !x.specialists.every(isSpecialistAvailability)) return false;
@@ -176,6 +276,9 @@ export function isScheduledOccurrence(x: unknown): x is ScheduledOccurrence {
   if (!isObj(x)) return false;
   if (!isStr(x.id)) return false;
   if (!isDateStr(x.date)) return false;
+  if (typeof x.startTime !== 'undefined' && !isLocalTime(x.startTime)) return false;
+  if (typeof x.endTime !== 'undefined' && !isLocalTime(x.endTime)) return false;
+  if (typeof x.timeZone !== 'undefined' && !isStr(x.timeZone)) return false;
   if (!isStr(x.status) || !STATUSES.has(x.status)) return false;
   if (!isStr(x.sourceActivityId)) return false;
   if (typeof x.effectiveActivityId !== 'undefined' && !isStr(x.effectiveActivityId)) return false;
@@ -209,6 +312,11 @@ const FAILED_CONSTRAINT_KINDS = new Set<string>([
   'specialist',
   'alliedHealth',
   'remoteRequired',
+  // 015 — temporal kinds.
+  'memberBusy',
+  'actionOverlap',
+  'temporalRule',
+  'outsidePreferredWindow',
 ]);
 
 export function isFailedConstraint(x: unknown): x is FailedConstraint {
@@ -232,6 +340,10 @@ export function isAllocationAttempt(x: unknown): x is AllocationAttempt {
   if (!isArr(x.failedConstraints) || !x.failedConstraints.every(isFailedConstraint)) return false;
   if (typeof x.isRemote !== 'undefined' && !isBool(x.isRemote)) return false;
   if (typeof x.location !== 'undefined' && !isStr(x.location)) return false;
+  if (typeof x.candidateDate !== 'undefined' && !isDateStr(x.candidateDate)) return false;
+  if (typeof x.candidateStartTime !== 'undefined' && !isLocalTime(x.candidateStartTime)) return false;
+  if (typeof x.candidateEndTime !== 'undefined' && !isLocalTime(x.candidateEndTime)) return false;
+  if (typeof x.score !== 'undefined' && !isNum(x.score)) return false;
   return true;
 }
 

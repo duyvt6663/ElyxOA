@@ -79,6 +79,8 @@ describe('schedule', () => {
     return {
       windowStart: '2026-06-01',
       windowEnd: '2026-06-14',
+      timeZone: 'America/Los_Angeles',
+      memberBusy: [],
       travel: [],
       equipment: [],
       specialists: [],

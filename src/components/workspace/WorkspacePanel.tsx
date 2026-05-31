@@ -24,6 +24,7 @@
  */
 
 import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics } from '@/lib/types';
+import type { EducationMap } from '@/lib/activity-education';
 import type { TabId, WorkspaceSelection } from './AllocatorWorkspace';
 import TabNav from './TabNav';
 import CalendarTab from './tabs/CalendarTab';
@@ -41,6 +42,8 @@ export interface WorkspacePanelProps {
   activities: Activity[];
   availability: AvailabilityBundle;
   diagnostics?: ScheduleDiagnostics;
+  /** 023: activity-education profiles keyed by activityId; consumed by the Activities + Trace tabs. */
+  education: EducationMap;
   setSchedule: (next: { result: ScheduleResult; diagnostics: ScheduleDiagnostics }) => void;
   resetSchedule: () => void;
 }
@@ -54,6 +57,7 @@ export default function WorkspacePanel({
   activities,
   availability,
   diagnostics,
+  education,
   setSchedule,
   resetSchedule,
 }: WorkspacePanelProps) {
@@ -62,11 +66,11 @@ export default function WorkspacePanel({
       case 'calendar':
         return <CalendarTab result={result} availability={availability} selection={selection} onSelect={onSelect} />;
       case 'activities':
-        return <ActivitiesTab activities={activities} result={result} selection={selection} onSelect={onSelect} />;
+        return <ActivitiesTab activities={activities} result={result} selection={selection} onSelect={onSelect} education={education} />;
       case 'resources':
         return <ResourcesTab availability={availability} selection={selection} onSelect={onSelect} />;
       case 'trace':
-        return <AllocationTraceTab selection={selection} diagnostics={diagnostics} activities={activities} />;
+        return <AllocationTraceTab selection={selection} diagnostics={diagnostics} activities={activities} result={result} education={education} />;
       case 'data':
         return (
           <DataImportTab

@@ -31,11 +31,12 @@ gated on the app being publicly hosted.
   validate, roles), `components/` (UI).
 
 # 4. src/ structure (implemented + acceptance-verified end-to-end)
-Implementation pass complete through 011/012/013; `npm install` + `npm run build` green
-(`/` ○ Static, `/api/chat` ƒ Dynamic, 99.2 kB First Load JS); `npm test` 18/18 (scheduler
-+ diagnostics); Playwright acceptance suite `tests/drive-acceptance.mjs` reports 5/5 PASS
+Implementation pass complete through 011/012/013 + 015-020/022-023; `npm install` +
+`npm run build` green (`/` ○ Static 173 kB First Load JS, `/api/chat` ƒ Dynamic); `npm test`
+**86/86**; Playwright acceptance suite `tests/drive-acceptance.mjs` reports **A1–A13 13/13 PASS**
 on a live dev server with a real OpenAI key set (`OPENAI_API_KEY` loaded via `.env.local`,
-gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallbacks.
+gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallbacks. 023 adds
+116 committed activity-education profiles (`src/data/activity-education.json`).
 
   src/app/          layout.tsx, page.tsx (Server Component: schedules at build via
                     scheduleTemporal (015), threads { result, diagnostics } into AllocatorWorkspace),
@@ -47,9 +48,12 @@ gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallba
                     scheduler.ts (date-only greedy + scheduleWithDiagnostics + exported date/isFeasible helpers),
                     temporal-policy.ts (getDefaultTemporalPolicy by type+title),
                     temporal-scheduler.ts (015 scheduleTemporal: candidate slots → hard temporal
-                    feasibility → scored allocation → ledgers), {scheduler,temporal-scheduler}.test.ts (24 tests).
+                    feasibility → scored allocation → ledgers; 023 sets occ.effectiveActivityId =
+                    chosen candidate), {scheduler,temporal-scheduler}.test.ts (24 tests),
+                    activity-education.ts + .test.ts (023: profile lookup keyed by activityId;
+                    educationForOccurrence resolves effective/fallback),
                     llm/{config,prompt,rate-limit}.ts (model = gpt-5.3-chat-latest via @ai-sdk/openai;
-                    sliding-window per-IP rate-limit; SYSTEM_PROMPT + buildGrounding).
+                    sliding-window per-IP rate-limit; SYSTEM_PROMPT + buildGrounding incl. 023 education).
   src/components/   workspace/ — AllocatorWorkspace (selection state + diagnostics threading),
                     AppHeader, WindowLayout, MobileSwitch, ChatSurface (real streamText round-trip
                     with markdown link-button parsing → workspace navigation), WorkspacePanel,
@@ -60,11 +64,13 @@ gitignored). 116-activity fixture committed: 102 primary + 14 backup-only fallba
                     AgendaList/OccurrenceCard/SummaryHeader/FilterBar/Legend) plus DayTimeline (015:
                     chronological lane, actions interleaved with occupied blocks) and ImportPanel (009).
   src/data/         activities.json (116 records; 015 temporalPolicy overrides on demo-critical acts),
-                    availability.json (015: timeZone + memberBusy, 23 groups / ~1006 time blocks).
-  scripts/          generate-availability.mjs (015: LLM weekly pattern → 92-day expansion;
-                    npm run generate:availability; deterministic fallback w/o key).
-  tests/            drive-acceptance.mjs (Playwright A1-A5; A4 hits live LLM when key present).
-  docs/             DEPLOY.md, prompts/, backlog/ (active 019), archive/ (001-018), context/.
+                    availability.json (015: timeZone + memberBusy, 23 groups / ~1006 time blocks),
+                    activity-education.json (023: 116 education profiles, one per activityId).
+  scripts/          generate-availability.mjs (015: LLM weekly pattern → 92-day expansion);
+                    generate-{hints,bundles,activity-education}.mjs (LLM + deterministic fallback w/o key;
+                    npm run generate:{availability,hints,bundles,activity-education}).
+  tests/            drive-acceptance.mjs (Playwright A1-A13; A5 hits live LLM when key present).
+  docs/             DEPLOY.md, prompts/, backlog/ (active 019-023), archive/ (001-018), context/.
   .env.local        OPENAI_API_KEY (gitignored via .env*; mode 600).
   README.md         reviewer entry point with hosted-URL placeholder + 6-item assignment checklist.
 
@@ -94,7 +100,14 @@ example: `src/lib/scheduler.ts` (algorithm) and `src/components/CalendarView.tsx
 # 6. backlog state
 
 **Active backlog:** `019-contextual-chat-agent-workspace.md` (Cursor/Claude-CLI-style visible
-chat contexts, `@` refs, navigation actions, and validated draft schedule/travel edits).
+chat contexts, `@` refs, navigation actions, and validated draft schedule/travel edits) and
+`020-guided-onboarding-and-tag-glossary.md` (status/tooling glossary, accessible tag tooltips,
+and first-run/contextual guided tour), `021-db-auth-google-calendar-import.md` (Postgres/Auth.js
+DB layer, Google admin login, protected expensive API routes, and Google Calendar FreeBusy import),
+`022-ui-ux-polish.md` (chat formatting, tooltip/tour polish). **023 DONE** —
+`023-activity-education-descriptions.md` (116 LLM-generated activity purpose/health-context profiles
+surfaced in the Activities tab oneLine + Health context, the Trace "About this action"
+panel with scheduled/substituted/skipped handling, and chat grounding).
 
 Archived plans 001-018 live in `docs/archive/`. Highlights: 007 prompts+README · 008 deploy
 (live at https://elyx-oa.vercel.app/) · 015 temporal availability + scheduler · 016 temporal
@@ -108,7 +121,7 @@ cardiology + travel demos) · 017 merged Actions + Priority into one sortable **
 (one HH:MM header per group, no per-row timestamp, collapsible bundles, and a distinct amber
 `↳ substituted (N)` sub-group).
 
-The take-home is **live + fully UI/UX-verified**. 33 unit tests, 6/6 Playwright acceptance,
+The take-home is **live + fully UI/UX-verified**. 86 unit tests, A1-A13 13/13 Playwright acceptance,
 `npm run build` static (`/` ○, `/api/chat` ƒ), lint clean, 0 console errors. Offline data
-regenerators: `generate:availability`, `generate:hints`, `generate:bundles` (each deterministic
-without a key).
+regenerators: `generate:availability`, `generate:hints`, `generate:bundles`,
+`generate:activity-education` (each deterministic without a key).

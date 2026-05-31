@@ -31,7 +31,8 @@
  * 4. If the trace lookup is undefined, render a small notice (012 impl pending).
  */
 
-import type { Activity, ScheduleDiagnostics, AllocationTrace, AllocationAttempt } from '@/lib/types';
+import type { Activity, ScheduleDiagnostics, ScheduleResult, ScheduledOccurrence, AllocationTrace, AllocationAttempt, ActivityEducationProfile } from '@/lib/types';
+import { educationForOccurrence, educationForActivity, type EducationMap } from '@/lib/activity-education';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
 
 export interface AllocationTraceTabProps {
@@ -39,6 +40,10 @@ export interface AllocationTraceTabProps {
   diagnostics?: ScheduleDiagnostics;
   /** 016 §4 — source-activity definitions, for the details panel under short traces. */
   activities?: Activity[];
+  /** 023 — schedule output, to resolve the selected occurrence + its status. */
+  result: ScheduleResult;
+  /** 023 — activity-education profiles keyed by activityId, for "About this action". */
+  education: EducationMap;
 }
 
 function AttemptCard({ attempt, index, isChosen }: { attempt: AllocationAttempt; index: number; isChosen: boolean }) {
@@ -120,7 +125,7 @@ function AttemptCard({ attempt, index, isChosen }: { attempt: AllocationAttempt;
   );
 }
 
-export default function AllocationTraceTab({ selection, diagnostics, activities }: AllocationTraceTabProps) {
+export default function AllocationTraceTab({ selection, diagnostics, activities, result, education }: AllocationTraceTabProps) {
   if (selection.selectedOccurrenceId === null) {
     return (
       <div className="p-6 text-sm text-gray-600">
@@ -150,6 +155,9 @@ export default function AllocationTraceTab({ selection, diagnostics, activities 
     );
   }
 
+  const occ = result.occurrences.find((o) => o.id === selection.selectedOccurrenceId);
+  const sourceOneLine = educationForActivity(education, trace.sourceActivityId)?.oneLine;
+
   return (
     <div className="p-4 text-sm" data-tour-id="trace-content">
       <header className="mb-3">
@@ -160,6 +168,7 @@ export default function AllocationTraceTab({ selection, diagnostics, activities 
         <div className="text-xs text-gray-500">
           source: <span className="font-mono">{trace.sourceActivityId}</span>
         </div>
+        {sourceOneLine && <div className="mt-1 text-xs text-gray-400">{sourceOneLine}</div>}
       </header>
       <ol className="space-y-2">
         {trace.attempts.map((attempt, i) => (
@@ -172,7 +181,108 @@ export default function AllocationTraceTab({ selection, diagnostics, activities 
           </li>
         ))}
       </ol>
+      {occ && <AboutThisActionPanel occ={occ} trace={trace} education={education} />}
       <SourceActivityPanel activities={activities} sourceId={trace.sourceActivityId} />
+    </div>
+  );
+}
+
+/** 023 — health-education complement to SourceActivityPanel; handles scheduled/substituted/skipped. */
+function AboutThisActionPanel({
+  occ,
+  trace,
+  education,
+}: {
+  occ: ScheduledOccurrence;
+  trace: AllocationTrace;
+  education: EducationMap;
+}) {
+  if (occ.status === 'skipped') {
+    const edu = educationForActivity(education, trace.sourceActivityId);
+    if (!edu && !occ.reason) return null;
+    return (
+      <section className="mt-4 rounded border border-gray-200 bg-gray-50 p-3 text-xs">
+        <h3 className="mb-2 font-medium text-gray-700">About this action</h3>
+        {edu ? (
+          <EducationBody edu={edu} />
+        ) : (
+          <p className="text-gray-500">No education profile for this action.</p>
+        )}
+        {occ.reason && (
+          <p className="mt-2 text-gray-600">
+            <span className="font-medium text-gray-700">Not placed: </span>
+            {occ.reason}
+          </p>
+        )}
+      </section>
+    );
+  }
+
+  if (occ.status === 'substituted') {
+    const fallback = educationForOccurrence(education, occ);
+    const originalTitle = occ.sourceTitle ?? educationForActivity(education, trace.sourceActivityId)?.oneLine;
+    return (
+      <section className="mt-4 rounded border border-gray-200 bg-gray-50 p-3 text-xs">
+        <h3 className="mb-2 font-medium text-gray-700">About this action</h3>
+        <div className="mb-1 font-medium text-gray-700">Scheduled fallback</div>
+        {fallback ? (
+          <EducationBody edu={fallback} />
+        ) : (
+          <p className="text-gray-500">No education profile for the scheduled fallback.</p>
+        )}
+        <div className="mt-3 border-t border-gray-200 pt-2">
+          <div className="mb-1 font-medium text-gray-700">Original plan</div>
+          {originalTitle && <p className="text-gray-600">{originalTitle}</p>}
+          {occ.reason && (
+            <p className="mt-1 text-gray-600">
+              <span className="font-medium text-gray-700">Why substituted: </span>
+              {occ.reason}
+            </p>
+          )}
+        </div>
+      </section>
+    );
+  }
+
+  // scheduled
+  const edu = educationForOccurrence(education, occ);
+  if (!edu) return null;
+  return (
+    <section className="mt-4 rounded border border-gray-200 bg-gray-50 p-3 text-xs">
+      <h3 className="mb-2 font-medium text-gray-700">About this action</h3>
+      <EducationBody edu={edu} showGuidance />
+    </section>
+  );
+}
+
+/** 023 — shared education body (oneLine lead, what/why, healthFocus chips, optional member guidance). */
+function EducationBody({ edu, showGuidance }: { edu: ActivityEducationProfile; showGuidance?: boolean }) {
+  return (
+    <div className="space-y-2 text-gray-600">
+      <p className="text-gray-700">{edu.oneLine}</p>
+      <p>
+        <span className="font-medium text-gray-700">What it does: </span>
+        {edu.whatItDoes}
+      </p>
+      <p>
+        <span className="font-medium text-gray-700">Why it matters: </span>
+        {edu.whyItMatters}
+      </p>
+      {edu.healthFocus.length > 0 && (
+        <ul className="flex flex-wrap gap-1">
+          {edu.healthFocus.map((f, i) => (
+            <li key={i} className="rounded bg-gray-100 px-1.5 py-0.5 text-gray-700">
+              {f}
+            </li>
+          ))}
+        </ul>
+      )}
+      {showGuidance && edu.memberGuidance && (
+        <p>
+          <span className="font-medium text-gray-700">Member guidance: </span>
+          {edu.memberGuidance}
+        </p>
+      )}
     </div>
   );
 }

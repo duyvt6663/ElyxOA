@@ -12,9 +12,13 @@
 // A7 (020): clicking the "Scheduled" summary pill opens its glossary tooltip.
 // A8 (020): first-run tour prompt -> Start -> 5 steps -> Finish; reload -> prompt gone (localStorage).
 // A9 (020): the header Help control opens the Help & glossary panel.
+// A10 (023): Activities row shows a one-line education summary under the title.
+// A11 (023): expanding an activity shows the "Health context" section (what it does).
+// A12 (023): selecting a scheduled calendar action opens its Trace with "About this action".
+// A13 (023): a substituted action's Trace shows the fallback education + "Original plan".
 
 import { chromium } from 'playwright';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync } from 'node:fs';
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:3000/';
 const SHOTS = '/tmp/elyx-015-acceptance';
@@ -195,6 +199,84 @@ async function runA9(page) {
   record('A9', ok, ok ? 'help panel opens' : 'help panel did not open');
 }
 
+// 023 — committed education profiles, for asserting the displayed copy comes from the fixture.
+const EDU = JSON.parse(readFileSync('src/data/activity-education.json', 'utf8'));
+const eduFor = (id) => EDU.find((e) => e.activityId === id);
+
+// A10 (023): the Activities tab shows each row's one-line education summary under the title.
+async function runA10(page) {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await gotoTab(page, 'Activities');
+  await page.waitForSelector('text=/Activities \\(/', { timeout: 8000 });
+  const oneLine = eduFor('act-001')?.oneLine ?? '';
+  const text = await page.locator('body').innerText();
+  const ok = oneLine.length > 0 && text.includes(oneLine);
+  await page.screenshot({ path: `${SHOTS}/A10.png` });
+  record('A10', ok, ok ? 'oneLine under title' : `missing oneLine "${oneLine.slice(0, 40)}…"`);
+}
+
+// A11 (023): expanding an activity reveals the "Health context" block (what it does).
+async function runA11(page) {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await gotoTab(page, 'Activities');
+  await page.waitForSelector('text=/Activities \\(/', { timeout: 8000 });
+  await page.getByRole('button', { name: 'Morning Antihypertensive' }).first().click();
+  await page.waitForTimeout(350);
+  const whatItDoes = eduFor('act-001')?.whatItDoes ?? '';
+  const text = await page.locator('body').innerText();
+  // the heading carries a CSS `uppercase` transform, which innerText reflects — match case-insensitively.
+  const ok = text.toLowerCase().includes('health context') && whatItDoes.length > 0 && text.includes(whatItDoes);
+  await page.screenshot({ path: `${SHOTS}/A11.png` });
+  record('A11', ok, ok ? 'Health context shown on expand' : 'Health context / whatItDoes missing');
+}
+
+// A12 (023): clicking a calendar action opens its Trace with the "About this action" education block.
+async function runA12(page) {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  const cell = page.locator('[data-testid="day-cell-chips"]').first();
+  await cell.waitFor({ timeout: 8000 });
+  await cell.click();
+  await page.waitForTimeout(800);
+  const action = page
+    .locator('aside li button')
+    .filter({ has: page.locator('span.rounded-full') })
+    .filter({ hasNot: page.locator('span.w-3') })
+    .first();
+  await action.waitFor({ timeout: 5000 });
+  await action.click({ force: true });
+  const ok = await page
+    .waitForSelector('text=About this action', { timeout: 5000 })
+    .then(() => true)
+    .catch(() => false);
+  await page.screenshot({ path: `${SHOTS}/A12.png` });
+  record('A12', ok, ok ? 'Trace shows About this action' : 'no About this action block');
+}
+
+// A13 (023): a substituted action's Trace distinguishes the scheduled fallback from the original plan.
+async function runA13(page) {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await gotoTab(page, 'Activities');
+  await page.waitForSelector('text=/Activities \\(/', { timeout: 8000 });
+  // act-005 "Zone 2 Treadmill Cardio" has many substituted occurrences (travel fallbacks).
+  await page.getByRole('button', { name: 'Zone 2 Treadmill Cardio' }).first().click();
+  await page.waitForTimeout(350);
+  // scope to the desktop expansion row (tr.bg-gray-50) so we hit an occurrence button, not a
+  // page-level "Show substituted items" filter control that also contains the word.
+  const sub = page.locator('tr.bg-gray-50 button').filter({ hasText: /substituted/ }).first();
+  await sub.waitFor({ timeout: 5000 });
+  await sub.scrollIntoViewIfNeeded();
+  await sub.click();
+  await page.waitForSelector('text=Scheduled fallback', { timeout: 5000 }).catch(() => {});
+  const text = await page.locator('body').innerText();
+  const ok = text.includes('Scheduled fallback') && text.includes('Original plan');
+  await page.screenshot({ path: `${SHOTS}/A13.png` });
+  record('A13', ok, ok ? 'fallback + original plan shown' : 'substituted education not distinguished');
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true });
   const ctx = await browser.newContext();
@@ -211,6 +293,10 @@ async function main() {
     ['A7', runA7],
     ['A8', runA8],
     ['A9', runA9],
+    ['A10', runA10],
+    ['A11', runA11],
+    ['A12', runA12],
+    ['A13', runA13],
   ]) {
     try {
       await runner(page);

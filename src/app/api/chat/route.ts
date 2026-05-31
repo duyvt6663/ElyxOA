@@ -29,15 +29,20 @@ import { streamText, tool, convertToModelMessages, stepCountIs, type UIMessage }
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 import availabilityData from '@/data/availability.json';
+import activityEducationData from '@/data/activity-education.json';
 import { hasApiKey, getModelId } from '@/lib/llm/config';
 import { SYSTEM_PROMPT, buildGrounding } from '@/lib/llm/prompt';
 import { checkRateLimit } from '@/lib/llm/rate-limit';
 import { resolveContextRefs, type ChatContextItem } from '@/lib/chat-context';
-import type { AvailabilityBundle } from '@/lib/types';
+import { buildEducationMap } from '@/lib/activity-education';
+import type { AvailabilityBundle, ActivityEducationProfile } from '@/lib/types';
 
 // 015: the server holds the canonical availability fixture so it can slice the member's
 // occupied blocks for the selected date into the grounding (the client never ships 1000+ blocks).
 const availability = availabilityData as unknown as AvailabilityBundle;
+
+// 023 Phase 4: committed activity education, keyed by activityId, for chat grounding.
+const education = buildEducationMap(activityEducationData as unknown as ActivityEducationProfile[]);
 
 export const runtime = 'nodejs'; // edge optional; keep nodejs for AI SDK compatibility unless impl chooses otherwise
 
@@ -165,6 +170,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     activities: body.activities,
     availability,
     contexts,
+    education,
   });
 
   try {

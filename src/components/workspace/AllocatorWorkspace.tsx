@@ -58,6 +58,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics, SchedulingSemanticHints } from '@/lib/types';
 import type { ContextBlock, ContextIndex } from '@/lib/chat-context';
+import type { EducationMap } from '@/lib/activity-education';
 import schedulingHints from '@/data/scheduling-hints.json';
 import { scheduleTemporal } from '@/lib/temporal-scheduler';
 import { isSchedulingSemanticHints, validateHintReferences } from '@/lib/validate';
@@ -92,6 +93,8 @@ export interface AllocatorWorkspaceProps {
   availability: AvailabilityBundle;
   diagnostics?: ScheduleDiagnostics;
   contextIndex: ContextIndex;
+  /** 023: activity-education profiles keyed by activityId; forwarded to the Activities + Trace tabs. */
+  education: EducationMap;
 }
 
 /** 019: abbreviate a YYYY-MM-DD into "Jun 22" for a chip label (window is Jun/Jul/Aug 2026). */
@@ -102,7 +105,7 @@ function shortDate(date: string): string {
   return `${mon} ${d ?? ''}`.trim();
 }
 
-export default function AllocatorWorkspace({ result, activities, availability, diagnostics, contextIndex }: AllocatorWorkspaceProps) {
+export default function AllocatorWorkspace({ result, activities, availability, diagnostics, contextIndex, education }: AllocatorWorkspaceProps) {
   const [displayedResult, setDisplayedResult] = useState<ScheduleResult>(result);
   const [displayedDiagnostics, setDisplayedDiagnostics] = useState<ScheduleDiagnostics | undefined>(diagnostics);
   const [selection, setSelection] = useState<WorkspaceSelection>({
@@ -394,6 +397,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
       activities={activities}
       availability={availability}
       diagnostics={displayedDiagnostics}
+      education={education}
       setSchedule={setSchedule}
       resetSchedule={resetSchedule}
     />

@@ -27,8 +27,11 @@
 import activitiesData from '@/data/activities.json';
 import availabilityData from '@/data/availability.json';
 import schedulingHintsData from '@/data/scheduling-hints.json';
+import activityEducationData from '@/data/activity-education.json';
 import { scheduleTemporal } from '@/lib/temporal-scheduler';
 import { buildContextIndex } from '@/lib/chat-context';
+import { buildEducationMap } from '@/lib/activity-education';
+import type { ActivityEducationProfile } from '@/lib/types';
 import {
   isActivity,
   isAvailabilityBundle,
@@ -67,6 +70,11 @@ const { result, diagnostics } = scheduleTemporal(activities, availability, sched
 // deterministic ref navigation work without shipping the full availability fixture or an API key.
 const contextIndex = buildContextIndex({ result, availability });
 
+// 023: committed activity-education profiles → map keyed by activityId. Threaded to the
+// Activities + Allocation Trace tabs so each action shows what it does / why it matters.
+// Cast at the JSON boundary like the other fixtures (the generator emits the canonical shape).
+const education = buildEducationMap(activityEducationData as unknown as ActivityEducationProfile[]);
+
 export default function Page() {
   return (
     <main className="min-h-dvh">
@@ -76,6 +84,7 @@ export default function Page() {
         availability={availability}
         diagnostics={diagnostics}
         contextIndex={contextIndex}
+        education={education}
       />
     </main>
   );

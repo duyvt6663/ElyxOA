@@ -25,8 +25,9 @@
  *   5. Return GroundingPayload.
  */
 
-import type { Activity, ScheduleResult, ScheduledOccurrence, AllocationTrace, AvailabilityBundle } from '@/lib/types';
+import type { Activity, ScheduleResult, ScheduledOccurrence, AllocationTrace, AvailabilityBundle, ActivityEducationProfile } from '@/lib/types';
 import type { ResolvedContext } from '@/lib/chat-context';
+import type { EducationMap } from '@/lib/activity-education';
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -66,15 +67,28 @@ export interface GroundingPayload {
   /** 019 Phase 1 — resolved typed contexts attached to this turn (the authoritative context). */
   contexts: ResolvedContext[];
   /** 019 Phase 3 — compact id+title of every activity, so the model can resolve a name the user
-   * mentions ("brisk walks") to an activityId for the setTemporalPolicy edit tool. */
-  activityCatalog: Array<{ id: string; title: string; type: ScheduledOccurrence['type'] }>;
+   * mentions ("brisk walks") to an activityId for the setTemporalPolicy edit tool. 023 R3 — plus
+   * each activity's <=120-char education oneLine, so "what's this for?" answers from committed copy. */
+  activityCatalog: Array<{ id: string; title: string; type: ScheduledOccurrence['type']; oneLine?: string }>;
+  /** 023 Phase 4 — compact education ONLY for activities relevant this turn (trace source+backups,
+   * activities named by contexts, the selected occurrence's source/effective ids). Lets chat answer
+   * "what does this do / why is it in my plan?" from committed copy, not invented health claims.
+   * Empty when no education map was supplied. */
+  education: Array<{
+    activityId: string;
+    oneLine: string;
+    whatItDoes: string;
+    whyItMatters: string;
+    healthFocus: string[];
+    memberGuidance: string;
+  }>;
   /** 019 Phase 3 — busy-block + travel catalogs so the model can resolve ids for removeBusyBlock
    * and editTravelWindow. */
   busyBlockCatalog: Array<{ busyBlockId: string; title: string; category: string }>;
   travelCatalog: Array<{ travelId: string; destination: string; startDate: string; endDate: string }>;
 }
 
-export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, occupiedBlocks, dayBundles, and adaptations — never invent facts. SCOPE: the selection is CONTEXT, not necessarily the subject. Answer the user's ACTUAL question — only lean on the selected occurrence's trace when the question is about that occurrence; for schedule-wide questions (travel changes, substituted/skipped items, constrained resources, routines) use scheduleSummary, adaptations, and dayBundles, and do not narrow to the selected occurrence. If the data needed isn't in the snapshot, say so briefly. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. dayBundles are the customer-facing groupings of the selected day's routine low-risk daily food/medication actions (e.g. "Morning meds": 4) — use them to answer routine/grouping questions. If the selection is empty, ask the user to click an occurrence. Treat the contexts array as the authoritative attached context for this turn — the typed schedule objects the user explicitly attached — and prioritise it over the bare selection. To direct the user to the workspace, you MAY call the navigation tools — openTab(tab), selectDate(date), selectOccurrence(occurrenceId), focusResource(resourceKey) — which render as clickable cards. But ALWAYS also write a 1-3 sentence text answer in the SAME turn; NEVER reply with only a tool call. For a "why" / explanation question, the text answer is the point — navigate only in addition to it, never instead of it. The markdown links [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), [Resources](tab://resources) remain a fallback. For schedule edits, call an edit tool — EACH produces a DRAFT the user must Apply; NEVER claim an edit is applied. setTemporalPolicy(activityId, window/anchor) retimes an activity's whole series; addBusyBlock(date, startTime, endTime, title, category) blocks a time range; removeBusyBlock(busyBlockId, date?) frees a member busy block (date for one instance, omit for the whole recurring block); editTravelWindow(travelId, startDate, endDate) changes a trip. Resolve ids from the grounding catalogs (activityCatalog / busyBlockCatalog / travelCatalog) or an attached context.`;
+export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, occupiedBlocks, dayBundles, and adaptations — never invent facts. SCOPE: the selection is CONTEXT, not necessarily the subject. Answer the user's ACTUAL question — only lean on the selected occurrence's trace when the question is about that occurrence; for schedule-wide questions (travel changes, substituted/skipped items, constrained resources, routines) use scheduleSummary, adaptations, and dayBundles, and do not narrow to the selected occurrence. If the data needed isn't in the snapshot, say so briefly. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. dayBundles are the customer-facing groupings of the selected day's routine low-risk daily food/medication actions (e.g. "Morning meds": 4) — use them to answer routine/grouping questions. If the selection is empty, ask the user to click an occurrence. Treat the contexts array as the authoritative attached context for this turn — the typed schedule objects the user explicitly attached — and prioritise it over the bare selection. To direct the user to the workspace, you MAY call the navigation tools — openTab(tab), selectDate(date), selectOccurrence(occurrenceId), focusResource(resourceKey) — which render as clickable cards. But ALWAYS also write a 1-3 sentence text answer in the SAME turn; NEVER reply with only a tool call. For a "why" / explanation question, the text answer is the point — navigate only in addition to it, never instead of it. The markdown links [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), [Resources](tab://resources) remain a fallback. For schedule edits, call an edit tool — EACH produces a DRAFT the user must Apply; NEVER claim an edit is applied. setTemporalPolicy(activityId, window/anchor) retimes an activity's whole series; addBusyBlock(date, startTime, endTime, title, category) blocks a time range; removeBusyBlock(busyBlockId, date?) frees a member busy block (date for one instance, omit for the whole recurring block); editTravelWindow(travelId, startDate, endDate) changes a trip. Resolve ids from the grounding catalogs (activityCatalog / busyBlockCatalog / travelCatalog) or an attached context. For "what does this action do / why is it in my plan / what's it for" questions, answer from the supplied education entries (whatItDoes/whyItMatters/healthFocus/memberGuidance) and activityCatalog[].oneLine, quoting that copy conservatively; you MUST NOT invent health benefits, outcomes, dosing, or diagnoses beyond the supplied education text.`;
 
 const DAY_MS = 86400000;
 function nearbyDates(date: string | null): Set<string> {
@@ -96,8 +110,9 @@ export function buildGrounding(args: {
   activities: Activity[];
   availability?: AvailabilityBundle;
   contexts?: ResolvedContext[];
+  education?: EducationMap;
 }): GroundingPayload {
-  const { selection, result, traces, activities, availability, contexts } = args;
+  const { selection, result, traces, activities, availability, contexts, education } = args;
 
   // 1. Locate trace for the selected occurrence.
   const trace = selection.selectedOccurrenceId
@@ -128,7 +143,39 @@ export function buildGrounding(args: {
       .sort((a, b) => a.id.localeCompare(b.id));
   }
 
-  // 4. Slice member occupied blocks to the selected date ± 1 day (keeps the payload small).
+  // 023 Phase 4. Collect the activity ids relevant THIS turn for full(ish) education: the trace's
+  // source+backups, any activity named by a resolved context (activity ref directly, or the
+  // source/effective ids of an occurrence/trace ref), plus the selected occurrence's ids. Then emit
+  // a compact education subset (no careTeamNote/expectedSignals/timestamps) sorted by id. [] if no map.
+  const eduIds = new Set<string>();
+  if (education) {
+    for (const a of referencedActivities) eduIds.add(a.id);
+    const addOccIds = (occurrenceId: string) => {
+      const occ = result.occurrences.find((o) => o.id === occurrenceId);
+      if (!occ) return;
+      eduIds.add(occ.sourceActivityId);
+      if (occ.effectiveActivityId) eduIds.add(occ.effectiveActivityId);
+    };
+    for (const c of contexts ?? []) {
+      if (c.ref.type === 'activity') eduIds.add(c.ref.activityId);
+      else if (c.ref.type === 'occurrence' || c.ref.type === 'trace') addOccIds(c.ref.occurrenceId);
+    }
+    if (selection.selectedOccurrenceId) addOccIds(selection.selectedOccurrenceId);
+  }
+  const educationPayload: GroundingPayload['education'] = education
+    ? [...eduIds]
+        .map((id) => education[id])
+        .filter((p): p is ActivityEducationProfile => Boolean(p))
+        .sort((a, b) => a.activityId.localeCompare(b.activityId))
+        .map((p) => ({
+          activityId: p.activityId,
+          oneLine: p.oneLine,
+          whatItDoes: p.whatItDoes,
+          whyItMatters: p.whyItMatters,
+          healthFocus: p.healthFocus,
+          memberGuidance: p.memberGuidance,
+        }))
+    : [];
   const occupiedBlocks: OccupiedBlock[] = [];
   if (availability && selection.selectedDate) {
     const dates = nearbyDates(selection.selectedDate);
@@ -191,7 +238,8 @@ export function buildGrounding(args: {
     dayBundles,
     adaptations,
     contexts: contexts ?? [],
-    activityCatalog: activities.map((a) => ({ id: a.id, title: a.title, type: a.type })),
+    education: educationPayload,
+    activityCatalog: activities.map((a) => ({ id: a.id, title: a.title, type: a.type, oneLine: education?.[a.id]?.oneLine })),
     busyBlockCatalog: availability
       ? availability.memberBusy.map((mb) => ({ busyBlockId: mb.id, title: mb.title, category: mb.category }))
       : [],

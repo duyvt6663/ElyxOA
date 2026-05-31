@@ -220,6 +220,8 @@ export interface ScheduledOccurrence {
   outsidePreferredWindow?: boolean;
   status: 'scheduled' | 'substituted' | 'skipped';
   sourceActivityId: string;
+  /** 023 — the activity actually PLACED here (= the candidate). Equals sourceActivityId unless this
+   * is a substitution, where it is the fallback's id; lets the UI resolve fallback-activity education. */
   effectiveActivityId?: string;
   /** 016 §10 — the source activity's title; set on substituted occurrences so the UI can show
    * "Fallback ← Source" instead of several identical fallback titles looking like duplicates. */
@@ -308,6 +310,32 @@ export interface ScheduleDiagnostics {
 export interface ScheduleDebugResult {
   result: ScheduleResult;
   diagnostics: ScheduleDiagnostics;
+}
+
+/**
+ * 023: presentation-only health-education profile for an activity. Generated offline
+ * (npm run generate:activity-education) and committed to src/data/activity-education.json.
+ * Kept SEPARATE from Activity (never overload Activity.details or mutate the scheduler fixture).
+ */
+export interface ActivityEducationProfile {
+  activityId: string;
+  /** <= 120 chars; shown under the activity title. */
+  oneLine: string;
+  /** 1 sentence explaining the action plainly. */
+  whatItDoes: string;
+  /** 1-2 sentences on the intended health-plan role. */
+  whyItMatters: string;
+  /** short tags, e.g. "blood pressure", "glucose stability", "recovery". */
+  healthFocus: string[];
+  /** metrics/signals the care team may watch (derived from activity.metrics, not invented). */
+  expectedSignals: string[];
+  /** practical customer-facing note. */
+  memberGuidance: string;
+  /** brief reviewer-facing rationale. */
+  careTeamNote: string;
+  /** model name when an LLM was used, else "deterministic-fallback". */
+  generatedBy?: string;
+  generatedAt: string;
 }
 
 /**

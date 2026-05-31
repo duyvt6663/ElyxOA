@@ -1,0 +1,2145 @@
+[
+  {
+    "activityId": "act-001",
+    "oneLine": "Take your prescribed morning blood pressure medication as directed.",
+    "whatItDoes": "This records taking your morning antihypertensive medication.",
+    "whyItMatters": "Consistent use helps the care team monitor routine use and reported effects. It supports ongoing plan review.",
+    "healthFocus": [
+      "blood pressure",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Take it at the same time each morning and note any unusual symptoms.",
+    "careTeamNote": "Tracks adherence and tolerability for hypertension management.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-002",
+    "oneLine": "Take metformin with breakfast as part of your daily routine.",
+    "whatItDoes": "This logs your daily metformin intake with a meal.",
+    "whyItMatters": "Regular tracking helps the care team review consistency and any side effects. It supports glucose management oversight.",
+    "healthFocus": [
+      "glucose stability",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Take with food and record any stomach upset or changes you notice.",
+    "careTeamNote": "Monitors adherence and tolerability for metabolic support.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-003",
+    "oneLine": "Monthly check-in with cardiology to review your heart health plan.",
+    "whatItDoes": "This captures a scheduled review with your cardiology team.",
+    "whyItMatters": "It allows updates to your care plan and addresses questions. Regular reviews support coordinated care.",
+    "healthFocus": [
+      "cardiovascular health",
+      "care coordination"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Prepare questions and bring recent readings or logs.",
+    "careTeamNote": "Ensures ongoing cardiology oversight and plan alignment.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-004",
+    "oneLine": "Take your morning supplements as outlined in your plan.",
+    "whatItDoes": "This logs your daily supplement routine.",
+    "whyItMatters": "Tracking supports consistency and helps the care team review any effects. It informs plan adjustments if needed.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Follow your plan and note any new or unusual symptoms.",
+    "careTeamNote": "Monitors supplement adherence and reported effects.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-005",
+    "oneLine": "Complete a steady, moderate treadmill cardio session.",
+    "whatItDoes": "This records a Zone 2 cardio workout on the treadmill.",
+    "whyItMatters": "Regular sessions support endurance and overall fitness. Logged effort and duration guide safe progression.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "endurance"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Aim for a pace you can sustain and log how it felt.",
+    "careTeamNote": "Tracks aerobic training load and perceived effort.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-006",
+    "oneLine": "Annual blood draw to review key health markers.",
+    "whatItDoes": "This records your yearly lab testing appointment.",
+    "whyItMatters": "Results help the care team review trends and update your plan. It supports informed decision-making.",
+    "healthFocus": [
+      "preventive care",
+      "monitoring"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Follow pre-test instructions and ask about your results.",
+    "careTeamNote": "Provides baseline and trend data for annual review.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-007",
+    "oneLine": "Check your CGM sensor and confirm it is working properly.",
+    "whatItDoes": "This logs a daily check of your glucose monitor.",
+    "whyItMatters": "Regular checks support reliable data for the care team. It helps identify issues early.",
+    "healthFocus": [
+      "glucose monitoring",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Confirm readings look reasonable and note any skin irritation.",
+    "careTeamNote": "Ensures CGM data reliability and tolerability.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-008",
+    "oneLine": "Log your daily blood pressure reading.",
+    "whatItDoes": "This records your blood pressure measurement.",
+    "whyItMatters": "Consistent logs help the care team track trends. It supports ongoing plan review.",
+    "healthFocus": [
+      "blood pressure",
+      "monitoring"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Measure at a consistent time and position each day.",
+    "careTeamNote": "Provides home BP trend data for evaluation.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-009",
+    "oneLine": "Monthly physician visit to review and update your care plan.",
+    "whatItDoes": "This captures a routine plan review with your physician.",
+    "whyItMatters": "Regular reviews allow updates and address concerns. It supports coordinated, informed care.",
+    "healthFocus": [
+      "care coordination",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Bring updates on symptoms, routines, and questions.",
+    "careTeamNote": "Maintains continuity and plan optimization.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-010",
+    "oneLine": "Complete a lower body strength training session.",
+    "whatItDoes": "This logs your lower body resistance workout.",
+    "whyItMatters": "Strength work supports mobility and functional capacity. Tracking effort and duration informs progression.",
+    "healthFocus": [
+      "strength",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Focus on controlled movements and note how your body feels.",
+    "careTeamNote": "Monitors training load and readiness for lower body work.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-011",
+    "oneLine": "Take your evening magnesium supplement as planned.",
+    "whatItDoes": "This records your nightly magnesium intake.",
+    "whyItMatters": "Consistent use and tracking help review tolerance and routine. It supports overall plan adherence.",
+    "healthFocus": [
+      "sleep",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Take it at the same time each evening and note any effects.",
+    "careTeamNote": "Tracks adherence and reported tolerability.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-012",
+    "oneLine": "Complete your guided physiotherapy rehab exercises.",
+    "whatItDoes": "This logs a rehab-focused therapy session.",
+    "whyItMatters": "Regular sessions support recovery and function. Tracking pain and time helps guide care.",
+    "healthFocus": [
+      "recovery",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Move within comfort and record pain or improvement.",
+    "careTeamNote": "Monitors rehab adherence and symptom response.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-013",
+    "oneLine": "Start your day with a protein-focused breakfast.",
+    "whatItDoes": "This logs a breakfast emphasizing protein intake.",
+    "whyItMatters": "Consistent meals support energy and satiety. Tracking intake informs nutrition planning.",
+    "healthFocus": [
+      "nutrition",
+      "energy"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Include a clear protein source and log what you eat.",
+    "careTeamNote": "Tracks dietary patterns and macro intake.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-014",
+    "oneLine": "Monthly endocrinology visit to review metabolic health.",
+    "whatItDoes": "This records a specialist review of your endocrine plan.",
+    "whyItMatters": "Regular reviews support plan updates and question resolution. It helps coordinate care decisions.",
+    "healthFocus": [
+      "glucose stability",
+      "care coordination"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Bring logs and note any changes since last visit.",
+    "careTeamNote": "Supports endocrine oversight and adjustments.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-015",
+    "oneLine": "Complete an upper body strength training session.",
+    "whatItDoes": "This logs your upper body resistance workout.",
+    "whyItMatters": "Strength sessions support functional capacity and balance. Tracking effort helps guide progression.",
+    "healthFocus": [
+      "strength",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Use controlled form and log how challenging it felt.",
+    "careTeamNote": "Monitors upper body training load and readiness.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-016",
+    "oneLine": "Build your lunch around vegetables as a base.",
+    "whatItDoes": "This logs a meal anchored by vegetables.",
+    "whyItMatters": "Consistent choices support fiber intake and balanced meals. Tracking helps guide nutrition habits.",
+    "healthFocus": [
+      "nutrition",
+      "fiber"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Fill half your plate with vegetables and note what you include.",
+    "careTeamNote": "Encourages fiber-rich meal patterns.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-017",
+    "oneLine": "Take your scheduled weekly GLP-1 injection.",
+    "whatItDoes": "This records your weekly injectable medication use.",
+    "whyItMatters": "Consistent tracking helps the care team monitor use and effects. It supports ongoing plan review.",
+    "healthFocus": [
+      "glucose stability",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Take it on your scheduled day and note any side effects.",
+    "careTeamNote": "Monitors adherence and tolerability for GLP-1 therapy.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-018",
+    "oneLine": "Use contrast therapy to support recovery after activity.",
+    "whatItDoes": "This logs a session alternating temperature exposure.",
+    "whyItMatters": "Sessions may support recovery and comfort. Tracking responses helps guide use.",
+    "healthFocus": [
+      "recovery",
+      "circulation"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Pay attention to how your body responds and log changes.",
+    "careTeamNote": "Tracks perceived recovery and symptom response.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-019",
+    "oneLine": "Complete a swimming interval workout.",
+    "whatItDoes": "This records an interval-based swim session.",
+    "whyItMatters": "Intervals support cardiovascular fitness and variety. Logged effort and time inform progression.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "endurance"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Alternate effort levels and note how hard it felt.",
+    "careTeamNote": "Monitors interval training load and readiness.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-020",
+    "oneLine": "Meet your daily hydration goal.",
+    "whatItDoes": "This logs your fluid intake for the day.",
+    "whyItMatters": "Consistent hydration supports overall function. Tracking helps maintain routine.",
+    "healthFocus": [
+      "hydration",
+      "nutrition"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Sip fluids regularly and track your intake.",
+    "careTeamNote": "Encourages consistent hydration habits.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-021",
+    "oneLine": "Refill your weekly pill organizer.",
+    "whatItDoes": "This records organizing your medications for the week.",
+    "whyItMatters": "Preparation supports consistent use and reduces missed doses. It helps the care team assess adherence.",
+    "healthFocus": [
+      "adherence",
+      "routine"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Set aside time weekly to organize all doses.",
+    "careTeamNote": "Supports medication adherence through planning.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-022",
+    "oneLine": "Complete a guided breathwork session.",
+    "whatItDoes": "This logs a structured breathing exercise session.",
+    "whyItMatters": "Breathwork may support relaxation and recovery. Tracking helps monitor response and consistency.",
+    "healthFocus": [
+      "recovery",
+      "stress"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Follow the guide and note how you feel after.",
+    "careTeamNote": "Tracks relaxation practice and perceived benefit.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-023",
+    "oneLine": "Review your sleep plan with a specialist.",
+    "whatItDoes": "This records a consultation focused on sleep health.",
+    "whyItMatters": "Regular reviews support plan updates and address concerns. It helps coordinate sleep care.",
+    "healthFocus": [
+      "sleep",
+      "care coordination"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Share sleep patterns and any concerns.",
+    "careTeamNote": "Supports ongoing sleep management and plan updates.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-024",
+    "oneLine": "Complete an interval workout on the rowing machine.",
+    "whatItDoes": "This logs a rowing interval training session.",
+    "whyItMatters": "Intervals support cardiovascular fitness and strength. Tracking effort helps guide progression.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "strength"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Alternate effort levels and record perceived exertion.",
+    "careTeamNote": "Monitors rowing interval load and readiness.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-025",
+    "oneLine": "Plan dinner carbs with balanced protein and fiber each evening.",
+    "whatItDoes": "Logs how carbohydrates are paired with protein and fiber at dinner.",
+    "whyItMatters": "This supports steadier energy and helps the care team track eating patterns over time.",
+    "healthFocus": [
+      "nutrition",
+      "glucose stability",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Aim to include a protein and fiber source with your evening carbs.",
+    "careTeamNote": "Tracks macronutrient balance and consistency at dinner.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-026",
+    "oneLine": "Check your weekly vitamin D routine and note any effects.",
+    "whatItDoes": "Reviews adherence and any side effects related to vitamin D use.",
+    "whyItMatters": "This helps the care team monitor consistency and tolerance of supplementation.",
+    "healthFocus": [
+      "adherence",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Mark whether you took it and note anything unusual.",
+    "careTeamNote": "Supports adherence tracking and side-effect awareness.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-027",
+    "oneLine": "Use deep tissue massage to support muscle recovery monthly.",
+    "whatItDoes": "Applies pressure to muscles to relieve tension and log recovery response.",
+    "whyItMatters": "This may support mobility and helps track pain and recovery trends.",
+    "healthFocus": [
+      "recovery",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Focus on tight areas and stop if discomfort feels sharp.",
+    "careTeamNote": "Monitors soft tissue recovery and pain response.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-028",
+    "oneLine": "Ride at a steady, moderate effort on the bike twice weekly.",
+    "whatItDoes": "Performs a tempo cycling session and logs effort and duration.",
+    "whyItMatters": "This supports cardiorespiratory fitness and tracks workout tolerance.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Keep effort steady and sustainable throughout the session.",
+    "careTeamNote": "Assesses aerobic workload and readiness trends.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-029",
+    "oneLine": "Prepare meals ahead to support balanced weekly eating.",
+    "whatItDoes": "Plans and prepares meals to log protein, fiber, and adherence.",
+    "whyItMatters": "This supports consistent nutrition and helps the care team review intake patterns.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Prep simple meals you can easily repeat during the week.",
+    "careTeamNote": "Encourages consistency in macronutrient intake.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-030",
+    "oneLine": "Take your omega-3 supplement with lunch and log it.",
+    "whatItDoes": "Tracks daily omega-3 intake and any side effects.",
+    "whyItMatters": "This supports adherence monitoring and tolerance review by the care team.",
+    "healthFocus": [
+      "adherence",
+      "nutrition"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Take it with food and note any changes you notice.",
+    "careTeamNote": "Monitors supplement adherence and tolerability.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-031",
+    "oneLine": "Review your macros monthly to support balanced nutrition.",
+    "whatItDoes": "Looks at protein, fiber, and adherence trends over time.",
+    "whyItMatters": "This helps guide nutrition adjustments and supports informed care planning.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Review your logs and note any consistent gaps.",
+    "careTeamNote": "Enables periodic nutrition pattern review.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-032",
+    "oneLine": "Perform a kettlebell circuit to build power and coordination.",
+    "whatItDoes": "Completes a series of kettlebell movements and logs effort and duration.",
+    "whyItMatters": "This supports strength and functional movement tracking over time.",
+    "healthFocus": [
+      "mobility",
+      "recovery",
+      "cardiorespiratory fitness"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Focus on form and controlled movement throughout.",
+    "careTeamNote": "Tracks functional strength and session load.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-033",
+    "oneLine": "Review your workspace setup to support comfort and posture.",
+    "whatItDoes": "Assesses ergonomics and logs pain and recovery responses.",
+    "whyItMatters": "This may support reduced strain and helps track symptom patterns.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Adjust chair, screen, and posture for better alignment.",
+    "careTeamNote": "Evaluates ergonomic impact on discomfort.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-034",
+    "oneLine": "Add a daily serving of fermented foods to your meals.",
+    "whatItDoes": "Logs intake of fermented foods along with protein and fiber.",
+    "whyItMatters": "This supports dietary variety and helps track nutrition consistency.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Include options like yogurt, kefir, or fermented vegetables.",
+    "careTeamNote": "Tracks inclusion of fermented foods in diet.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-035",
+    "oneLine": "Monthly Prescription Refill Check — supports medication and monitoring adherence the care team can track.",
+    "whatItDoes": "Monthly Prescription Refill Check is a scheduled medication or monitoring step the member completes as part of their plan.",
+    "whyItMatters": "Keeping this consistent helps the care team track adherence over time and review the plan with reliable data. It is intended to support steady follow-through, not to replace clinician guidance.",
+    "healthFocus": [
+      "adherence",
+      "monitoring"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Log completion and any side-effects so the care team can spot patterns; follow your clinician's existing instructions for timing.",
+    "careTeamNote": "Useful for longitudinal adherence tracking and plan review.",
+    "generatedBy": "deterministic-fallback",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-036",
+    "oneLine": "Do a short daily mobility flow to keep joints moving.",
+    "whatItDoes": "Performs gentle movements and logs effort and duration.",
+    "whyItMatters": "This supports flexibility and helps track readiness and recovery.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Move through a comfortable range without forcing positions.",
+    "careTeamNote": "Encourages daily movement and recovery tracking.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-037",
+    "oneLine": "Schedule a yearly skin check with your dermatology team.",
+    "whatItDoes": "Reviews skin health and documents any care plan updates.",
+    "whyItMatters": "This supports early review of changes and coordinated care planning.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Bring up any new or changing skin concerns.",
+    "careTeamNote": "Facilitates preventive skin monitoring.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-038",
+    "oneLine": "Default to alcohol-free evenings to support routine consistency.",
+    "whatItDoes": "Tracks evenings without alcohol alongside nutrition metrics.",
+    "whyItMatters": "This supports healthy habits and helps monitor consistency over time.",
+    "healthFocus": [
+      "nutrition",
+      "sleep",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Choose a non-alcoholic option you enjoy.",
+    "careTeamNote": "Encourages reduced alcohol intake patterns.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-039",
+    "oneLine": "Log your sleep supplement use and any effects daily.",
+    "whatItDoes": "Tracks adherence and side effects related to sleep supplements.",
+    "whyItMatters": "This supports safe use and helps the care team review patterns.",
+    "healthFocus": [
+      "sleep",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Note how you feel the next day after use.",
+    "careTeamNote": "Monitors supplement impact on sleep.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-040",
+    "oneLine": "Use foam rolling to support recovery after activity.",
+    "whatItDoes": "Applies pressure to muscles and logs pain and recovery response.",
+    "whyItMatters": "This may support muscle relaxation and helps track recovery trends.",
+    "healthFocus": [
+      "recovery",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Roll slowly over tight areas without sharp pain.",
+    "careTeamNote": "Tracks self-managed recovery practices.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-041",
+    "oneLine": "Complete a daily core circuit to support stability.",
+    "whatItDoes": "Performs core exercises and logs effort and duration.",
+    "whyItMatters": "This supports posture and helps track consistency and readiness.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Focus on controlled, steady movements.",
+    "careTeamNote": "Monitors core stability work and tolerance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-042",
+    "oneLine": "Pause and check in with hunger and fullness while eating.",
+    "whatItDoes": "Encourages awareness during meals and logs nutrition metrics.",
+    "whyItMatters": "This supports mindful eating and helps track consistency.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Eat slowly and notice when you feel satisfied.",
+    "careTeamNote": "Encourages mindful intake patterns.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-043",
+    "oneLine": "Complete a weekly check on medication side effects.",
+    "whatItDoes": "Logs any side effects and adherence for current medications.",
+    "whyItMatters": "This helps the care team monitor safety and consistency.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Report any new or ongoing symptoms.",
+    "careTeamNote": "Supports ongoing safety surveillance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-044",
+    "oneLine": "Take a brisk outdoor walk each day at a steady pace.",
+    "whatItDoes": "Performs a walking session and logs effort and duration.",
+    "whyItMatters": "This supports daily activity and tracks fitness and readiness.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Walk at a pace where talking is possible but effort is noticeable.",
+    "careTeamNote": "Encourages consistent aerobic activity.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-045",
+    "oneLine": "Review your medications with your psychiatry care team monthly.",
+    "whatItDoes": "Discusses current medications and logs updates and resolved questions.",
+    "whyItMatters": "This supports safe, coordinated care and informed decisions.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Prepare questions or concerns ahead of the visit.",
+    "careTeamNote": "Ensures regular psychiatric medication review.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-046",
+    "oneLine": "Attend counseling sessions to support mental well-being.",
+    "whatItDoes": "Engages in therapy and logs time and recovery response.",
+    "whyItMatters": "This supports emotional health and helps track progress over time.",
+    "healthFocus": [
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Be open about current challenges and goals.",
+    "careTeamNote": "Tracks engagement in mental health support.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-047",
+    "oneLine": "Order groceries weekly to support consistent meal planning.",
+    "whatItDoes": "Plans and logs food purchases tied to nutrition metrics.",
+    "whyItMatters": "This supports access to balanced foods and consistent intake.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Choose items that make meals easy to prepare.",
+    "careTeamNote": "Supports food access and planning consistency.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-048",
+    "oneLine": "Review your medications with a clinician each month.",
+    "whatItDoes": "Checks medication use and logs adherence and side effects.",
+    "whyItMatters": "This supports safe use and helps guide care plan updates.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Share any concerns or changes you’ve noticed.",
+    "careTeamNote": "Enables clinician oversight of medication use.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-049",
+    "oneLine": "Short session to introduce higher-effort aerobic work.",
+    "whatItDoes": "Guides a brief workout that challenges aerobic capacity.",
+    "whyItMatters": "Helps the care team track cardiorespiratory effort and readiness over time.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Keep effort controlled and note how you feel after.",
+    "careTeamNote": "Tracks tolerance to higher aerobic demand and recovery patterns.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-050",
+    "oneLine": "Pack simple protein options for travel days.",
+    "whatItDoes": "Encourages preparing portable protein-rich foods ahead of trips.",
+    "whyItMatters": "Supports consistent intake and helps avoid gaps during travel.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Choose shelf-stable or easy-to-carry items you will actually use.",
+    "careTeamNote": "Monitors nutrition consistency during routine disruption.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-051",
+    "oneLine": "Practice coordinated breathing and speech mechanics.",
+    "whatItDoes": "Guides exercises linking breath control with speaking patterns.",
+    "whyItMatters": "May support comfort, efficiency, and awareness of breathing habits.",
+    "healthFocus": [
+      "recovery",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Work gently and stop if discomfort increases.",
+    "careTeamNote": "Observes respiratory coordination and symptom response.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-052",
+    "oneLine": "Maintain strength with a simple full-body routine.",
+    "whatItDoes": "Provides a balanced session targeting major muscle groups.",
+    "whyItMatters": "Supports muscle function and consistency without aiming for progression.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Use familiar movements and steady pacing.",
+    "careTeamNote": "Tracks maintenance workload and readiness.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-053",
+    "oneLine": "Check readiness with a brief pulse oximeter session.",
+    "whatItDoes": "Pairs light activity with oxygen saturation awareness.",
+    "whyItMatters": "Helps the care team observe response to exertion and recovery trends.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Record readings in a calm, consistent setting.",
+    "careTeamNote": "Links perceived effort with oxygen-related readiness signals.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-054",
+    "oneLine": "Add a small daily boost of dietary fiber.",
+    "whatItDoes": "Encourages including a fiber-rich food each day.",
+    "whyItMatters": "Supports digestion and steady intake patterns the plan can track.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Increase fiber gradually and hydrate well.",
+    "careTeamNote": "Monitors fiber intake consistency and tolerance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-055",
+    "oneLine": "Review goals and adjust your plan with a coach.",
+    "whatItDoes": "Provides a structured check-in to discuss progress and questions.",
+    "whyItMatters": "Supports plan alignment and shared decision-making.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Bring notes on what is working and what is not.",
+    "careTeamNote": "Ensures ongoing plan relevance and clarity.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-056",
+    "oneLine": "Review and log any recent acute pain changes.",
+    "whatItDoes": "Guides a quick check of new or changing pain symptoms.",
+    "whyItMatters": "Helps the care team track patterns and decide on next steps.",
+    "healthFocus": [
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Note location, timing, and triggers clearly.",
+    "careTeamNote": "Supports early identification of concerning trends.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-057",
+    "oneLine": "Practice balance and body awareness exercises.",
+    "whatItDoes": "Uses simple drills to improve stability and coordination.",
+    "whyItMatters": "Supports mobility and reduces variability in movement control.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Use a safe space and stable support if needed.",
+    "careTeamNote": "Tracks neuromuscular control and confidence.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-058",
+    "oneLine": "Refresh your pantry with balanced staple foods.",
+    "whatItDoes": "Encourages reviewing and restocking core nutrition items.",
+    "whyItMatters": "Supports consistent food choices aligned with your plan.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Keep convenient, versatile options on hand.",
+    "careTeamNote": "Reinforces environment-driven adherence.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-059",
+    "oneLine": "Log daily creatine use and any effects.",
+    "whatItDoes": "Tracks consistent supplement intake and any side effects.",
+    "whyItMatters": "Helps the care team monitor tolerance and adherence.",
+    "healthFocus": [
+      "adherence",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Take as previously planned and note any changes you feel.",
+    "careTeamNote": "Ensures safe, consistent supplement use tracking.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-060",
+    "oneLine": "Carry weight for a short functional strength session.",
+    "whatItDoes": "Uses loaded carries to engage core and grip strength.",
+    "whyItMatters": "Supports functional movement and whole-body coordination.",
+    "healthFocus": [
+      "mobility",
+      "cardiorespiratory fitness"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Start light and focus on posture.",
+    "careTeamNote": "Assesses functional strength and tolerance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-061",
+    "oneLine": "Use simple rules to guide restaurant choices.",
+    "whatItDoes": "Applies basic selection habits when eating out.",
+    "whyItMatters": "Supports nutrition consistency in less controlled settings.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Look for balanced plates with protein and fiber.",
+    "careTeamNote": "Tracks decision-making in real-world contexts.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-062",
+    "oneLine": "Use sauna time as a calm recovery session.",
+    "whatItDoes": "Encourages passive heat exposure for relaxation.",
+    "whyItMatters": "May support recovery awareness and stress reduction.",
+    "healthFocus": [
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Stay hydrated and keep sessions comfortable.",
+    "careTeamNote": "Monitors response to passive recovery strategies.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-063",
+    "oneLine": "Review supplements monthly for safety and fit.",
+    "whatItDoes": "Prompts a check of current supplements and any effects.",
+    "whyItMatters": "Supports safe use and alignment with the care plan.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "List all products and note any new symptoms.",
+    "careTeamNote": "Identifies risks, interactions, and unnecessary items.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-064",
+    "oneLine": "Go over body composition results with your team.",
+    "whatItDoes": "Reviews scan data and what it may mean for your plan.",
+    "whyItMatters": "Supports informed adjustments and goal setting.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Ask about trends rather than single results.",
+    "careTeamNote": "Translates data into actionable plan updates.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-065",
+    "oneLine": "Focus on safe technique for posterior chain moves.",
+    "whatItDoes": "Guides form for exercises targeting back-side muscles.",
+    "whyItMatters": "Supports efficient movement and reduces strain risk.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Move slowly and prioritize form over load.",
+    "careTeamNote": "Emphasizes technique quality and tolerance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-066",
+    "oneLine": "Check daily sodium and electrolyte intake balance.",
+    "whatItDoes": "Encourages awareness of salt and electrolyte sources.",
+    "whyItMatters": "Supports hydration patterns and nutrition tracking.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Notice packaged foods and fluids you consume.",
+    "careTeamNote": "Observes intake patterns affecting hydration.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-067",
+    "oneLine": "Use brief cold exposure as a recovery tool.",
+    "whatItDoes": "Applies short ice bath sessions for post-activity recovery.",
+    "whyItMatters": "May support perceived recovery and symptom tracking.",
+    "healthFocus": [
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Keep duration comfortable and exit if needed.",
+    "careTeamNote": "Tracks tolerance to cold exposure.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-068",
+    "oneLine": "Practice alignment and core control with Pilates.",
+    "whatItDoes": "Uses controlled movements to improve posture and stability.",
+    "whyItMatters": "Supports mobility and body awareness over time.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Focus on slow, precise movements.",
+    "careTeamNote": "Monitors control and consistency.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-069",
+    "oneLine": "Travel Medication Pack Check — supports medication and monitoring adherence the care team can track.",
+    "whatItDoes": "Travel Medication Pack Check is a scheduled medication or monitoring step the member completes as part of their plan.",
+    "whyItMatters": "Keeping this consistent helps the care team track adherence over time and review the plan with reliable data. It is intended to support steady follow-through, not to replace clinician guidance.",
+    "healthFocus": [
+      "adherence",
+      "monitoring"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Log completion and any side-effects so the care team can spot patterns; follow your clinician's existing instructions for timing.",
+    "careTeamNote": "Useful for longitudinal adherence tracking and plan review.",
+    "generatedBy": "deterministic-fallback",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-070",
+    "oneLine": "Make a simple, mindful choice about late snacks.",
+    "whatItDoes": "Encourages pausing to choose or skip a late-night snack.",
+    "whyItMatters": "Supports awareness of eating patterns and consistency.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "If eating, choose something light and balanced.",
+    "careTeamNote": "Tracks evening intake habits.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-071",
+    "oneLine": "Review digestive symptoms with your care team.",
+    "whatItDoes": "Discusses recent gastrointestinal symptoms and patterns.",
+    "whyItMatters": "Helps guide plan updates and further evaluation if needed.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Note timing, triggers, and severity.",
+    "careTeamNote": "Supports structured symptom assessment.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-072",
+    "oneLine": "Do a quick reset for neck and shoulder tension.",
+    "whatItDoes": "Guides gentle movements to ease upper body stiffness.",
+    "whyItMatters": "Supports daily comfort and movement quality.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Keep movements slow and within a comfortable range.",
+    "careTeamNote": "Monitors frequency and response to mobility work.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-073",
+    "oneLine": "Easy walk with brief reflection to check how your body feels.",
+    "whatItDoes": "You take a light walk and note pain and recovery afterward.",
+    "whyItMatters": "Supports gentle movement and awareness. Helps the care team track recovery patterns over time.",
+    "healthFocus": [
+      "recovery",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Keep pace comfortable and jot a quick note on how you feel.",
+    "careTeamNote": "Monitors recovery trends and tolerance to low-load activity.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-074",
+    "oneLine": "Drop into dietitian office hours to review weekly eating habits.",
+    "whatItDoes": "You review your food choices and logs with a dietitian.",
+    "whyItMatters": "Supports consistent nutrition habits and informed choices. Helps align intake with plan goals.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Bring recent logs and one or two questions.",
+    "careTeamNote": "Reinforces adherence and adjusts guidance based on intake patterns.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-075",
+    "oneLine": "Sync wearable readiness to guide your weekly training view.",
+    "whatItDoes": "You upload readiness and session data from your device.",
+    "whyItMatters": "Supports awareness of effort and recovery. Helps the care team track load and readiness together.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Sync regularly and note any unusual fatigue.",
+    "careTeamNote": "Correlates perceived effort with readiness for load management.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-076",
+    "oneLine": "Short exercises to build foot and ankle strength.",
+    "whatItDoes": "You perform targeted movements for feet and ankles.",
+    "whyItMatters": "Supports stability and mobility. Helps track tolerance and consistency.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Move with control and stop if sharp pain occurs.",
+    "careTeamNote": "Builds distal strength and monitors response to localized work.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-077",
+    "oneLine": "Weekly check of joint range and comfort.",
+    "whatItDoes": "You move key joints through their range and note symptoms.",
+    "whyItMatters": "Supports awareness of mobility changes. Helps the care team track limitations over time.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Compare sides and note any tight or painful areas.",
+    "careTeamNote": "Identifies trends in ROM and symptom provocation.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-078",
+    "oneLine": "Have a protein shake after strength sessions.",
+    "whatItDoes": "You consume a protein shake following training.",
+    "whyItMatters": "Supports recovery nutrition and consistency. Helps track intake alongside workouts.",
+    "healthFocus": [
+      "nutrition",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Log the shake soon after your session.",
+    "careTeamNote": "Links post-session intake with recovery habits.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-079",
+    "oneLine": "Monthly review of training load with your care team.",
+    "whatItDoes": "You discuss recent training data and questions with your team.",
+    "whyItMatters": "Supports safe progression and plan alignment. Helps update the care plan as needed.",
+    "healthFocus": [
+      "adherence",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Bring your logs and any concerns to discuss.",
+    "careTeamNote": "Facilitates shared decisions on load and plan updates.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-080",
+    "oneLine": "Simple hotel gym circuit to stay active while traveling.",
+    "whatItDoes": "You complete a short, adaptable workout using basic equipment.",
+    "whyItMatters": "Supports consistency during travel. Helps maintain routine and track effort.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Keep it simple and adjust to available equipment.",
+    "careTeamNote": "Maintains continuity and captures effort under variable conditions.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-081",
+    "oneLine": "Prepare notes ahead of your monthly lab review.",
+    "whatItDoes": "You list questions, adherence, and any side effects to discuss.",
+    "whyItMatters": "Supports efficient visits and clear communication. Helps the team interpret labs with context.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Write down changes, missed doses, and symptoms.",
+    "careTeamNote": "Improves lab interpretation with adherence and side-effect context.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-082",
+    "oneLine": "Set a daily cutoff time for caffeine.",
+    "whatItDoes": "You stop caffeine intake after a chosen time each day.",
+    "whyItMatters": "Supports sleep quality and routine. Helps track consistency with your plan.",
+    "healthFocus": [
+      "sleep",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Choose a cutoff that fits your schedule and stick to it.",
+    "careTeamNote": "Behavioral lever for sleep; adherence tracked alongside diet logs.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-083",
+    "oneLine": "Use a massage gun for brief recovery sessions.",
+    "whatItDoes": "You apply percussive therapy to sore areas for a short time.",
+    "whyItMatters": "Supports comfort and recovery awareness. Helps track response to soft-tissue work.",
+    "healthFocus": [
+      "recovery",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Use light pressure and avoid sensitive areas.",
+    "careTeamNote": "Monitors symptom response to adjunct recovery modality.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-084",
+    "oneLine": "Introductory plyometric drills to prime movement.",
+    "whatItDoes": "You perform low-volume jumps and hops with focus on form.",
+    "whyItMatters": "Supports neuromuscular readiness. Helps track tolerance to impact.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Prioritize landing control over height or speed.",
+    "careTeamNote": "Assesses readiness for higher-impact work.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-085",
+    "oneLine": "Pick up monthly medications from the pharmacy.",
+    "whatItDoes": "You obtain refills and confirm your medication list.",
+    "whyItMatters": "Supports adherence and continuity. Helps track side effects and supply gaps.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Check labels and note any new or ongoing side effects.",
+    "careTeamNote": "Ensures supply continuity and captures tolerability signals.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-086",
+    "oneLine": "Plan a balanced family meal for the weekend.",
+    "whatItDoes": "You choose and prepare meals with attention to protein and fiber.",
+    "whyItMatters": "Supports consistent nutrition in a social setting. Helps track intake patterns.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Pick simple recipes everyone will eat and log portions.",
+    "careTeamNote": "Captures real-world adherence during family meals.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-087",
+    "oneLine": "Annual physical exam to review overall health.",
+    "whatItDoes": "You meet with your clinician for a comprehensive check and updates.",
+    "whyItMatters": "Supports preventive review and plan alignment. Helps update the care plan and resolve questions.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "care-plan-updates",
+      "questions-resolved"
+    ],
+    "memberGuidance": "Bring medications list and key questions.",
+    "careTeamNote": "Periodic comprehensive review and plan refinement.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-088",
+    "oneLine": "Evening routine to wind down and prepare for sleep.",
+    "whatItDoes": "You follow a short sequence to relax body and mind before bed.",
+    "whyItMatters": "Supports sleep consistency and recovery. Helps track how routine relates to symptoms.",
+    "healthFocus": [
+      "sleep",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Keep timing consistent and limit screens near bedtime.",
+    "careTeamNote": "Links pre-sleep behaviors with recovery and symptom scores.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-089",
+    "oneLine": "Daily flexibility block to keep joints moving.",
+    "whatItDoes": "You perform brief stretches across major muscle groups.",
+    "whyItMatters": "Supports mobility and routine. Helps track tolerance and consistency.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Breathe steadily and avoid forcing range.",
+    "careTeamNote": "Maintains baseline mobility and monitors daily tolerance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-090",
+    "oneLine": "Check your vaccine status each month.",
+    "whatItDoes": "You review records and note any updates or reactions.",
+    "whyItMatters": "Supports up-to-date records and awareness. Helps the team track adherence and side effects.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Record dates and any reactions to share with your team.",
+    "careTeamNote": "Maintains accurate immunization status and tolerability log.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-091",
+    "oneLine": "Prepare high-protein snacks for the week.",
+    "whatItDoes": "You stock and portion snacks with protein and fiber.",
+    "whyItMatters": "Supports consistent intake and satiety. Helps track adherence to nutrition goals.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Pre-portion snacks to make choices easier.",
+    "careTeamNote": "Improves adherence through environment setup.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-092",
+    "oneLine": "Easy ride guided by your HRV readiness score.",
+    "whatItDoes": "You complete a low-intensity ride aligned with readiness data.",
+    "whyItMatters": "Supports recovery-focused training. Helps align effort with current readiness.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Keep effort comfortable and follow readiness cues.",
+    "careTeamNote": "Matches low-load work to readiness for recovery support.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-093",
+    "oneLine": "Gentle mobility after flights to ease stiffness.",
+    "whatItDoes": "You perform light movements after travel to restore motion.",
+    "whyItMatters": "Supports circulation and mobility after sitting. Helps track symptom changes post-travel.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "recovery-score",
+      "minutes-completed"
+    ],
+    "memberGuidance": "Start easy and focus on hips, back, and calves.",
+    "careTeamNote": "Assesses post-travel stiffness and recovery response.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-094",
+    "oneLine": "Check emergency medications monthly.",
+    "whatItDoes": "You verify availability, dates, and note any side effects experienced.",
+    "whyItMatters": "Supports readiness and adherence. Helps the team track tolerability and access.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Confirm location and expiration dates.",
+    "careTeamNote": "Ensures emergency meds are current and tolerable.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-095",
+    "oneLine": "Add context notes to your weekly weigh-in.",
+    "whatItDoes": "You record factors like meals, sleep, and activity with your weight.",
+    "whyItMatters": "Supports interpretation of trends. Helps link intake and habits with changes.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Note anything unusual that week.",
+    "careTeamNote": "Provides context to weight trends using behavior logs.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-096",
+    "oneLine": "Review technique videos with a coach or on your own.",
+    "whatItDoes": "You watch and assess movement form from recorded sessions.",
+    "whyItMatters": "Supports skill and safety. Helps align effort with proper technique.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Focus on one or two cues to apply next session.",
+    "careTeamNote": "Improves movement quality and reduces unnecessary strain.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-097",
+    "oneLine": "Monthly snapshot of how consistently you completed planned training.",
+    "whatItDoes": "Summarizes your training minutes, effort, and readiness over the past month.",
+    "whyItMatters": "Helps you and the care team track consistency and recovery trends. Informs gradual plan updates.",
+    "healthFocus": [
+      "adherence",
+      "recovery",
+      "cardiorespiratory fitness"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Log sessions regularly so the monthly view reflects your usual routine.",
+    "careTeamNote": "Monthly rollup to assess adherence and recovery balance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-098",
+    "oneLine": "Keep a steady daily eating window to support routine.",
+    "whatItDoes": "Tracks consistency of your daily eating window along with protein and fiber.",
+    "whyItMatters": "Regular timing can support energy and appetite patterns. Data helps the team review nutrition habits.",
+    "healthFocus": [
+      "nutrition",
+      "glucose stability",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Aim for similar start and end times most days and log what you eat.",
+    "careTeamNote": "Assesses timing consistency alongside macro intake.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-099",
+    "oneLine": "Weekly check to see if a lighter training week is appropriate.",
+    "whatItDoes": "Reviews effort, minutes, and readiness to gauge need for reduced load.",
+    "whyItMatters": "Supports recovery awareness and planning. Helps avoid accumulating fatigue.",
+    "healthFocus": [
+      "recovery",
+      "adherence",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Note how you feel before sessions and log honestly.",
+    "careTeamNote": "Flags low readiness/high load patterns for deload consideration.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-100",
+    "oneLine": "Weekly check of hydration and supplement use and any effects.",
+    "whatItDoes": "Logs adherence and any side effects related to hydration and supplements.",
+    "whyItMatters": "Supports safe, consistent use and helps the team review tolerance. Encourages awareness of changes.",
+    "healthFocus": [
+      "adherence",
+      "recovery",
+      "nutrition"
+    ],
+    "expectedSignals": [
+      "adherence",
+      "side-effects"
+    ],
+    "memberGuidance": "Record use and note any new or unusual symptoms.",
+    "careTeamNote": "Monitors adherence and tolerability signals.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-101",
+    "oneLine": "Monthly overview of key nutrition habits.",
+    "whatItDoes": "Aggregates protein, fiber, and adherence into a monthly scorecard.",
+    "whyItMatters": "Highlights patterns to support consistent eating habits. Guides small plan adjustments.",
+    "healthFocus": [
+      "nutrition",
+      "adherence",
+      "glucose stability"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams",
+      "adherence"
+    ],
+    "memberGuidance": "Log meals consistently so trends are accurate.",
+    "careTeamNote": "Monthly nutrition trend summary for review.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-102",
+    "oneLine": "Set a simple daily minimum for steps.",
+    "whatItDoes": "Tracks daily movement against a step floor using session context.",
+    "whyItMatters": "Supports baseline activity and routine. Helps the team monitor consistency.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "adherence",
+      "mobility"
+    ],
+    "expectedSignals": [
+      "session-rpe",
+      "minutes-completed",
+      "readiness-score"
+    ],
+    "memberGuidance": "Pick a realistic floor and record your daily activity.",
+    "careTeamNote": "Baseline movement adherence indicator.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-103",
+    "oneLine": "Have a brisk walk as a backup when plans change.",
+    "whatItDoes": "Logs minutes and steps from a substitute brisk walk session.",
+    "whyItMatters": "Maintains activity when workouts are missed. Supports routine continuity.",
+    "healthFocus": [
+      "cardiorespiratory fitness",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "walk-minutes",
+      "steps"
+    ],
+    "memberGuidance": "Use this when you can’t do your usual workout.",
+    "careTeamNote": "Fallback activity to preserve weekly volume.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-104",
+    "oneLine": "Quick no-equipment strength option when needed.",
+    "whatItDoes": "Tracks rounds completed and effort for a bodyweight session.",
+    "whyItMatters": "Keeps strength work consistent without equipment. Supports adherence.",
+    "healthFocus": [
+      "adherence",
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "rounds-completed",
+      "session-rpe"
+    ],
+    "memberGuidance": "Choose simple moves and log rounds and effort.",
+    "careTeamNote": "Ensures strength stimulus during disruptions.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-105",
+    "oneLine": "Easy mobility routine to keep you moving.",
+    "whatItDoes": "Logs time spent on mobility and perceived stiffness.",
+    "whyItMatters": "Supports joint comfort and range of motion. Helps track recovery signals.",
+    "healthFocus": [
+      "mobility",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "mobility-minutes",
+      "stiffness-score"
+    ],
+    "memberGuidance": "Move gently and note areas of stiffness.",
+    "careTeamNote": "Tracks mobility dose and stiffness trends.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-106",
+    "oneLine": "Short desk reset to break up sitting time.",
+    "whatItDoes": "Records completion of brief movement or posture resets.",
+    "whyItMatters": "Supports regular movement during sedentary periods. Encourages consistency.",
+    "healthFocus": [
+      "mobility",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "reset-completion"
+    ],
+    "memberGuidance": "Take a quick break and mark it complete.",
+    "careTeamNote": "Binary adherence to micro-breaks.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-107",
+    "oneLine": "At-home rehab when you can’t attend sessions.",
+    "whatItDoes": "Logs rehab minutes and pain levels during exercises.",
+    "whyItMatters": "Supports continuity of therapy and symptom tracking. Informs care review.",
+    "healthFocus": [
+      "recovery",
+      "mobility",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "pain-score",
+      "rehab-minutes"
+    ],
+    "memberGuidance": "Follow your plan and note pain changes.",
+    "careTeamNote": "Monitors rehab dose and pain response.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-108",
+    "oneLine": "Brief breathing practice to support recovery.",
+    "whatItDoes": "Tracks minutes of breathwork and perceived stress.",
+    "whyItMatters": "May support relaxation and recovery. Provides simple stress trend data.",
+    "healthFocus": [
+      "recovery",
+      "sleep"
+    ],
+    "expectedSignals": [
+      "breathing-minutes",
+      "stress-score"
+    ],
+    "memberGuidance": "Use a calm, comfortable pace and log how you feel.",
+    "careTeamNote": "Captures stress response to breathwork.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-109",
+    "oneLine": "Quick journal to note readiness and soreness.",
+    "whatItDoes": "Records subjective readiness and muscle soreness.",
+    "whyItMatters": "Helps identify patterns in recovery. Supports plan adjustments.",
+    "healthFocus": [
+      "recovery",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "readiness-score",
+      "soreness-score"
+    ],
+    "memberGuidance": "Be consistent and brief in your entries.",
+    "careTeamNote": "Subjective recovery markers over time.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-110",
+    "oneLine": "Send questions for a clinician to review asynchronously.",
+    "whatItDoes": "Submits questions and receives care team responses.",
+    "whyItMatters": "Supports timely guidance and plan review without a visit. Keeps care coordinated.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "questions-submitted",
+      "care-team-response"
+    ],
+    "memberGuidance": "Write clear, concise questions and include context.",
+    "careTeamNote": "Tracks engagement and response loop.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-111",
+    "oneLine": "Share a brief weekly summary with your care team.",
+    "whatItDoes": "Submits a short update of your week for review.",
+    "whyItMatters": "Keeps the team informed and supports coordinated decisions. Encourages reflection.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "summary-submitted"
+    ],
+    "memberGuidance": "Highlight key wins, challenges, and any concerns.",
+    "careTeamNote": "Regular summary to inform plan updates.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-112",
+    "oneLine": "Simple weekly log of your medication routine.",
+    "whatItDoes": "Records whether medications were taken as planned.",
+    "whyItMatters": "Supports adherence tracking and care team review. Helps spot gaps.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "adherence-log-complete"
+    ],
+    "memberGuidance": "Mark entries daily and review at week’s end.",
+    "careTeamNote": "Binary adherence log for oversight.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-113",
+    "oneLine": "Message the pharmacy about refills or questions.",
+    "whatItDoes": "Logs messages sent and tracks days of supply.",
+    "whyItMatters": "Supports continuity of access and communication. Helps avoid gaps.",
+    "healthFocus": [
+      "adherence"
+    ],
+    "expectedSignals": [
+      "message-sent",
+      "days-of-supply"
+    ],
+    "memberGuidance": "Reach out early if supply is running low.",
+    "careTeamNote": "Monitors supply and outreach behavior.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-114",
+    "oneLine": "Choose a simple high-protein option while traveling.",
+    "whatItDoes": "Tracks protein intake and adherence for a travel meal.",
+    "whyItMatters": "Supports consistent nutrition when routines change. Provides simple tracking.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "meal-adherence"
+    ],
+    "memberGuidance": "Pick easy options and log what you choose.",
+    "careTeamNote": "Travel-specific adherence to protein targets.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-115",
+    "oneLine": "Make a balanced meal from pantry staples.",
+    "whatItDoes": "Logs protein and fiber from a simple at-home meal.",
+    "whyItMatters": "Supports consistent nutrition with available foods. Encourages routine.",
+    "healthFocus": [
+      "nutrition",
+      "adherence"
+    ],
+    "expectedSignals": [
+      "protein-grams",
+      "fiber-grams"
+    ],
+    "memberGuidance": "Combine a protein source with fiber-rich foods and record it.",
+    "careTeamNote": "Baseline intake from pantry constraints.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  },
+  {
+    "activityId": "act-116",
+    "oneLine": "Quick reminder to check daily fluid intake.",
+    "whatItDoes": "Tracks liters of fluid and a simple habit check.",
+    "whyItMatters": "Supports hydration awareness and routine. Helps the team review patterns.",
+    "healthFocus": [
+      "nutrition",
+      "recovery"
+    ],
+    "expectedSignals": [
+      "fluid-liters",
+      "habit-check"
+    ],
+    "memberGuidance": "Sip regularly and log totals by day’s end.",
+    "careTeamNote": "Hydration tracking with habit compliance.",
+    "generatedBy": "gpt-5.3-chat-latest",
+    "generatedAt": "2026-06-01T00:00:00Z"
+  }
+]

@@ -31,7 +31,9 @@ export default function CalendarTab({ result, availability, selection: _selectio
       travel={availability.travel}
       homeTimeZone={availability.timeZone}
       onSelect={(occ: ScheduledOccurrence) =>
-        onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date })
+        // 023: opening an action's detail = its Trace, where timing/status/resources + the
+        // "About this action" education live.
+        onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date, activeTab: 'trace' })
       }
       onExpandDay={(date) => onSelect({ selectedDate: date })}
     />

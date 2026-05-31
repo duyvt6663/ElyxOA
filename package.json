@@ -10,7 +10,8 @@
     "test": "vitest run",
     "generate:availability": "node scripts/generate-availability.mjs",
     "generate:hints": "node scripts/generate-hints.mjs",
-    "generate:bundles": "node scripts/generate-bundles.mjs"
+    "generate:bundles": "node scripts/generate-bundles.mjs",
+    "generate:activity-education": "node scripts/generate-activity-education.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.67",

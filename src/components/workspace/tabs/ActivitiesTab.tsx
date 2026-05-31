@@ -14,6 +14,7 @@
 
 import { Fragment, useMemo, useState } from 'react';
 import type { Activity, ActivityType, ScheduleResult, ScheduledOccurrence } from '@/lib/types';
+import { educationForActivity, type EducationMap } from '@/lib/activity-education';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
 
 type SortMode = 'priority' | 'type' | 'outcome' | 'frequency';
@@ -23,6 +24,7 @@ export interface ActivitiesTabProps {
   result: ScheduleResult;
   selection: WorkspaceSelection;
   onSelect: (partial: Partial<WorkspaceSelection>) => void;
+  education: EducationMap;
 }
 
 const TYPE_TAG: Record<ActivityType, string> = {
@@ -91,7 +93,7 @@ function OutcomeCounts({ o }: { o: Outcome }) {
   );
 }
 
-export default function ActivitiesTab({ activities, result, selection: _selection, onSelect }: ActivitiesTabProps) {
+export default function ActivitiesTab({ activities, result, selection: _selection, onSelect, education }: ActivitiesTabProps) {
   const [sortMode, setSortMode] = useState<SortMode>('priority');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -146,8 +148,50 @@ export default function ActivitiesTab({ activities, result, selection: _selectio
 
   function ExpandContent({ a }: { a: Activity }) {
     const occs = occByActivity.get(a.id) ?? [];
+    const edu = educationForActivity(education, a.id);
     return (
       <>
+        <div className="mb-2 rounded bg-white/60 p-2">
+          <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-500">Health context</div>
+          {edu ? (
+            <div className="space-y-1 text-[11px] text-gray-700">
+              <div>
+                <span className="text-gray-500">What it does: </span>
+                {edu.whatItDoes}
+              </div>
+              <div>
+                <span className="text-gray-500">Why it matters: </span>
+                {edu.whyItMatters}
+              </div>
+              {edu.healthFocus.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1">
+                  <span className="text-gray-500">Health focus:</span>
+                  {edu.healthFocus.map((f) => (
+                    <span key={f} className="rounded bg-gray-200 px-1.5 py-0.5 text-[10px] text-gray-700">
+                      {f}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {edu.expectedSignals.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1">
+                  <span className="text-gray-500">Signals to watch:</span>
+                  {edu.expectedSignals.map((s) => (
+                    <span key={s} className="rounded bg-gray-200 px-1.5 py-0.5 text-[10px] text-gray-700">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div>
+                <span className="text-gray-500">Member guidance: </span>
+                {edu.memberGuidance}
+              </div>
+            </div>
+          ) : (
+            <p className="text-[11px] text-gray-700">{a.details}</p>
+          )}
+        </div>
         <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-500">
           <span>resources: {summarizeResources(a)}</span>
           <span>facilitator: {a.facilitatorLabel}</span>
@@ -235,6 +279,11 @@ export default function ActivitiesTab({ activities, result, selection: _selectio
                       <button type="button" onClick={() => toggle(a.id)} className="text-left font-medium hover:underline">
                         {a.title}
                       </button>
+                      {educationForActivity(education, a.id)?.oneLine && (
+                        <div className="mt-0.5 line-clamp-2 text-[11px] text-gray-500">
+                          {educationForActivity(education, a.id)?.oneLine}
+                        </div>
+                      )}
                     </td>
                     <td className="py-2 pr-2 whitespace-nowrap align-top">
                       {a.frequency.count}/{a.frequency.period}
@@ -280,6 +329,11 @@ export default function ActivitiesTab({ activities, result, selection: _selectio
                   <span className={`rounded px-1.5 py-0.5 text-[10px] ${TYPE_TAG[a.type]}`}>{a.type}</span>
                   <span className="flex-1 truncate font-medium">{a.title}</span>
                 </button>
+                {educationForActivity(education, a.id)?.oneLine && (
+                  <div className="line-clamp-2 pl-6 text-[11px] text-gray-500">
+                    {educationForActivity(education, a.id)?.oneLine}
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={() => openTrace(a.id)}

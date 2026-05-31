@@ -23,6 +23,7 @@
 import { ALLIED_HEALTH_ROLES, EQUIPMENT_ROLES, SPECIALIST_ROLES } from './roles';
 import type {
   Activity,
+  ActivityEducationProfile,
   ActivityTemporalPolicy,
   ActivityTemporalPolicyHint,
   AllocationAttempt,
@@ -467,5 +468,91 @@ export function validateHintReferences(
       if (!activityIds.has(id)) errors.push(`globalRules[${r.id}] references unknown activityId "${id}"`);
     }
   }
+  return errors;
+}
+
+// === 023: ActivityEducationProfile guard + reference/safety validation ===
+
+/**
+ * 023 — unsafe phrasing the generated education copy must never contain. Shared by the
+ * generator's post-filter and the validator so both reject the same medical-instruction /
+ * outcome-promise language. Word-boundary anchored, case-insensitive; "prevent"/"treat"
+ * also catch "prevents"/"treats" etc.
+ */
+export const EDUCATION_UNSAFE_PATTERNS: RegExp[] = [
+  /\bcure(s|d)?\b/i,
+  /\bguarantee(s|d)?\b/i,
+  /\bdiagnose(s|d)?\b/i,
+  /\bdiagnosis\b/i,
+  /\b(increase|raise|adjust|change|double)\s+(the\s+)?dose\b/i,
+  /\bstop taking\b/i,
+  /\bprevent(s|ed|ion)?\b/i,
+  /\btreat(s|ed|ment|ing)?\b/i,
+];
+
+/** True if any field of the profile contains unsafe phrasing. */
+function hasUnsafeEducationPhrase(p: ActivityEducationProfile): boolean {
+  const text = [p.oneLine, p.whatItDoes, p.whyItMatters, p.memberGuidance, p.careTeamNote, ...p.healthFocus, ...p.expectedSignals].join(' ');
+  return EDUCATION_UNSAFE_PATTERNS.some((re) => re.test(text));
+}
+
+export function isActivityEducationProfile(x: unknown): x is ActivityEducationProfile {
+  if (!isObj(x)) return false;
+  if (!isStr(x.activityId) || x.activityId.length === 0) return false;
+  if (!isStr(x.oneLine)) return false;
+  if (!isStr(x.whatItDoes)) return false;
+  if (!isStr(x.whyItMatters)) return false;
+  if (!isArr(x.healthFocus) || !x.healthFocus.every(isStr)) return false;
+  if (!isArr(x.expectedSignals) || !x.expectedSignals.every(isStr)) return false;
+  if (!isStr(x.memberGuidance)) return false;
+  if (!isStr(x.careTeamNote)) return false;
+  if (typeof x.generatedBy !== 'undefined' && !isStr(x.generatedBy)) return false;
+  if (!isStr(x.generatedAt)) return false;
+  return true;
+}
+
+/**
+ * 023 — validate the committed education set against the live activity fixture. Returns a list
+ * of human-readable errors (empty = valid). Covers: shape, exactly one profile per activity id,
+ * no missing / dangling ids, per-field length caps, array caps, unsafe phrasing, and stable sort
+ * by activityId. The generator and the build boundary both run this so a bad file fails loud.
+ */
+export function validateEducationProfiles(profiles: unknown, activities: Activity[]): string[] {
+  const errors: string[] = [];
+  if (!isArr(profiles)) return ['education profiles must be an array'];
+
+  const activityIds = new Set(activities.map((a) => a.id));
+  const seen = new Set<string>();
+  const ids: string[] = [];
+
+  for (let i = 0; i < profiles.length; i++) {
+    const p = profiles[i];
+    if (!isActivityEducationProfile(p)) {
+      errors.push(`profile[${i}] has invalid shape`);
+      continue;
+    }
+    ids.push(p.activityId);
+    if (seen.has(p.activityId)) errors.push(`duplicate profile for activityId "${p.activityId}"`);
+    seen.add(p.activityId);
+    if (!activityIds.has(p.activityId)) errors.push(`profile references unknown activityId "${p.activityId}"`);
+
+    if (p.oneLine.length > 120) errors.push(`"${p.activityId}".oneLine exceeds 120 chars (${p.oneLine.length})`);
+    if (p.whatItDoes.length > 400) errors.push(`"${p.activityId}".whatItDoes exceeds 400 chars`);
+    if (p.whyItMatters.length > 400) errors.push(`"${p.activityId}".whyItMatters exceeds 400 chars`);
+    if (p.memberGuidance.length > 400) errors.push(`"${p.activityId}".memberGuidance exceeds 400 chars`);
+    if (p.careTeamNote.length > 400) errors.push(`"${p.activityId}".careTeamNote exceeds 400 chars`);
+    if (p.healthFocus.length > 5) errors.push(`"${p.activityId}".healthFocus exceeds 5 items`);
+    if (p.expectedSignals.length > 5) errors.push(`"${p.activityId}".expectedSignals exceeds 5 items`);
+
+    if (hasUnsafeEducationPhrase(p)) errors.push(`"${p.activityId}" contains unsafe medical phrasing`);
+  }
+
+  for (const id of activityIds) {
+    if (!seen.has(id)) errors.push(`missing education profile for activityId "${id}"`);
+  }
+
+  const sorted = [...ids].sort();
+  if (ids.some((id, i) => id !== sorted[i])) errors.push('profiles are not sorted by activityId');
+
   return errors;
 }

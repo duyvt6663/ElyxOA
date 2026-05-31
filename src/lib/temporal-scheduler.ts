@@ -603,6 +603,9 @@ function allocateTemporal(
       occ.endTime = minToTime(best.endMin);
       occ.timeZone = availability.timeZone;
       occ.outsidePreferredWindow = !best.inPreferred;
+      // 023: the activity actually SCHEDULED (= the candidate). For a substitution this is the
+      // fallback, not the source — so the UI can resolve fallback education via effectiveActivityId.
+      occ.effectiveActivityId = candidateActivity.id;
       // 016 §11 — tag SCHEDULED low-risk daily food/med for customer-facing bundling.
       // Substituted (isPrimary=false) is never bundled — it stays individual (adaptation story).
       if (isPrimary) {

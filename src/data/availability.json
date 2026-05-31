@@ -2,17 +2,5265 @@
   "windowStart": "2026-06-01",
   "windowEnd": "2026-08-31",
   "timeZone": "America/Los_Angeles",
-  "memberBusy": [],
+  "memberBusy": [
+    {
+      "id": "mb-sleep-sleep",
+      "title": "Sleep",
+      "category": "sleep",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-01",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-06",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-06",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-07",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-07",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-22",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-22",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "00:00",
+          "endTime": "06:30"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "22:30",
+          "endTime": "23:59"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-meal-breakfast",
+      "title": "Breakfast",
+      "category": "meal",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-06",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-06-07",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-06-22",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "08:30",
+          "endTime": "09:00"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "08:00",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "06:30",
+          "endTime": "07:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-commute-commute-to-office",
+      "title": "Commute to Office",
+      "category": "commute",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-work-morning-work",
+      "title": "Morning Work",
+      "category": "work",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "07:30",
+          "endTime": "12:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-meal-lunch",
+      "title": "Lunch",
+      "category": "meal",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-06",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-06-07",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-22",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "12:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "12:00",
+          "endTime": "12:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-work-afternoon-work",
+      "title": "Afternoon Work",
+      "category": "work",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "12:30",
+          "endTime": "17:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-commute-commute-home",
+      "title": "Commute Home",
+      "category": "commute",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-family-family-time",
+      "title": "Family Time",
+      "category": "family",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-06",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-06-07",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "08:30",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "18:00",
+          "endTime": "20:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-meal-dinner",
+      "title": "Dinner",
+      "category": "meal",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-06",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-06-22",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "18:30",
+          "endTime": "19:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "19:30",
+          "endTime": "20:30"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "20:00",
+          "endTime": "20:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-personal-recovery",
+      "title": "Personal/Recovery",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-01",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-02",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-03",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-05",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-08",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-10",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-12",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-15",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-17",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-19",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-01",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-03",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-06",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-08",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-10",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-13",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-15",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-17",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-20",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-22",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-24",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-27",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-29",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-31",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-03",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-05",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-07",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-17",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-19",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-21",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-24",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-26",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-28",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-31",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-work-early-calls",
+      "title": "Early Calls",
+      "category": "work",
+      "blocks": [
+        {
+          "date": "2026-06-02",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "07:00",
+          "endTime": "07:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-work-late-follow-ups",
+      "title": "Late Follow-ups",
+      "category": "work",
+      "blocks": [
+        {
+          "date": "2026-06-02",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-04",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-09",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-11",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-16",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-18",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-06-30",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-02",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-07",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-09",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-14",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-16",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-21",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-23",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-28",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-07-30",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-04",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-06",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-18",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-20",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-25",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        },
+        {
+          "date": "2026-08-27",
+          "startTime": "17:30",
+          "endTime": "18:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-morning-routine",
+      "title": "Morning Routine",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-06",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-06-07",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "06:30",
+          "endTime": "08:30"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "06:30",
+          "endTime": "08:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-family-family-activities",
+      "title": "Family Activities",
+      "category": "family",
+      "blocks": [
+        {
+          "date": "2026-06-06",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "09:00",
+          "endTime": "13:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-personal-time",
+      "title": "Personal Time",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-06",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-relaxation",
+      "title": "Relaxation",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-06",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-13",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-20",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-04",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-11",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-18",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-25",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-01",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-08",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-15",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-22",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-29",
+          "startTime": "20:30",
+          "endTime": "22:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-clinical-health-review-coaching",
+      "title": "Health Review/Coaching",
+      "category": "clinical",
+      "blocks": [
+        {
+          "date": "2026-06-07",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "13:00",
+          "endTime": "14:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-prep-planning",
+      "title": "Prep & Planning",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-07",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "14:00",
+          "endTime": "17:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-family-family-dinner-time",
+      "title": "Family Dinner Time",
+      "category": "family",
+      "blocks": [
+        {
+          "date": "2026-06-07",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "17:00",
+          "endTime": "19:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-wind-down",
+      "title": "Wind Down",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-07",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-14",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-21",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-05",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-12",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-19",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-07-26",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-02",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-09",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-16",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-23",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-30",
+          "startTime": "19:30",
+          "endTime": "22:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-travel-transit",
+      "title": "Transit",
+      "category": "travel",
+      "blocks": [
+        {
+          "date": "2026-06-22",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-22",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "07:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "13:00",
+          "endTime": "17:00"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-family-family-check-in",
+      "title": "Family Check-in",
+      "category": "family",
+      "blocks": [
+        {
+          "date": "2026-06-22",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "17:00",
+          "endTime": "18:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    },
+    {
+      "id": "mb-personal-recovery",
+      "title": "Recovery",
+      "category": "personal",
+      "blocks": [
+        {
+          "date": "2026-06-22",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-23",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-24",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-25",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-26",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-27",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-28",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-06-29",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-10",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-11",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-12",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-13",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        },
+        {
+          "date": "2026-08-14",
+          "startTime": "19:00",
+          "endTime": "22:30"
+        }
+      ],
+      "blocksScheduling": true,
+      "visibleByDefault": true
+    }
+  ],
   "travel": [
     {
       "id": "travel-01",
       "destination": "Singapore",
-      "blocked": [{ "start": "2026-06-22", "end": "2026-06-29" }]
+      "blocked": [
+        {
+          "start": "2026-06-22",
+          "end": "2026-06-29"
+        }
+      ]
     },
     {
       "id": "travel-02",
       "destination": "Tokyo",
-      "blocked": [{ "start": "2026-08-10", "end": "2026-08-14" }]
+      "blocked": [
+        {
+          "start": "2026-08-10",
+          "end": "2026-08-14"
+        }
+      ]
     }
   ],
   "equipment": [
@@ -20,7 +5268,12 @@
       "id": "eq-treadmill-01",
       "role": "treadmill",
       "label": "Home Treadmill",
-      "blocked": [{ "start": "2026-07-06", "end": "2026-07-12" }]
+      "blocked": [
+        {
+          "start": "2026-07-06",
+          "end": "2026-07-12"
+        }
+      ]
     },
     {
       "id": "eq-rower-01",
@@ -68,7 +5321,12 @@
       "id": "eq-ice-bath-01",
       "role": "ice-bath",
       "label": "Ice Bath",
-      "blocked": [{ "start": "2026-07-20", "end": "2026-07-22" }]
+      "blocked": [
+        {
+          "start": "2026-07-20",
+          "end": "2026-07-22"
+        }
+      ]
     },
     {
       "id": "eq-pool-01",
@@ -112,46 +5370,82 @@
       "id": "sp-physician-01",
       "role": "physician",
       "name": "Dr. Reyes",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "sp-cardiologist-01",
       "role": "cardiologist",
       "name": "Dr. Okafor",
       "available": [
-        { "start": "2026-07-01", "end": "2026-07-03" },
-        { "start": "2026-08-01", "end": "2026-08-03" }
+        {
+          "start": "2026-07-01",
+          "end": "2026-07-03"
+        },
+        {
+          "start": "2026-08-01",
+          "end": "2026-08-03"
+        }
       ]
     },
     {
       "id": "sp-endocrinologist-01",
       "role": "endocrinologist",
       "name": "Dr. Haddad",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "sp-sleep-physician-01",
       "role": "sleep-physician",
       "name": "Dr. Tan",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "sp-dermatologist-01",
       "role": "dermatologist",
       "name": "Dr. Alvarez",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "sp-psychiatrist-01",
       "role": "psychiatrist",
       "name": "Dr. Mwangi",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "sp-phlebotomist-01",
       "role": "phlebotomist",
       "name": "Robin Vance",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     }
   ],
   "alliedHealth": [
@@ -161,8 +5455,14 @@
       "discipline": "Physiotherapy",
       "name": "Jo Park",
       "available": [
-        { "start": "2026-06-01", "end": "2026-06-14" },
-        { "start": "2026-07-06", "end": "2026-08-31" }
+        {
+          "start": "2026-06-01",
+          "end": "2026-06-14"
+        },
+        {
+          "start": "2026-07-06",
+          "end": "2026-08-31"
+        }
       ]
     },
     {
@@ -170,42 +5470,72 @@
       "role": "occupational-therapist",
       "discipline": "Occupational Therapy",
       "name": "Sam Cole",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "ah-dietitian-01",
       "role": "dietitian",
       "discipline": "Dietetics",
       "name": "Dana Fox",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "ah-speech-01",
       "role": "speech-therapist",
       "discipline": "Speech Therapy",
       "name": "Priya Nair",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "ah-massage-01",
       "role": "massage-therapist",
       "discipline": "Massage Therapy",
       "name": "Marco Ili",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "ah-trainer-01",
       "role": "personal-trainer",
       "discipline": "Personal Training",
       "name": "Lena Frost",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     },
     {
       "id": "ah-coach-01",
       "role": "health-coach",
       "discipline": "Health Coaching",
       "name": "Kai Brooks",
-      "available": [{ "start": "2026-06-01", "end": "2026-08-31" }]
+      "available": [
+        {
+          "start": "2026-06-01",
+          "end": "2026-08-31"
+        }
+      ]
     }
   ]
 }

@@ -161,14 +161,16 @@ interface CommittedAction {
 type ActionLedger = Map<string /* date */, CommittedAction[]>;
 
 /**
- * "Blocking" actions occupy exclusive focused member time (workouts, therapy sessions,
- * consultations, meal prep) — no two may overlap and they cannot overlap blocking busy
- * blocks. "Quick" actions (<20 min: pills, BP/CGM logs, hydration, short food habits) are
- * point-in-time: they get a placed time and still obey waking hours + their own temporal
- * rules, but may coincide with each other and with blocking actions. This realizes 015's
- * "daily overload is a soft score, not a dropped action" intent without unbounded overlap.
+ * "Blocking" actions occupy exclusive focused member time (strength/VO2 workouts, therapy
+ * sessions, consultations, meal prep) — no two may overlap and they cannot overlap blocking
+ * busy blocks. "Quick" actions are point-in-time: they get a placed time and still obey waking
+ * hours + their own temporal rules, but may coincide with each other and with blocking actions.
+ * Quick = (<20 min: pills, BP/CGM logs, hydration, short food habits) OR low-intensity fitness
+ * (brisk walks, mobility, balance, step-count) which weave into the day rather than demanding a
+ * focused booking. This realizes 015's "daily overload is a soft score, not a dropped action".
  */
-function isBlocking(activity: Activity): boolean {
+function isBlocking(activity: Activity, policy: ActivityTemporalPolicy): boolean {
+  if (activity.type === 'fitness' && policy.intensity === 'low') return false;
   return activity.durationMinutes >= 20;
 }
 
@@ -271,8 +273,8 @@ function temporalRuleViolation(a: ProtoEvent, b: ProtoEvent): FailedConstraint |
 
 const MOVE_RADIUS: Record<Activity['frequency']['period'], number> = {
   day: 0,
-  week: 2,
-  month: 3,
+  week: 3, // ±3 days from the generated Monday spans the whole week, spreading the pile-up
+  month: 6,
   year: 30,
 };
 
@@ -315,7 +317,7 @@ function evaluateCandidates(
 ): { feasible: FeasibleCandidate[]; fails: FailedConstraint[] } {
   const policy = resolved.policy;
   const duration = Math.max(activity.durationMinutes, 1);
-  const candBlocking = isBlocking(activity);
+  const candBlocking = isBlocking(activity, policy);
   const feasible: FeasibleCandidate[] = [];
   const fails: FailedConstraint[] = [];
   const pushFail = (fc: FailedConstraint) => {
@@ -514,7 +516,7 @@ function allocateTemporal(
       intensity: resolved.policy.intensity,
       policy: resolved.policy,
       activityId: chosen.id,
-      blocking: isBlocking(chosen),
+      blocking: isBlocking(chosen, resolved.policy),
     });
   };
 

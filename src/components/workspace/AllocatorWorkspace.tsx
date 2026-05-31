@@ -61,15 +61,18 @@ import type { ContextBlock, ContextIndex } from '@/lib/chat-context';
 import schedulingHints from '@/data/scheduling-hints.json';
 import { scheduleTemporal } from '@/lib/temporal-scheduler';
 import { isSchedulingSemanticHints, validateHintReferences } from '@/lib/validate';
-import { applyPatchToInputs, diffResults, validatePatch, type SchedulePatch, type ScheduleDiff } from '@/lib/schedule-patch';
+import { applyPatchToInputs, describePatch, diffResults, validatePatch, type SchedulePatch, type ScheduleDiff } from '@/lib/schedule-patch';
 import AppHeader from './AppHeader';
 import WindowLayout from './WindowLayout';
 import MobileSwitch from './MobileSwitch';
 import ChatSurface from './ChatSurface';
 import WorkspacePanel from './WorkspacePanel';
 
-/** 019 Phase 3 — result of previewing/applying a draft patch (no commit on preview). */
-export type PatchPreview = { diff: ScheduleDiff } | { error: string };
+/** 019 Phase 3 — result of previewing a draft patch (no commit). Carries a human description so the
+ * preview card needs neither activities nor availability. */
+export type PatchPreview =
+  | { description: string; diff: ScheduleDiff }
+  | { description: string; error: string };
 
 export type TabId = 'calendar' | 'activities' | 'resources' | 'trace' | 'data';
 
@@ -237,11 +240,12 @@ export default function AllocatorWorkspace({ result, activities, availability, d
   // result. NO commit (decision 4 + no silent mutations).
   const previewPatch = useCallback(
     (patch: SchedulePatch): PatchPreview => {
-      const err = validatePatch(patch, editedActivities);
-      if (err) return { error: err };
+      const description = describePatch(patch, editedActivities, editedAvailability);
+      const err = validatePatch(patch, editedActivities, editedAvailability);
+      if (err) return { description, error: err };
       const patched = applyPatchToInputs(patch, editedActivities, editedAvailability);
       const next = rerunWith(patched.activities, patched.availability);
-      return { diff: diffResults(displayedResult, next.result) };
+      return { description, diff: diffResults(displayedResult, next.result) };
     },
     [editedActivities, editedAvailability, displayedResult, rerunWith]
   );
@@ -249,7 +253,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
   // 019 Phase 3: Apply a draft patch — snapshot for undo, commit the patched inputs + rerun result.
   const applyPatch = useCallback(
     (patch: SchedulePatch): { error: string } | null => {
-      const err = validatePatch(patch, editedActivities);
+      const err = validatePatch(patch, editedActivities, editedAvailability);
       if (err) return { error: err };
       const patched = applyPatchToInputs(patch, editedActivities, editedAvailability);
       const next = rerunWith(patched.activities, patched.availability);

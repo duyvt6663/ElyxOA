@@ -11,28 +11,50 @@
  */
 
 import type { TabId, WorkspaceSelection } from './AllocatorWorkspace';
-import type { SchedulePatch, TimeWindow } from '@/lib/schedule-patch';
+import type { SchedulePatch, TimeWindow, BusyCategory } from '@/lib/schedule-patch';
 
 export const NAV_TOOL_NAMES = ['openTab', 'selectDate', 'selectOccurrence', 'focusResource'] as const;
 
 const WINDOWS = ['morning', 'midday', 'afternoon', 'evening'];
 const ANCHORS = ['wake', 'breakfast', 'lunch', 'dinner', 'bedtime', 'any'];
+const CATEGORIES = ['sleep', 'work', 'commute', 'meal', 'family', 'travel', 'personal', 'clinical', 'buffer'];
+
+const str = (v: unknown): string | undefined => (typeof v === 'string' ? v : undefined);
 
 /** 019 Phase 3 — parse a draft-edit tool call into a typed SchedulePatch, or null if not an edit. */
 export function parseSchedulePatch(name: string, input: unknown): SchedulePatch | null {
   const a = (input ?? {}) as Record<string, unknown>;
-  if (name === 'setTemporalPolicy' && typeof a.activityId === 'string') {
-    return {
-      kind: 'setTemporalPolicy',
-      activityId: a.activityId,
-      window: typeof a.window === 'string' && WINDOWS.includes(a.window) ? (a.window as TimeWindow) : undefined,
-      anchor:
-        typeof a.anchor === 'string' && ANCHORS.includes(a.anchor)
-          ? (a.anchor as SchedulePatch['anchor'])
-          : undefined,
-    };
+  switch (name) {
+    case 'setTemporalPolicy':
+      if (typeof a.activityId !== 'string') return null;
+      return {
+        kind: 'setTemporalPolicy',
+        activityId: a.activityId,
+        window: typeof a.window === 'string' && WINDOWS.includes(a.window) ? (a.window as TimeWindow) : undefined,
+        anchor:
+          typeof a.anchor === 'string' && ANCHORS.includes(a.anchor)
+            ? (a.anchor as Extract<SchedulePatch, { kind: 'setTemporalPolicy' }>['anchor'])
+            : undefined,
+      };
+    case 'addBusyBlock':
+      if (![a.date, a.startTime, a.endTime].every((v) => typeof v === 'string')) return null;
+      return {
+        kind: 'addBusyBlock',
+        date: a.date as string,
+        startTime: a.startTime as string,
+        endTime: a.endTime as string,
+        title: str(a.title) ?? 'Busy',
+        category: typeof a.category === 'string' && CATEGORIES.includes(a.category) ? (a.category as BusyCategory) : 'personal',
+      };
+    case 'removeBusyBlock':
+      if (typeof a.busyBlockId !== 'string') return null;
+      return { kind: 'removeBusyBlock', busyBlockId: a.busyBlockId, date: str(a.date) };
+    case 'editTravelWindow':
+      if (![a.travelId, a.startDate, a.endDate].every((v) => typeof v === 'string')) return null;
+      return { kind: 'editTravelWindow', travelId: a.travelId as string, startDate: a.startDate as string, endDate: a.endDate as string };
+    default:
+      return null;
   }
-  return null;
 }
 
 const TAB_IDS: readonly TabId[] = ['calendar', 'activities', 'resources', 'trace', 'data'];

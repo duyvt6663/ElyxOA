@@ -84,6 +84,34 @@ const editTools = {
     }),
     execute: async () => ({ acknowledged: true as const }),
   }),
+  addBusyBlock: tool({
+    description:
+      'Propose blocking a time range on a date (e.g. "block Jun 24 18:00-20:00 for dinner"). DRAFT ' +
+      'the user must Apply. category is one of sleep/work/commute/meal/family/travel/personal/clinical/buffer.',
+    inputSchema: z.object({
+      date: z.string(),
+      startTime: z.string(),
+      endTime: z.string(),
+      title: z.string(),
+      category: z.enum(['sleep', 'work', 'commute', 'meal', 'family', 'travel', 'personal', 'clinical', 'buffer']),
+    }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+  removeBusyBlock: tool({
+    description:
+      'Propose freeing a member busy block (e.g. "make Wednesday lunch available"). Resolve busyBlockId ' +
+      'from the grounding busyBlockCatalog. Pass a date to free one instance, or omit it to remove the ' +
+      'whole recurring block. DRAFT the user must Apply.',
+    inputSchema: z.object({ busyBlockId: z.string(), date: z.string().optional() }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+  editTravelWindow: tool({
+    description:
+      'Propose changing a travel window\'s dates (e.g. "extend the Singapore trip by a day"). Resolve ' +
+      'travelId from the grounding travelCatalog. DRAFT the user must Apply.',
+    inputSchema: z.object({ travelId: z.string(), startDate: z.string(), endDate: z.string() }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
 };
 
 interface ChatRequestBody {

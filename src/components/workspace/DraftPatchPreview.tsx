@@ -15,15 +15,15 @@ import type { PatchPreview } from './AllocatorWorkspace';
 
 export interface DraftPatchPreviewProps {
   patch: SchedulePatch;
-  description: string;
   onPreview: (patch: SchedulePatch) => PatchPreview;
   onApply: (patch: SchedulePatch) => { error: string } | null;
 }
 
-export default function DraftPatchPreview({ patch, description, onPreview, onApply }: DraftPatchPreviewProps) {
+export default function DraftPatchPreview({ patch, onPreview, onApply }: DraftPatchPreviewProps) {
   // Compute the preview once for this draft (the scheduler rerun is synchronous).
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const preview = useMemo(() => onPreview(patch), [patch]);
+  const description = preview.description;
   const [state, setState] = useState<'pending' | 'applied' | 'discarded'>('pending');
   const [applyError, setApplyError] = useState<string | null>(null);
 
@@ -87,6 +87,7 @@ function DiffSummary({ diff }: { diff: ScheduleDiff }) {
     <div className="mt-1 space-y-1 text-gray-700">
       <div className="flex flex-wrap gap-x-3 gap-y-0.5">
         {diff.retimed.length > 0 && <span>{diff.retimed.length} retimed</span>}
+        {diff.movedDay.length > 0 && <span>{diff.movedDay.length} moved to another day</span>}
         {diff.nowScheduled.length > 0 && <span className="text-emerald-700">{diff.nowScheduled.length} newly scheduled</span>}
         {diff.nowSkipped.length > 0 && <span className="text-red-700">{diff.nowSkipped.length} now skipped</span>}
       </div>
@@ -94,6 +95,11 @@ function DiffSummary({ diff }: { diff: ScheduleDiff }) {
         {diff.retimed.slice(0, 3).map((r) => (
           <li key={r.id}>
             {r.date}: {r.from} → {r.to}
+          </li>
+        ))}
+        {diff.movedDay.slice(0, 3).map((r) => (
+          <li key={r.id}>
+            {r.from} → {r.to}
           </li>
         ))}
         {diff.nowSkipped.slice(0, 2).map((r) => (

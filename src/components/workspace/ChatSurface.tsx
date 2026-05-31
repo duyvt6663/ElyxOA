@@ -42,7 +42,7 @@ import AtMentionMenu from './AtMentionMenu';
 import ChatActionCard from './ChatActionCard';
 import DraftPatchPreview from './DraftPatchPreview';
 import { navActionToSelection, parseSchedulePatch } from './chatActions';
-import { describePatch, type SchedulePatch } from '@/lib/schedule-patch';
+import type { SchedulePatch } from '@/lib/schedule-patch';
 import type { PatchPreview } from './AllocatorWorkspace';
 
 export interface ChatSurfaceProps {
@@ -454,7 +454,6 @@ export default function ChatSurface({
                           <DraftPatchPreview
                             key={idx}
                             patch={patch}
-                            description={describePatch(patch, activities)}
                             onPreview={onPreviewPatch}
                             onApply={onApplyPatch}
                           />

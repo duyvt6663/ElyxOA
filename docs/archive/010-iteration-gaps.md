@@ -1,5 +1,15 @@
 # 010 - Iteration Gaps (Post-Verification, Surface Polish)
 
+> **CLOSED (2026-05-31).** All items resolved or folded forward:
+> - #7 filtered-count subline — **done** (SummaryHeader "Showing N of M (filters active)").
+> - #9 chip glyph — **done** in 016 (legible B/X outcome glyphs).
+> - #11 mobile chip tap-to-expand — **subsumed** by 016 (mobile AgendaList → per-day rows +
+>   expandable DayTimeline).
+> - #16 hosted URL — **done** via 008 (README points to https://elyx-oa.vercel.app/).
+> - #18 edge-case scheduler tests — superseded by the 015 temporal suite (33 unit tests incl.
+>   overlap / temporal-rule / capacity cases). No standalone work needed.
+> Archived.
+
 ## Goal
 Surface-level polish + cross-cutting fixes surfaced by the `verify` skill run (npm install →
 npm run build → drive the dev server via Playwright across desktop + mobile). The build is

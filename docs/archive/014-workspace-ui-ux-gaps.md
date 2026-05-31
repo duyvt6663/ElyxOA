@@ -1,5 +1,18 @@
 # 014 - Workspace UI/UX Gaps (post-011/012/013)
 
+> **CLOSED (2026-05-31).** Resolved across 015 + 016:
+> - #1 density, #3 Resources axis, #6 Priority hover, #9 count wrap — done (015 + 016).
+> - #2 Data-tab duplication/isolation — done (009 hoist).
+> - #4 Trace whitespace — done (016: slot/score/provenance + Source-activity panel).
+> - #5 Trace empty-state — done (016: 3-line guide).
+> - #7 AppHeader mobile — acceptable (product name visible; flex-wraps cleanly at 360px).
+> - #8 Actions title column — done (016 E: min-w-48 title + trimmed columns + sticky header).
+> - #10 chat starter disabled cue — done (starter chips carry the `disabled` attribute).
+> - #11 "Upper Body Strength all-substituted" — **explained, not a bug**: act-015's resources
+>   (dumbbells/cable-machine/trainer) are valid + available; it substitutes to a remote walk
+>   because of genuine blocking-fitness capacity (tracked as 016 #3), not a fixture quirk.
+> Archived.
+
 ## Goal
 Capture concrete UI/UX gaps surfaced by a full visual walkthrough of the workspace shell + 6
 tabs + LLM chat after 011/012/013 implementation landed. Driven via Playwright across desktop

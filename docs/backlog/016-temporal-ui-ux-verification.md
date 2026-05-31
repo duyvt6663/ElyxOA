@@ -49,11 +49,12 @@ scale. The two **severe** ones were fixed in the same pass; the rest are tracked
    actions to Monday); or lift recovery therapy out of tier-5 when it has a clinician resource;
    or widen the evening blocking horizon. Deferred — needs a tier/movement rework + re-tune.
 
-4. **Trace tab whitespace for short traces (carries over from 014 #4).**
-   A skipped/1-attempt occurrence leaves most of the right panel empty. The temporal trace adds
-   slot/score/provenance which fills feasible traces, but skipped ones are still sparse.
-   → *Option:* add a "source activity details" sub-panel or a mini-timeline of that activity's
-   occurrences below the attempts. Deferred.
+4. **Trace tab whitespace for short traces (carries over from 014 #4).** ✅ FIXED
+   A skipped/1-attempt occurrence left most of the right panel empty.
+   → *Fixed:* the Trace tab renders a "Source activity" details panel under the attempts (title,
+   type, frequency, priority, duration, remote, resources, backups), and the empty state is now a
+   3-line guide (Calendar / Priority / Resources entry points). Trace dedup (§C) also collapsed the
+   repeated failure lines. Verified.
 
 5. **Day timeline same-slot stack hides most actions.** ✅ FIXED
    This is larger than the original "two quick actions overlap" cosmetic note. On the deployed
@@ -232,11 +233,14 @@ Drove every surface again (desktop + mobile, 0 console errors). Fixes shipped th
 - **G** dropped the redundant Legend row. (`Legend.tsx` now orphaned, left in place.)
 
 ## Still open (tracked)
-- **#3 (remainder)** fitness/therapy capacity — ~38 activities can't all fit the limited focused
-  slots; they substitute to remote walks. Genuinely needs either lighter member busy blocks or a
-  tier rework. The Trace explains each honestly.
-- **#4** Trace whitespace for short/skipped traces.
-- **#8 (starter scope)** explicit selected-vs-global chat starters.
+- **#3 (remainder) — THE open product decision.** ~38 activities (esp. blocking fitness/therapy)
+  can't all fit the member's limited focused time (early-AM + post-family evening), so they
+  substitute to remote walks / skip. Staggering + the consultation carve-out fixed the Monday pile
+  and consultations; the remainder is genuine over-subscription. Fixing it is a tradeoff call:
+  (a) lighten the member busy fixture (fewer/shorter family blocks → more evening slots),
+  (b) lift recovery/downshift therapy out of tier-5, or (c) accept it as honest adaptation (the
+  Trace explains each). Needs a decision before more scheduler work.
+- **#8 (starter scope)** explicit selected-vs-global chat starters (prompt/UX design).
 - **#11 (optional)** LLM label refinement for bundles (`generate:bundles` → `calendar-bundles.json`);
   deterministic labels ship today.
 

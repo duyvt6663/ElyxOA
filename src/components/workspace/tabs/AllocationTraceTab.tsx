@@ -31,12 +31,14 @@
  * 4. If the trace lookup is undefined, render a small notice (012 impl pending).
  */
 
-import type { ScheduleDiagnostics, AllocationTrace, AllocationAttempt } from '@/lib/types';
+import type { Activity, ScheduleDiagnostics, AllocationTrace, AllocationAttempt } from '@/lib/types';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
 
 export interface AllocationTraceTabProps {
   selection: WorkspaceSelection;
   diagnostics?: ScheduleDiagnostics;
+  /** 016 §4 — source-activity definitions, for the details panel under short traces. */
+  activities?: Activity[];
 }
 
 function AttemptCard({ attempt, index, isChosen }: { attempt: AllocationAttempt; index: number; isChosen: boolean }) {
@@ -118,11 +120,20 @@ function AttemptCard({ attempt, index, isChosen }: { attempt: AllocationAttempt;
   );
 }
 
-export default function AllocationTraceTab({ selection, diagnostics }: AllocationTraceTabProps) {
+export default function AllocationTraceTab({ selection, diagnostics, activities }: AllocationTraceTabProps) {
   if (selection.selectedOccurrenceId === null) {
     return (
-      <div className="p-6 text-sm text-gray-500">
-        Click an occurrence in the Calendar or Resources tab to see how it was allocated.
+      <div className="p-6 text-sm text-gray-600">
+        <p className="mb-2 font-medium text-gray-700">See how any occurrence was allocated.</p>
+        <ul className="list-disc space-y-1 pl-5 text-gray-500">
+          <li>Click any action in the <span className="font-medium">Calendar</span> day timeline.</li>
+          <li>Click any row in the <span className="font-medium">Priority</span> tab to jump to its first occurrence.</li>
+          <li>Click a band in the <span className="font-medium">Resources</span> tab.</li>
+        </ul>
+        <p className="mt-3 text-xs text-gray-400">
+          The trace shows every candidate slot the scheduler tried, the chosen slot + score, the
+          policy source, and why each rejected candidate failed.
+        </p>
       </div>
     );
   }
@@ -161,6 +172,29 @@ export default function AllocationTraceTab({ selection, diagnostics }: Allocatio
           </li>
         ))}
       </ol>
+      <SourceActivityPanel activities={activities} sourceId={trace.sourceActivityId} />
     </div>
+  );
+}
+
+/** 016 §4 — source activity definition; fills the panel under short traces with useful context. */
+function SourceActivityPanel({ activities, sourceId }: { activities?: Activity[]; sourceId: string }) {
+  const a = activities?.find((x) => x.id === sourceId);
+  if (!a) return null;
+  const resources = a.resources.map((r) => `${r.kind}:${r.role}`).join(', ') || 'none';
+  return (
+    <section className="mt-4 rounded border border-gray-200 bg-gray-50 p-3 text-xs">
+      <h3 className="mb-2 font-medium text-gray-700">Source activity</h3>
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-600">
+        <div><dt className="inline text-gray-400">title: </dt><dd className="inline">{a.title}</dd></div>
+        <div><dt className="inline text-gray-400">type: </dt><dd className="inline">{a.type}</dd></div>
+        <div><dt className="inline text-gray-400">frequency: </dt><dd className="inline">{a.frequency.count}/{a.frequency.period}</dd></div>
+        <div><dt className="inline text-gray-400">priority: </dt><dd className="inline">{a.priority}</dd></div>
+        <div><dt className="inline text-gray-400">duration: </dt><dd className="inline">{a.durationMinutes}m</dd></div>
+        <div><dt className="inline text-gray-400">remote: </dt><dd className="inline">{a.canBeRemote ? 'yes' : 'no'}</dd></div>
+        <div className="col-span-2"><dt className="inline text-gray-400">resources: </dt><dd className="inline">{resources}</dd></div>
+        <div className="col-span-2"><dt className="inline text-gray-400">backups: </dt><dd className="inline font-mono">{a.backupActivityIds.join(', ') || 'none'}</dd></div>
+      </dl>
+    </section>
   );
 }

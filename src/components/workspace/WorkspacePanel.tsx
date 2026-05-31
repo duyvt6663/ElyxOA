@@ -76,7 +76,7 @@ export default function WorkspacePanel({
       case 'resources':
         return <ResourcesTab availability={availability} selection={selection} onSelect={onSelect} />;
       case 'trace':
-        return <AllocationTraceTab selection={selection} diagnostics={diagnostics} />;
+        return <AllocationTraceTab selection={selection} diagnostics={diagnostics} activities={activities} />;
       case 'data':
         return (
           <DataImportTab

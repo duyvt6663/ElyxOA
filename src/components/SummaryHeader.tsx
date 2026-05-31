@@ -29,15 +29,20 @@ const TYPE_STYLES: Record<ActivityType, string> = {
 
 export interface SummaryHeaderProps {
   result: ScheduleResult;
+  /** 010 #7 — count of occurrences matching the active filters; when < total, a
+   * "showing N of M" subline appears so the totals don't read as the visible set. */
+  visibleCount?: number;
 }
 
-export default function SummaryHeader({ result }: SummaryHeaderProps) {
+export default function SummaryHeader({ result, visibleCount }: SummaryHeaderProps) {
+  const total = result.occurrences.length;
   const nScheduled = result.occurrences.filter((o) => o.status === 'scheduled').length;
   const nSubstituted = result.occurrences.filter((o) => o.status === 'substituted').length;
   const nSkipped = result.occurrences.filter((o) => o.status === 'skipped').length;
+  const filtered = typeof visibleCount === 'number' && visibleCount !== total;
 
   return (
-    <header className="flex flex-wrap items-center gap-3 border-b pb-3">
+    <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b pb-3">
       <div className="text-sm font-medium">
         Window: {result.windowStart} → {result.windowEnd}
       </div>
@@ -50,6 +55,11 @@ export default function SummaryHeader({ result }: SummaryHeaderProps) {
       <span className={`rounded border px-2 py-0.5 text-xs ${STATUS_STYLES.skipped.badge}`}>
         Skipped · {nSkipped}
       </span>
+      {filtered && (
+        <span className="w-full text-xs text-gray-500">
+          Showing {visibleCount} of {total} occurrences (filters active)
+        </span>
+      )}
     </header>
   );
 }

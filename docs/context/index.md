@@ -92,42 +92,23 @@ example: `src/lib/scheduler.ts` (algorithm) and `src/components/CalendarView.tsx
 # 6. backlog state
 
 **Archived (completed):** 001 scaffold · 002 data model · 003 activity fixture ·
-004 availability fixture · 005 scheduler · 006 calendar UI · 009 runtime import (state
-hoist closed the verification gap) · 011 workspace shell · 012 scheduler diagnostics ·
-013 explainability tabs + LLM chat. See `docs/archive/`.
+004 availability fixture · 005 scheduler · 006 calendar UI · 007 prompts+README ·
+008 deploy (live at https://elyx-oa.vercel.app/) · 009 runtime import · 010 iteration gaps ·
+011 workspace shell · 012 scheduler diagnostics · 013 explainability tabs + LLM chat ·
+014 workspace UI/UX gaps · 015 temporal availability + scheduler. See `docs/archive/`.
 
-**Still in `docs/backlog/`:**
-- `007-document-prompts-and-usage.md` — README + prompts done; hosted URL still
-  placeholder (filled by 008).
-- `008-host-and-prepare-submission.md` — not deployed. Needs amending for the
-  `OPENAI_API_KEY` env var on Vercel (see 013's archived Task §0).
-- `010-iteration-gaps.md` — polish list. Items #5, #6, #8, #10, #12, #13, #14, #15,
-  #17, #19 fixed. Open: #7 (filtered counts subline), #9 (chip glyph cosmetic), #11
-  (mobile chip tap; deferred to 014), #16 (hosted URL; pending 008), #18 (extra
-  scheduler tests; optional).
-- `014-workspace-ui-ux-gaps.md` — 11 UI/UX findings from a full Playwright walkthrough.
-  §2 (Data-tab calendar duplication + import state isolation) closed in this pass via
-  the 009 hoist + the ImportPanel-as-toolbar refactor. Remaining items the user is
-  holding for an architectural decision: §1 calendar density blowout (medication chips
-  dominate); §3 Resources axis labels; §4-§6 Trace whitespace / empty-state polish /
-  Priority hover; §7-§10 cosmetic; §11 data quirk (Upper Body Strength all-substituted).
-- `008` — **DEPLOYED**: https://elyx-oa.vercel.app/ (README hosted URL filled). Vercel
-  Git integration on `main`; `OPENAI_API_KEY` set as a project env var for `/api/chat`.
-- `015-temporal-availability-and-scheduler.md` — **DONE (live).** All 9 tasks: data contract +
-  validators; `getDefaultTemporalPolicy` + overrides; LLM-generated busy fixture
-  (`generate:availability`); LLM semantic compiler + committed `scheduling-hints.json` +
-  build-time staleness check (`generate:hints`); temporal scheduler core; calendar density fix +
-  DayTimeline + occupied toggle; Resources Member lane + Priority off-window + Trace
-  slot/score/provenance + chat temporal grounding; acceptance A1–A6 + docs. Real-fixture profile
-  2900 / 490 / 168 (4.7% skip); June cardiology skip + Singapore/Tokyo travel adaptation preserved.
-- `016-temporal-ui-ux-verification.md` — full post-015 Playwright UI/UX audit. Fixed two severe
-  issues (duplicate occurrence ids from movement-window day collisions; month-cell chip flood →
-  per-type count pills with ⟳/✕ badges). Follow-up fixes landed for same-slot DayTimeline
-  grouping/listing, scheduler-emitted Priority `off-window`, temporal ImportPanel rerun + hints,
-  mobile link nav, and mobile AgendaList density. Still open: Monday weekly pile-up, Trace
-  whitespace, chat starter scope, substituted rows that hide their source activity, food/medication
-  micro-action bundling for calendar density (planned as LLM-assisted bundle metadata plus
-  scheduler-emitted display bundles), and ⟳ glyph polish.
+**Still in `docs/backlog/` (1):**
+- `016-temporal-ui-ux-verification.md` — the living post-015 UI/UX audit. Fixed across several
+  passes: duplicate occurrence ids, month-cell chip flood (per-type B/X pills), same-slot
+  DayTimeline grouping/listing, scheduler-emitted Priority `off-window`, temporal ImportPanel
+  rerun + hints, mobile link nav + AgendaList density, substituted-row source labels (`← source`),
+  deterministic food/med display bundles, weekly-expansion stagger + consultation work-overlap,
+  legible B/X glyphs, Trace dedup + Source-activity panel + richer empty state, SummaryHeader
+  filtered subline, mobile filter collapse, Actions outcome column.
+  **One open product decision — 016 #3:** ~38 blocking fitness/therapy activities can't all fit the
+  member's limited focused time and substitute to remote walks / skip. Resolution is a tradeoff
+  (lighten the busy fixture, lift recovery therapy out of tier-5, or accept as honest adaptation).
+  Plus optional/minor: chat starter scope (#8), LLM bundle-label refinement (#11).
 
-015 is fully implemented + UI/UX-verified (9 tasks + the 016 audit). 26 unit tests, 6/6
-acceptance, 0 console errors. Remaining items are post-015 robustness/UX work (016 open list).
+The take-home is live + UI/UX-verified. 33 unit tests, 6/6 acceptance, build static, lint clean,
+0 console errors. Only 016 #3 (scheduling capacity) needs a product call before more work.

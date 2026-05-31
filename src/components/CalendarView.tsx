@@ -68,7 +68,7 @@ export default function CalendarView({ result, memberBusy = [], onSelect }: Cale
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6">
-      <SummaryHeader result={result} />
+      <SummaryHeader result={result} visibleCount={filtered.length} />
       <FilterBar
         month={month}
         onMonthChange={setMonth}

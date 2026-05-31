@@ -12,6 +12,7 @@
 import { useMemo, useState } from 'react';
 import type { SchedulePatch, ScheduleDiff } from '@/lib/schedule-patch';
 import type { PatchPreview } from './AllocatorWorkspace';
+import GlossaryTooltip from '../GlossaryTooltip';
 
 export interface DraftPatchPreviewProps {
   patch: SchedulePatch;
@@ -54,7 +55,9 @@ export default function DraftPatchPreview({ patch, onPreview, onApply, onExplain
     <div className={headerCls + (err ? 'border-red-200 bg-red-50' : 'border-amber-300 bg-amber-50')}>
       <div className="flex items-center gap-1 font-medium text-amber-900">
         <span aria-hidden>✎</span>
-        <span>Draft edit</span>
+        <GlossaryTooltip term="chat.draftEdit">
+          <span>Draft edit</span>
+        </GlossaryTooltip>
         {state === 'applied' && <span className="ml-auto rounded bg-emerald-600 px-1.5 text-white">✓ Applied</span>}
       </div>
       <div className="mt-0.5 text-gray-700">{description}</div>

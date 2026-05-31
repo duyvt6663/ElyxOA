@@ -9,6 +9,9 @@
 // A4: Resources tab -> cardiologist + treadmill rows present.
 // A5: Select an occurrence -> ask a timing question -> chat answer is temporally grounded (HH:MM / busy block). SKIP w/o key.
 // A6: Resize to 360x800 -> MobileSwitch buttons visible, no page errors.
+// A7 (020): clicking the "Scheduled" summary pill opens its glossary tooltip.
+// A8 (020): first-run tour prompt -> Start -> 5 steps -> Finish; reload -> prompt gone (localStorage).
+// A9 (020): the header Help control opens the Help & glossary panel.
 
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
@@ -139,6 +142,59 @@ async function runA6(page) {
   record('A6', pageErrors.length === 0, pageErrors.length === 0 ? '' : `pageerrors: ${pageErrors.join(' | ')}`);
 }
 
+// A7 (020): clicking the "Scheduled" summary pill opens its glossary tooltip.
+async function runA7(page) {
+  await page.setViewportSize({ width: 1280, height: 800 }); // A6 left it at mobile; reset to desktop
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  const sched = page.locator('[role="button"]', { hasText: /Scheduled ·/ }).first();
+  await sched.waitFor({ timeout: 8000 });
+  await sched.click();
+  await page.waitForTimeout(250);
+  const ok = await page
+    .getByRole('tooltip')
+    .filter({ hasText: /placed on the calendar as planned/i })
+    .first()
+    .isVisible()
+    .catch(() => false);
+  await page.screenshot({ path: `${SHOTS}/A7.png` });
+  record('A7', ok, ok ? 'glossary tooltip opens' : 'tooltip did not open');
+}
+
+// A8 (020): first-run tour prompt → Start → 5 steps → Finish; reload → prompt does not reappear.
+async function runA8(page) {
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  const start = page.getByRole('button', { name: /Start tour/i }).first();
+  await start.waitFor({ timeout: 8000 });
+  await start.click();
+  for (let i = 0; i < 4; i++) {
+    const next = page.getByRole('button', { name: /^Next$/ }).first();
+    await next.waitFor({ timeout: 5000 });
+    await next.click();
+    await page.waitForTimeout(450);
+  }
+  const finish = page.getByRole('button', { name: /^Finish$/ }).first();
+  const reachedFinish = await finish.isVisible().catch(() => false);
+  if (reachedFinish) await finish.click();
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForTimeout(400);
+  const promptGone = !(await page.getByText(/Take a 90-second tour/i).first().isVisible().catch(() => false));
+  await page.screenshot({ path: `${SHOTS}/A8.png` });
+  const ok = reachedFinish && promptGone;
+  record('A8', ok, ok ? '5 steps + localStorage persists' : `reachedFinish=${reachedFinish} promptGone=${promptGone}`);
+}
+
+// A9 (020): the header Help control opens the Help & glossary panel.
+async function runA9(page) {
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  const help = page.getByRole('button', { name: /Help/i }).first();
+  await help.waitFor({ timeout: 8000 });
+  await help.click();
+  await page.waitForTimeout(250);
+  const ok = await page.getByRole('dialog', { name: /Help and glossary/i }).isVisible().catch(() => false);
+  await page.screenshot({ path: `${SHOTS}/A9.png` });
+  record('A9', ok, ok ? 'help panel opens' : 'help panel did not open');
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true });
   const ctx = await browser.newContext();
@@ -152,6 +208,9 @@ async function main() {
     ['A4', runA4],
     ['A5', runA5],
     ['A6', runA6],
+    ['A7', runA7],
+    ['A8', runA8],
+    ['A9', runA9],
   ]) {
     try {
       await runner(page);

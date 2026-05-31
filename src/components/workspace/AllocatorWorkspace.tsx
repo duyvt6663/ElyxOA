@@ -68,6 +68,7 @@ import MobileSwitch from './MobileSwitch';
 import ChatSurface from './ChatSurface';
 import WorkspacePanel from './WorkspacePanel';
 import GuidedTour from './GuidedTour';
+import HelpPanel from './HelpPanel';
 import { TOUR_STEPS, TOUR_DONE_KEY, type TourStep } from './tourSteps';
 
 /** 019 Phase 3 — result of previewing a draft patch (no commit). Carries a human description so the
@@ -115,6 +116,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
   // first-run "take a tour" nudge (shown once per browser).
   const [tourStep, setTourStep] = useState<number | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   useEffect(() => {
     try {
       if (!localStorage.getItem(TOUR_DONE_KEY)) setShowPrompt(true);
@@ -399,7 +401,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
 
   return (
     <>
-      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} onStartTour={startTour} />
+      <AppHeader result={displayedResult} edited={isEdited} onReset={resetSchedule} onOpenHelp={() => setHelpOpen(true)} />
       {/* md+: side-by-side */}
       <WindowLayout left={chat} right={workspace} />
       {/* <md: switch + single panel */}
@@ -440,6 +442,9 @@ export default function AllocatorWorkspace({ result, activities, availability, d
           onFinish={endTour}
         />
       )}
+
+      {/* 020 help hub. */}
+      {helpOpen && <HelpPanel onClose={() => setHelpOpen(false)} onStartTour={startTour} />}
     </>
   );
 }

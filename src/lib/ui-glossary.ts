@@ -17,7 +17,12 @@ export type GlossaryKey =
   | 'bundle.display'
   | 'timeline.occupiedBlock'
   | 'timeline.substitutionArrow'
-  | 'travel.badge';
+  | 'travel.badge'
+  | 'chat.navigationCard'
+  | 'chat.draftEdit'
+  | 'chat.editedBadge'
+  | 'chat.pinnedContext'
+  | 'chat.contextBlock';
 
 export interface GlossaryEntry {
   /** Short human label shown as the tooltip title. */
@@ -68,5 +73,25 @@ export const GLOSSARY: Record<GlossaryKey, GlossaryEntry> = {
   'travel.badge': {
     label: 'Travel day',
     explanation: 'The member is traveling; in-person actions may be substituted or skipped on these days.',
+  },
+  'chat.navigationCard': {
+    label: 'Navigation card',
+    explanation: 'The assistant can drive the workspace — click a card to jump to that view, date, or occurrence.',
+  },
+  'chat.draftEdit': {
+    label: 'Draft edit',
+    explanation: 'A proposed schedule change. Review the preview (what moves, what gets skipped), then Apply — nothing changes until you do.',
+  },
+  'chat.editedBadge': {
+    label: 'Schedule edited',
+    explanation: 'Chat edits have changed the schedule from the original. Undo the last one in chat, or Reset to original here.',
+  },
+  'chat.pinnedContext': {
+    label: 'Pinned context',
+    explanation: 'A pinned schedule object stays attached as you navigate; unpinned ones follow your current selection.',
+  },
+  'chat.contextBlock': {
+    label: 'Chat context',
+    explanation: 'A schedule object (day, action, trip, …) attached to the next assistant turn, so the answer is about exactly that.',
   },
 };

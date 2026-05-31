@@ -1,64 +1,34 @@
 'use client';
 
 /**
- * DECISION RECAP — 013 LLM Chat Wire-Up
- * - Provider LOCKED to OpenAI default `gpt-5.3-chat-latest` (see src/lib/llm/config.ts).
- *   Verify exact id at impl per 013 Open Question §1.
- * - Streaming via the Vercel AI SDK over POST /api/chat (SSE-style token stream).
- * - Starter chips POPULATE the composer; they DO NOT auto-send. Preserves user agency
- *   (013 §6 decision); a user can edit the prefilled text before pressing Enter.
- * - Empty selection: chips that need an occurrence ("Why was this skipped?",
- *   "Walk me through this trace step by step") are disabled, not hidden.
- * - Rate-limit (429) and missing-key (503) responses surface as small inline notices
- *   above the composer — the rest of the workspace keeps working.
- * - Conversation persistence: in-memory only (lost on refresh); 013 Open Question §3.
- * - Tab/occurrence handoff links: the model emits `[Trace](trace://occ-...)`,
- *   `[Calendar](tab://calendar?date=...)`, `[Resources](tab://resources)` per the
- *   system prompt; the impl pass parses them and renders inline buttons.
- *   `onSelect` is threaded through from AllocatorWorkspace so the buttons route to
- *   workspace.select(...).
- * - Server emits plain text via `streamText().toTextStreamResponse()`, so the
- *   client just decodes UTF-8 chunks. No SSE parsing needed.
- */
-
-/**
- * DECISION RECAP — 011 Allocator Workspace Shell
- * - SKELETON ONLY in 011. Real LLM provider wiring (onSend → /api/chat) is 013's job.
- * - Layout mirrors the reference chat pattern: header, scroll area, bottom-pinned composer, bottom fade.
- * - Composer Send button is disabled in 011.
- * - Reads selection so 013 can later show contextual chips, but does not render anything from it yet.
- */
-
-/**
- * DECISION RECAP — 019 Phase 1 Visible Context + @-insertion
- * - Renders <ContextTray> directly above the textarea: the attached ContextBlock[] (selected +
- *   pinned + @-mention) shown as removable chips — "visible beats hidden" (decision 1).
- * - Maps the current blocks → ChatContextItem[] and adds them as `contexts` in the existing
- *   /api/chat body (no existing field removed; still the text-stream transport).
- * - Typing `@` opens <AtMentionMenu>: ranked AtMentionSuggestion[] built from `contextIndex`
- *   (travel/resource/bundle) PLUS occurrences/activities derived from the held `result`. Title
- *   disambiguation (019): an ambiguous title offers BOTH the activity (series) ref and the
- *   selected-day occurrence ref as distinct suggestions. Selecting one inserts a short token AND
- *   adds a typed ContextBlock (provenance 'atMention').
- * - Degraded mode (019): tray + @-resolution run purely off contextIndex + result on the client,
- *   so they keep working when /api/chat returns 503.
- */
-
-/**
+ * DECISION RECAP — 019 Phase 2 Tool-call transport + navigation actions
+ * - Chat now uses the AI SDK UI-message stream (decision 6): the client runs `useChat` over a
+ *   `DefaultChatTransport` to /api/chat, which returns `toUIMessageStreamResponse()`. Messages are
+ *   PARTS-based — text parts render as prose (with the markdown-link fallback), tool-call parts
+ *   render as <ChatActionCard> the user clicks to navigate (navActionToSelection → onSelect).
+ * - A custom `fetch` maps 503 (no key) / 429 (rate-limited) responses to recognizable errors so the
+ *   existing inline notices are preserved.
+ * - The dynamic grounding inputs (selection, result, traces, activities, contexts) are sent per-send
+ *   via sendMessage(_, { body }); the Phase 1 context tray + @-menu are unchanged.
+ *
+ * DECISION RECAP — 019 Phase 1 Visible Context + @-insertion (unchanged)
+ * - <ContextTray> above the textarea shows the attached ContextBlock[] as removable chips; the
+ *   current blocks map → ChatContextItem[] and ride in the request body. Typing `@` opens
+ *   <AtMentionMenu> with ranked suggestions from contextIndex + the held result; selecting one
+ *   inserts a short token AND attaches a typed ContextBlock. Tray/@-resolution are client-side, so
+ *   they keep working when /api/chat returns 503.
+ *
  * BEHAVIOR SKETCH
- * 1. Render header "Allocator Assistant".
- * 2. Render the message list (role-styled bubbles). When empty, render the 5 starter chips above the composer.
- * 3. Render the ContextTray (019) + a bottom-pinned form with a textarea + Send button.
- *    - Send disabled while status === 'streaming' or input is empty.
- *    - On submit: POST to /api/chat with { messages, selection, result, traces, activities, contexts },
- *      stream tokens into a new assistant message bubble.
- * 4. Inline notice above the composer for status ∈ { 'unconfigured', 'rate-limited', 'error' }.
- * 5. Render the non-interactive gradient fade above the composer for visual softness.
+ * 1. Header; empty state renders the 5 starter chips (chips populate the composer, never auto-send).
+ * 2. Render each UIMessage's parts: text (markdown-link fallback) + tool-call action cards.
+ * 3. ContextTray + composer (textarea with @-menu). Enter sends via useChat.sendMessage(_, {body}).
+ * 4. Inline notice above the composer for unconfigured/rate-limited/error.
  */
 
 import { Fragment, useMemo, useState, type ReactNode } from 'react';
+import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport, getToolName, isToolUIPart } from 'ai';
 import type { Activity, ScheduleResult, ScheduleDiagnostics } from '@/lib/types';
-import type { ChatMessage } from '@/lib/llm/prompt';
 import type {
   AtMentionSuggestion,
   ChatContextItem,
@@ -69,6 +39,8 @@ import type {
 import type { WorkspaceSelection } from './AllocatorWorkspace';
 import ContextTray from './ContextTray';
 import AtMentionMenu from './AtMentionMenu';
+import ChatActionCard from './ChatActionCard';
+import { navActionToSelection } from './chatActions';
 
 export interface ChatSurfaceProps {
   selection: WorkspaceSelection;
@@ -85,6 +57,27 @@ export interface ChatSurfaceProps {
 
 const MENTION_LISTBOX_ID = 'at-mention-listbox';
 const MAX_SUGGESTIONS = 8;
+
+/**
+ * Custom fetch so 503 (no key) and 429 (rate-limited) surface as recognizable errors the UI maps to
+ * specific notices — the AI SDK transport otherwise throws a generic error on a non-ok response.
+ */
+const chatFetch: typeof fetch = async (input, init) => {
+  const res = await fetch(input, init);
+  if (!res.ok) {
+    if (res.status === 503) throw new Error('CHAT_UNCONFIGURED');
+    if (res.status === 429) throw new Error('CHAT_RATE_LIMITED');
+    let msg = `request failed (${res.status})`;
+    try {
+      const j = (await res.json()) as { error?: string };
+      if (j?.error) msg = j.error;
+    } catch {
+      // body wasn't JSON; keep the generic message.
+    }
+    throw new Error(msg);
+  }
+  return res;
+};
 
 /** 019: derive the @-mention suggestion catalog from the held result + the client context index. */
 function buildSuggestionCatalog(
@@ -185,8 +178,6 @@ function refKey(ref: ContextRef): string {
   }
 }
 
-type ChatStatus = 'idle' | 'streaming' | 'error' | 'unconfigured' | 'rate-limited';
-
 interface StarterChip {
   label: string;
   requiresSelection: boolean;
@@ -201,9 +192,8 @@ const STARTER_CHIPS: StarterChip[] = [
 ];
 
 /**
- * Parse assistant text for the 3 link patterns and return a mixed array of strings
- * and <button> elements. The regex captures all three patterns in one pass; each
- * match is dispatched to the right onSelect(...) handler.
+ * Parse assistant text for the 3 markdown link patterns and return a mixed array of strings and
+ * <button> elements (the fallback navigation path; tool-call cards are the primary path now).
  */
 function renderMessageContent(text: string, onNavigate: (partial: Partial<WorkspaceSelection>) => void): ReactNode[] {
   const pattern = /\[(Trace|Calendar|Resources)\]\((trace:\/\/occ-[^)]+|tab:\/\/calendar\?date=\d{4}-\d{2}-\d{2}|tab:\/\/resources)\)/g;
@@ -263,17 +253,16 @@ export default function ChatSurface({
   onRemoveContext,
   onTogglePin,
 }: ChatSurfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const transport = useMemo(() => new DefaultChatTransport({ api: '/api/chat', fetch: chatFetch }), []);
+  const { messages, sendMessage, status, error } = useChat({ transport });
+
   const [input, setInput] = useState('');
-  const [status, setStatus] = useState<ChatStatus>('idle');
-  const [error, setError] = useState<string | null>(null);
-  // 019: @-mention menu state. `mentionStart` is the index of the active `@` in `input`, or null
-  // when the menu is closed.
+  // 019: @-mention menu state. `mentionStart` is the index of the active `@` in `input`, or null.
   const [mentionStart, setMentionStart] = useState<number | null>(null);
   const [mentionActive, setMentionActive] = useState(0);
 
   const hasSelection = selection.selectedOccurrenceId !== null;
-  const isStreaming = status === 'streaming';
+  const isStreaming = status === 'submitted' || status === 'streaming';
   const canSend = !isStreaming && input.trim().length > 0;
 
   // 019: the full suggestion catalog (built from result + index); filtered by the live @-query.
@@ -306,7 +295,6 @@ export default function ChatSurface({
       setMentionStart(null);
       return;
     }
-    // The `@` must start a token (line start or whitespace before it) and contain no whitespace after.
     const before = at === 0 ? ' ' : value[at - 1];
     const fragment = value.slice(at + 1, caret);
     if (/\s/.test(before) === false || /\s/.test(fragment)) {
@@ -333,98 +321,25 @@ export default function ChatSurface({
     });
   }
 
-  async function handleSend() {
-    const userText = input.trim();
-    if (!userText) return;
-
-    const nextMessages: ChatMessage[] = [...messages, { role: 'user', content: userText }];
-    setMessages(nextMessages);
+  function handleSend() {
+    const text = input.trim();
+    if (!text) return;
     setInput('');
-    setStatus('streaming');
-    setError(null);
-
-    let res: Response;
-    try {
-      res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          messages: nextMessages,
+    setMentionStart(null);
+    void sendMessage(
+      { text },
+      {
+        body: {
           selection,
           result,
           traces: diagnostics?.traces ?? [],
           activities,
-          // 019: the attached, visible context blocks (selected + pinned + @-mention). Removing a
-          // chip drops it from contextBlocks, so it is guaranteed not sent here.
+          // 019: the attached, visible context blocks. Removing a chip drops it from contextBlocks,
+          // so it is guaranteed not sent here.
           contexts: contextBlocks.map<ChatContextItem>((b) => ({ ref: b.ref, provenance: b.provenance })),
-        }),
-      });
-    } catch (err) {
-      setStatus('error');
-      setError(err instanceof Error ? err.message : 'network error');
-      return;
-    }
-
-    if (!res.ok) {
-      let payload: { error?: string } = {};
-      try {
-        payload = await res.json();
-      } catch {
-        // body wasn't JSON; ignore.
+        },
       }
-      if (res.status === 503) {
-        setStatus('unconfigured');
-        setMessages((prev) => [
-          ...prev,
-          { role: 'assistant', content: 'Chat is not configured (OPENAI_API_KEY missing on server).' },
-        ]);
-      } else if (res.status === 429) {
-        setStatus('rate-limited');
-        setMessages((prev) => [
-          ...prev,
-          { role: 'assistant', content: 'Rate limit exceeded — try again later.' },
-        ]);
-      } else {
-        setStatus('error');
-        const msg = payload.error ?? `request failed (${res.status})`;
-        setError(msg);
-        setMessages((prev) => [...prev, { role: 'assistant', content: msg }]);
-      }
-      return;
-    }
-
-    if (!res.body) {
-      setStatus('error');
-      setError('empty response body');
-      return;
-    }
-
-    setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder('utf-8');
-    try {
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        if (!chunk) continue;
-        setMessages((prev) => {
-          const copy = prev.slice();
-          const last = copy[copy.length - 1];
-          if (last && last.role === 'assistant') {
-            copy[copy.length - 1] = { ...last, content: last.content + chunk };
-          }
-          return copy;
-        });
-      }
-    } catch (err) {
-      setStatus('error');
-      setError(err instanceof Error ? err.message : 'stream error');
-      return;
-    }
-    setStatus('idle');
+    );
   }
 
   function onChipClick(label: string) {
@@ -432,13 +347,14 @@ export default function ChatSurface({
   }
 
   function statusNotice(): string | null {
-    if (status === 'unconfigured') return 'Chat not configured — OPENAI_API_KEY missing on server.';
-    if (status === 'rate-limited') return 'Rate limit reached. Please wait a few minutes and try again.';
-    if (status === 'error') return error ?? 'Something went wrong.';
-    return null;
+    if (!error) return null;
+    if (error.message === 'CHAT_UNCONFIGURED') return 'Chat not configured — OPENAI_API_KEY missing on server.';
+    if (error.message === 'CHAT_RATE_LIMITED') return 'Rate limit reached. Please wait a few minutes and try again.';
+    return error.message || 'Something went wrong.';
   }
 
   const notice = statusNotice();
+  const lastId = messages[messages.length - 1]?.id;
 
   return (
     <section className="relative flex h-full flex-col">
@@ -486,15 +402,8 @@ export default function ChatSurface({
           </div>
         ) : (
           <ul className="space-y-3">
-            {messages.map((m, i) => (
-              <li
-                key={i}
-                className={
-                  m.role === 'user'
-                    ? 'flex justify-end'
-                    : 'flex justify-start'
-                }
-              >
+            {messages.map((m) => (
+              <li key={m.id} className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
                 <div
                   className={
                     m.role === 'user'
@@ -502,14 +411,35 @@ export default function ChatSurface({
                       : 'max-w-[80%] rounded-lg bg-gray-100 text-gray-900 px-3 py-2'
                   }
                 >
-                  <span className="whitespace-pre-wrap">
-                    {m.role === 'assistant'
-                      ? renderMessageContent(m.content, onSelect).map((node, idx) => (
-                          <Fragment key={idx}>{node}</Fragment>
-                        ))
-                      : m.content}
-                  </span>
-                  {isStreaming && i === messages.length - 1 && m.role === 'assistant' && (
+                  {m.parts.map((part, idx) => {
+                    if (part.type === 'text') {
+                      return (
+                        <span key={idx} className="whitespace-pre-wrap">
+                          {m.role === 'assistant'
+                            ? renderMessageContent(part.text, onSelect).map((node, j) => (
+                                <Fragment key={j}>{node}</Fragment>
+                              ))
+                            : part.text}
+                        </span>
+                      );
+                    }
+                    if (isToolUIPart(part)) {
+                      const name = getToolName(part);
+                      return (
+                        <ChatActionCard
+                          key={idx}
+                          name={name}
+                          input={part.input}
+                          onExecute={() => {
+                            const sel = navActionToSelection(name, part.input);
+                            if (sel) onSelect(sel);
+                          }}
+                        />
+                      );
+                    }
+                    return null;
+                  })}
+                  {isStreaming && m.id === lastId && m.role === 'assistant' && (
                     <span className="ml-1 inline-block w-2 h-4 bg-gray-500 animate-pulse" />
                   )}
                 </div>
@@ -529,7 +459,7 @@ export default function ChatSurface({
         onSubmit={(e) => {
           e.preventDefault();
           if (!canSend) return;
-          void handleSend();
+          handleSend();
         }}
       >
         <div className="relative flex-1">
@@ -581,7 +511,7 @@ export default function ChatSurface({
               }
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                if (canSend) void handleSend();
+                if (canSend) handleSend();
               }
             }}
           />

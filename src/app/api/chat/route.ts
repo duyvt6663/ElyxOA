@@ -25,11 +25,12 @@
  */
 
 import { NextRequest } from 'next/server';
-import { streamText } from 'ai';
+import { streamText, tool, convertToModelMessages, stepCountIs, type UIMessage } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { z } from 'zod';
 import availabilityData from '@/data/availability.json';
 import { hasApiKey, getModelId } from '@/lib/llm/config';
-import { SYSTEM_PROMPT, buildGrounding, type ChatMessage } from '@/lib/llm/prompt';
+import { SYSTEM_PROMPT, buildGrounding } from '@/lib/llm/prompt';
 import { checkRateLimit } from '@/lib/llm/rate-limit';
 import { resolveContextRefs, type ChatContextItem } from '@/lib/chat-context';
 import type { AvailabilityBundle } from '@/lib/types';
@@ -40,8 +41,36 @@ const availability = availabilityData as unknown as AvailabilityBundle;
 
 export const runtime = 'nodejs'; // edge optional; keep nodejs for AI SDK compatibility unless impl chooses otherwise
 
+// 019 Phase 2 — navigation tools. The model CALLS these to direct the user to the right view; the
+// client renders each call as a click-to-execute action card and performs the real navigation on
+// click. execute() is a no-op ack so the tool call carries a result (keeps the conversation valid
+// for multi-turn); stopWhen: stepCountIs(1) prevents a follow-up generation off that no-op result.
+const navTools = {
+  openTab: tool({
+    description: 'Open a workspace tab to direct the user to the right view.',
+    inputSchema: z.object({ tab: z.enum(['calendar', 'activities', 'resources', 'trace', 'data']) }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+  selectDate: tool({
+    description: 'Open the calendar focused on a specific date (YYYY-MM-DD).',
+    inputSchema: z.object({ date: z.string() }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+  selectOccurrence: tool({
+    description: 'Select a scheduled occurrence by id (occ-<activityId>-<YYYY-MM-DD>) and open its Trace.',
+    inputSchema: z.object({ occurrenceId: z.string() }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+  focusResource: tool({
+    description: 'Open the Resources tab to point the user at a resource (kind:role, e.g. equipment:treadmill).',
+    inputSchema: z.object({ resourceKey: z.string() }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+};
+
 interface ChatRequestBody {
-  messages: ChatMessage[];
+  // 019 Phase 2 — UI messages from the AI SDK useChat client (parts-based).
+  messages: UIMessage[];
   selection: { selectedOccurrenceId: string | null; selectedDate: string | null };
   // 019 Phase 1 — typed contexts attached to this turn (visible context blocks).
   contexts: ChatContextItem[];
@@ -94,11 +123,21 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   try {
     const result = streamText({
-      model: openai(getModelId()),
+      // Chat Completions (stateless), NOT the Responses API: a Zero-Data-Retention org does not
+      // persist Responses items, so multi-turn tool calls that reference prior `fc_...` item ids fail
+      // ("Item ... not found"). Chat Completions encodes tool calls inline, so multi-turn works.
+      model: openai.chat(getModelId()),
       system: SYSTEM_PROMPT + '\n\nGROUNDING:\n' + JSON.stringify(grounding, null, 2),
-      messages: body.messages,
+      messages: await convertToModelMessages(body.messages ?? [], {
+        tools: navTools,
+        ignoreIncompleteToolCalls: true,
+      }),
+      tools: navTools,
+      stopWhen: stepCountIs(1),
     });
-    return result.toTextStreamResponse();
+    return result.toUIMessageStreamResponse({
+      onError: (err) => (err instanceof Error ? err.message : 'provider error'),
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return new Response(

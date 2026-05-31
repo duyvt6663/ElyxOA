@@ -57,9 +57,11 @@ export interface GroundingPayload {
   activities: Activity[];
   /** 015 — member occupied blocks on the selected date ± 1 day (why a slot was/ wasn't free). */
   occupiedBlocks: OccupiedBlock[];
+  /** 016 §11 — customer-facing display bundles on the selected date (e.g. "Morning meds": 4). */
+  dayBundles: Array<{ label: string; count: number }>;
 }
 
-export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, and occupiedBlocks — never invent facts. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. If the selection is empty, ask the user to click an occurrence. When directing the user to the workspace, format links as [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), or [Resources](tab://resources).`;
+export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, and occupiedBlocks — never invent facts. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. dayBundles are the customer-facing groupings of the selected day's routine low-risk daily food/medication actions (e.g. "Morning meds": 4) — use them to answer routine/grouping questions. If the selection is empty, ask the user to click an occurrence. When directing the user to the workspace, format links as [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), or [Resources](tab://resources).`;
 
 const DAY_MS = 86400000;
 function nearbyDates(date: string | null): Set<string> {
@@ -131,6 +133,16 @@ export function buildGrounding(args: {
     occupiedBlocks.sort((a, b) => (a.date !== b.date ? a.date.localeCompare(b.date) : a.startTime.localeCompare(b.startTime)));
   }
 
+  // 016 §11: the selected day's display bundles (so chat can answer "what's my morning routine").
+  const bundleCounts = new Map<string, number>();
+  if (selection.selectedDate) {
+    for (const occ of result.occurrences) {
+      if (occ.date !== selection.selectedDate || !occ.displayBundleLabel) continue;
+      bundleCounts.set(occ.displayBundleLabel, (bundleCounts.get(occ.displayBundleLabel) ?? 0) + 1);
+    }
+  }
+  const dayBundles = [...bundleCounts.entries()].map(([label, count]) => ({ label, count }));
+
   return {
     selection,
     trace,
@@ -146,5 +158,6 @@ export function buildGrounding(args: {
     },
     activities: referencedActivities,
     occupiedBlocks,
+    dayBundles,
   };
 }

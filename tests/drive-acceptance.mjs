@@ -98,8 +98,8 @@ async function runA5(page) {
   await cell.waitFor({ timeout: 8000 });
   await cell.click();
   await page.waitForTimeout(1200); // let the DayDetail scroll-into-view animation settle
-  // Select via the chronological action list (always selectable, unlike grouped timeline bars).
-  const action = page.locator('aside li button').first();
+  // Select via a real action row (has a mono time) — not a bundle/group toggle.
+  const action = page.locator('aside li button').filter({ has: page.locator('span.font-mono') }).first();
   await action.waitFor({ timeout: 5000 });
   await action.click({ force: true });
   await page.waitForTimeout(300);

@@ -222,6 +222,10 @@ export interface ScheduledOccurrence {
   /** 016 §10 — the source activity's title; set on substituted occurrences so the UI can show
    * "Fallback ← Source" instead of several identical fallback titles looking like duplicates. */
   sourceTitle?: string;
+  /** 016 §11 — display-bundle tags for the customer-facing calendar. Set ONLY on scheduled,
+   * low-risk daily food/med occurrences; the raw occurrence is otherwise unchanged. */
+  displayBundleId?: string;
+  displayBundleLabel?: string;
   title: string;
   type: ActivityType;
   details: string;

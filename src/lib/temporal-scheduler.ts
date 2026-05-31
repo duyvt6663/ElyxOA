@@ -45,6 +45,7 @@ import type {
   TimeBlockPreference,
 } from './types';
 import { getDefaultTemporalPolicy } from './temporal-policy';
+import { bundleAssignment } from './bundle';
 import {
   addDaysYMD,
   buildOccurrence,
@@ -577,6 +578,15 @@ function allocateTemporal(
       occ.endTime = minToTime(best.endMin);
       occ.timeZone = availability.timeZone;
       occ.outsidePreferredWindow = !best.inPreferred;
+      // 016 §11 — tag SCHEDULED low-risk daily food/med for customer-facing bundling.
+      // Substituted (isPrimary=false) is never bundled — it stays individual (adaptation story).
+      if (isPrimary) {
+        const ba = bundleAssignment(candidateActivity, resolved.policy);
+        if (ba) {
+          occ.displayBundleId = ba.bundleId;
+          occ.displayBundleLabel = ba.label;
+        }
+      }
       // ID derives from the stable due-date (genDate), NOT the placed day: with movement
       // windows two occurrences of the same activity can land on the same day, which would
       // collide if keyed by placed day (duplicate React keys + broken trace lockstep).

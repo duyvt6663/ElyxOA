@@ -106,19 +106,34 @@ scale. The two **severe** ones were fixed in the same pass; the rest are tracked
    is compacted on small screens (`px-2 text-xs`) so all six tabs are visible/scrollable (rightmost
    edge 458px → 361px).
 
-10. **Substitution action-list labels hide the source activity.**
-    Deployed verification found four separate `08:00 Remote Brisk Walk Fallback` rows on Jun 1.
-    These are not duplicate occurrence IDs: they are distinct substituted occurrences from
-    `act-010` Lower Body Strength, `act-024` Row Erg Intervals, `act-049` VO2 Max Primer, and
-    `act-060` Loaded Carry Session, all using backup-only `act-103` Remote Brisk Walk Fallback.
-    The UI currently renders only the effective fallback title, so legitimate reused fallbacks look
-    like accidental duplicates.
-    → *Option:* for substituted rows, render `08:00 Remote Brisk Walk Fallback ← Lower Body
-    Strength` (or source title/id in a second muted line) and include the source in the title/trace
-    affordance. Same issue applies to repeated `Adherence Log Fallback`, `Async Physician Review
-    Fallback`, and `Travel Protein Plate Fallback` rows.
+10. **Substitution action-list labels hide the source activity.** ✅ FIXED
+    Deployed verification found four separate `08:00 Remote Brisk Walk Fallback` rows on Jun 1 —
+    distinct substituted occurrences from `act-010`/`act-024`/`act-049`/`act-060` all using
+    backup `act-103`. The UI rendered only the effective fallback title, so reused fallbacks looked
+    like duplicates.
+    → *Fixed:* `buildOccurrence` denormalizes the source title onto substituted occurrences
+    (`ScheduledOccurrence.sourceTitle`); `DayTimeline` renders `Remote Brisk Walk Fallback ←
+    Lower Body Strength` in the action list + the bar tooltip. Verified on Jun 1: the four rows now
+    read ← Lower Body Strength / Row Erg Intervals / VO2 Max Primer / Loaded Carry Session.
 
-11. **Food/medication micro-actions need scheduler-emitted display bundles.**
+11. **Food/medication micro-actions need scheduler-emitted display bundles.** ✅ FIXED
+    *(Decisions 2026-05-31: deterministic bundler, LLM labels optional; only scheduled low-risk
+    daily food/med collapse; Calendar + chat grounding render bundles.)*
+    → *Fixed:* `src/lib/bundle.ts` `bundleAssignment(activity, policy)` deterministically groups
+    by `(type, resolved anchor)` into labelled buckets (Morning meds, Breakfast/Lunch/Dinner
+    nutrition, Bedtime meds), keyed by the LABEL so anchor variants (wake/breakfast → "Morning
+    meds") consolidate. The temporal scheduler tags ONLY scheduled occurrences via
+    `displayBundleId`/`displayBundleLabel`; **guardrail verified** — skipped, substituted,
+    monitoring (BP/CGM via their device resource), and all blocking actions are never bundled
+    (unit-tested). `DayTimeline` renders each bundle as one expandable row/bar ("Morning meds ×4");
+    the mobile `AgendaList` inherits it. Chat grounding gains `dayBundles` so it can answer routine
+    questions. Verified Jun 1: action list 47 flat rows → 12 (5 named bundles + individual
+    skips/subs/blocking); 18 micro food/med collapsed into 5 bundles; 0 console errors.
+    → *Deferred (optional):* the LLM label-refinement pass (`generate:bundles` →
+    `calendar-bundles.json`). The bundler accepts `labelOverrides` and is unit-tested for it; the
+    committed labels are deterministic in code for now.
+
+    *(original analysis below)*
     Jun 1 visibly carries `Food 15` and `Meds 16`; the action list then exposes every hydration,
     fiber, caffeine, supplement, monitoring, and medication check as its own row. The scheduler is
     applying temporal safety rules (anchors, member-busy overlap, temporalRule checks), but it does
@@ -204,6 +219,14 @@ Driven + verified on a local dev server; acceptance A1–A6 → 6/6, 26 unit tes
 - **#3** Monday weekly pile-up (scheduling quality) — stagger weekly expansion across the week.
 - **#4** Trace whitespace for short/skipped traces.
 - **#8 (starter scope)** explicit selected-vs-global chat starters.
-- **#10** substituted action-list rows should show source activity, not only fallback title.
-- **#11** food/medication display bundling for customer-facing calendar density.
+- **#11 (optional)** LLM label refinement for bundles (`generate:bundles` → `calendar-bundles.json`);
+  deterministic labels ship today.
 - **#12** ⟳ glyph polish.
+
+## Bundle pass (2026-05-31) — addressed #10, #11
+
+- #10 substituted rows show `← source` (ScheduledOccurrence.sourceTitle).
+- #11 deterministic display bundles: `src/lib/bundle.ts` + scheduler tagging (scheduled-only,
+  guardrail unit-tested) + DayTimeline/AgendaList expandable bundle rows + chat `dayBundles`.
+  Jun 1 day list 47 → 12 rows. 33 unit tests, 6/6 acceptance, build static, lint clean, 0 errors.
+- `OccurrenceCard.tsx` remains orphaned (left in place).

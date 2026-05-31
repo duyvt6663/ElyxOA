@@ -1,23 +1,24 @@
 'use client';
 
 /**
- * DECISION RECAP — 015 Calendar day timeline + 016 §5 overlap handling
+ * DECISION RECAP — 015 day timeline + 016 §5 overlap handling + 016 §11 display bundles
  * - Chronological 06:00-22:30 lane: member occupied blocks (gray, left) interleaved with
- *   scheduled/substituted health actions (type-colored, right). Proportional by minute.
- * - 016 §5: quick actions (meds/monitoring/food habits) legitimately cluster at the same
- *   time (e.g. 14 at 06:30). Bars are therefore GROUPED by identical {start,end} slot and the
- *   groups are LANE-PACKED so overlaps fan out instead of stacking at one x/y. A grouped slot
- *   renders as "{time} ×N". A reliable chronological action LIST below the lane guarantees
- *   every action is readable + selectable regardless of packing.
- * - "Show occupied slots" (owned by DayDetail) hides the gray busy column.
+ *   scheduled/substituted health actions (type-colored, right), proportional by minute.
+ * - 016 §11: scheduled low-risk daily food/med carry displayBundleId/Label from the scheduler.
+ *   They render as ONE expandable entry per bundle ("Morning meds ×4") instead of N rows.
+ * - 016 §5: non-bundled actions that share an identical {start,end} slot are grouped ("12:00 ×2")
+ *   and lane-packed so overlaps fan out. A chronological list below makes every action (raw,
+ *   inside bundles too) readable + selectable.
+ * - 016 §10: substituted rows show "title ← source".
  */
 
+import { useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock } from '@/lib/types';
 
-const DAY_START = 6 * 60; // 06:00
-const DAY_END = 22 * 60 + 30; // 22:30
+const DAY_START = 6 * 60;
+const DAY_END = 22 * 60 + 30;
 const SPAN = DAY_END - DAY_START;
-const PX = 0.8; // pixels per minute
+const PX = 0.8;
 const MAX_LANES = 4;
 
 function toMin(t?: string): number | null {
@@ -32,7 +33,6 @@ const TYPE_BAR: Record<ActivityType, string> = {
   therapy: 'bg-violet-200 border-violet-400 text-violet-900',
   consultation: 'bg-sky-200 border-sky-400 text-sky-900',
 };
-
 const TYPE_DOT: Record<ActivityType, string> = {
   fitness: 'bg-indigo-500',
   food: 'bg-lime-500',
@@ -48,7 +48,11 @@ interface BusyItem {
   endMin: number;
 }
 
-interface Slot {
+interface Entry {
+  key: string;
+  kind: 'bundle' | 'slot';
+  label: string; // bundle label, or single title, or "HH:MM ×N"
+  type: ActivityType;
   startMin: number;
   endMin: number;
   items: ScheduledOccurrence[];
@@ -64,6 +68,15 @@ export interface DayTimelineProps {
 }
 
 export default function DayTimeline({ date, occurrences, memberBusy, showOccupied, onSelect }: DayTimelineProps) {
+  const [openEntries, setOpenEntries] = useState<Set<string>>(new Set());
+  const toggle = (k: string) =>
+    setOpenEntries((prev) => {
+      const next = new Set(prev);
+      if (next.has(k)) next.delete(k);
+      else next.add(k);
+      return next;
+    });
+
   const busy: BusyItem[] = [];
   for (const mb of memberBusy) {
     for (const tb of mb.blocks) {
@@ -75,45 +88,85 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
     }
   }
 
-  const timed = occurrences
-    .filter((o) => o.startTime && o.status !== 'skipped')
-    .sort((a, b) => (a.startTime! < b.startTime! ? -1 : a.startTime! > b.startTime! ? 1 : a.title.localeCompare(b.title)));
+  const timed = occurrences.filter((o) => o.startTime && o.status !== 'skipped');
   const skipped = occurrences.filter((o) => o.status === 'skipped');
 
-  // Group by identical {start,end} slot, then lane-pack the groups so overlaps fan out.
-  const bySlot = new Map<string, Slot>();
+  // Build entries: semantic bundles first, then slot-group the rest.
+  const entries: Entry[] = [];
+  const bundleMap = new Map<string, ScheduledOccurrence[]>();
+  const loose: ScheduledOccurrence[] = [];
   for (const o of timed) {
-    const s = toMin(o.startTime)!;
-    const e = toMin(o.endTime ?? o.startTime)!;
-    const key = `${s}-${e}`;
-    const slot = bySlot.get(key) ?? { startMin: s, endMin: e, items: [], lane: 0 };
-    slot.items.push(o);
-    bySlot.set(key, slot);
+    if (o.displayBundleId) {
+      const arr = bundleMap.get(o.displayBundleId) ?? [];
+      arr.push(o);
+      bundleMap.set(o.displayBundleId, arr);
+    } else {
+      loose.push(o);
+    }
   }
-  const slots = [...bySlot.values()].sort((a, b) => a.startMin - b.startMin || a.endMin - b.endMin);
+  for (const [id, items] of bundleMap) {
+    const starts = items.map((o) => toMin(o.startTime)!);
+    const ends = items.map((o) => toMin(o.endTime ?? o.startTime)!);
+    entries.push({
+      key: `bundle-${id}`,
+      kind: 'bundle',
+      label: `${items[0]!.displayBundleLabel} ×${items.length}`,
+      type: items[0]!.type,
+      startMin: Math.min(...starts),
+      endMin: Math.max(...ends),
+      items: items.sort((a, b) => a.startTime!.localeCompare(b.startTime!)),
+      lane: 0,
+    });
+  }
+  // Slot-group the loose (non-bundled) actions by identical {start,end}.
+  const slotMap = new Map<string, ScheduledOccurrence[]>();
+  for (const o of loose) {
+    const k = `${toMin(o.startTime)}-${toMin(o.endTime ?? o.startTime)}`;
+    const arr = slotMap.get(k) ?? [];
+    arr.push(o);
+    slotMap.set(k, arr);
+  }
+  for (const [, items] of slotMap) {
+    const s = toMin(items[0]!.startTime)!;
+    const e = toMin(items[0]!.endTime ?? items[0]!.startTime)!;
+    const single = items[0]!;
+    entries.push({
+      key: `slot-${s}-${e}`,
+      kind: 'slot',
+      label: items.length > 1 ? `${single.startTime} ×${items.length}` : `${single.startTime} ${single.title}`,
+      type: single.type,
+      startMin: s,
+      endMin: e,
+      items,
+      lane: 0,
+    });
+  }
+
+  entries.sort((a, b) => a.startMin - b.startMin || a.endMin - b.endMin);
   const laneEnds: number[] = [];
-  for (const slot of slots) {
-    let lane = laneEnds.findIndex((end) => end <= slot.startMin);
+  for (const en of entries) {
+    let lane = laneEnds.findIndex((end) => end <= en.startMin);
     if (lane === -1) {
       lane = laneEnds.length;
-      laneEnds.push(slot.endMin);
+      laneEnds.push(en.endMin);
     } else {
-      laneEnds[lane] = slot.endMin;
+      laneEnds[lane] = en.endMin;
     }
-    slot.lane = lane;
+    en.lane = lane;
   }
   const numLanes = Math.min(Math.max(laneEnds.length, 1), MAX_LANES);
 
   const top = (m: number) => Math.max(0, (Math.max(m, DAY_START) - DAY_START) * PX);
   const barHeight = (s: number, e: number) => Math.max(14, (Math.min(e, DAY_END) - Math.max(s, DAY_START)) * PX);
-
-  // Action column geometry (right side when occupied is shown).
   const colLeftPct = showOccupied ? 50 : 0;
   const colWidthPct = showOccupied ? 50 : 100;
   const laneWidthPct = colWidthPct / numLanes;
 
   const hours: number[] = [];
   for (let h = 6; h <= 22; h++) hours.push(h);
+
+  // Chronological list rows: bundles + slot-groups + singles, sorted by start.
+  const listEntries = [...entries].sort((a, b) => a.startMin - b.startMin || a.label.localeCompare(b.label));
 
   return (
     <div>
@@ -127,11 +180,7 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
         </div>
         <div className="relative flex-1 border-l border-gray-200">
           {hours.map((h) => (
-            <div
-              key={h}
-              className="absolute left-0 right-0 border-t border-gray-100"
-              style={{ top: (h * 60 - DAY_START) * PX }}
-            />
+            <div key={h} className="absolute left-0 right-0 border-t border-gray-100" style={{ top: (h * 60 - DAY_START) * PX }} />
           ))}
           {showOccupied &&
             busy.map((b, i) => (
@@ -144,65 +193,66 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
                 {b.title}
               </div>
             ))}
-          {slots.map((slot) => {
-            const lane = Math.min(slot.lane, numLanes - 1);
-            const single = slot.items[0]!;
-            const isGroup = slot.items.length > 1;
-            const anySub = slot.items.some((o) => o.status === 'substituted');
-            const label = isGroup
-              ? `${single.startTime} ×${slot.items.length}`
-              : `${single.startTime} ${single.title}`;
+          {entries.map((en) => {
+            const lane = Math.min(en.lane, numLanes - 1);
+            const single = en.items.length === 1 ? en.items[0]! : null;
+            const grouped = !single;
+            const anySub = en.items.some((o) => o.status === 'substituted');
             return (
               <button
-                key={`${slot.startMin}-${slot.endMin}`}
+                key={en.key}
                 type="button"
-                onClick={() => !isGroup && onSelect?.(single)}
-                className={`absolute overflow-hidden rounded border px-1 text-left text-[10px] leading-tight ${
-                  isGroup ? 'bg-white border-gray-300 text-gray-700' : TYPE_BAR[single.type]
-                } ${anySub ? 'ring-1 ring-amber-500' : ''} ${isGroup ? 'cursor-default' : 'hover:brightness-95'}`}
+                onClick={() => (single ? onSelect?.(single) : toggle(en.key))}
+                className={`absolute overflow-hidden rounded border px-1 text-left text-[10px] leading-tight hover:brightness-95 ${
+                  grouped ? 'bg-white border-gray-300 text-gray-700' : TYPE_BAR[en.type]
+                } ${anySub ? 'ring-1 ring-amber-500' : ''}`}
                 style={{
-                  top: top(slot.startMin),
-                  height: barHeight(slot.startMin, slot.endMin),
+                  top: top(en.startMin),
+                  height: barHeight(en.startMin, en.endMin),
                   left: `${colLeftPct + lane * laneWidthPct}%`,
                   width: `calc(${laneWidthPct}% - 2px)`,
                 }}
-                title={
-                  isGroup
-                    ? `${slot.items.length} actions at ${single.startTime}`
-                    : `${single.title}${single.sourceTitle ? ` (substitutes ${single.sourceTitle})` : ''} ${single.startTime}-${single.endTime}`
-                }
+                title={en.kind === 'bundle' ? `${en.label} (tap to expand)` : single ? `${single.title} ${single.startTime}-${single.endTime}` : en.label}
               >
-                {label}
+                {en.kind === 'bundle' ? en.label : single ? `${single.startTime} ${single.title}` : en.label}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* 016 §5: reliable chronological list — every action readable + selectable. */}
       {timed.length > 0 && (
         <div className="mt-3">
           <div className="mb-1 text-xs font-medium text-gray-500">Scheduled actions ({timed.length})</div>
           <ul className="flex flex-col gap-0.5">
-            {timed.map((o) => (
-              <li key={o.id}>
-                <button
-                  type="button"
-                  onClick={() => onSelect?.(o)}
-                  className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
-                >
-                  <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[o.type]}`} />
-                  <span className="font-mono text-gray-500">{o.startTime}</span>
-                  <span className="truncate">{o.title}</span>
-                  {o.status === 'substituted' && (
-                    <span className="text-amber-600 shrink-0">
-                      ⟳{o.sourceTitle ? <span className="ml-1 text-gray-400">← {o.sourceTitle}</span> : null}
-                    </span>
+            {listEntries.map((en) => {
+              if (en.items.length === 1) return <ActionRow key={en.key} occ={en.items[0]!} onSelect={onSelect} />;
+              const isOpen = openEntries.has(en.key);
+              const labelText =
+                en.kind === 'bundle'
+                  ? `${en.items[0]!.displayBundleLabel} ×${en.items.length}`
+                  : `${en.items[0]!.startTime} · ${en.items.length} actions`;
+              return (
+                <li key={en.key}>
+                  <button
+                    type="button"
+                    onClick={() => toggle(en.key)}
+                    className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
+                  >
+                    <span className="text-gray-400">{isOpen ? '▾' : '▸'}</span>
+                    {en.kind === 'bundle' && <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[en.type]}`} />}
+                    <span className="font-medium">{labelText}</span>
+                  </button>
+                  {isOpen && (
+                    <ul className="ml-4 border-l border-gray-200 pl-2">
+                      {en.items.map((o) => (
+                        <ActionRow key={o.id} occ={o} onSelect={onSelect} />
+                      ))}
+                    </ul>
                   )}
-                  {o.outsidePreferredWindow && <span className="text-amber-500" title="outside preferred window">◷</span>}
-                </button>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -225,5 +275,27 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
         </div>
       )}
     </div>
+  );
+}
+
+function ActionRow({ occ, onSelect }: { occ: ScheduledOccurrence; onSelect?: (o: ScheduledOccurrence) => void }) {
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={() => onSelect?.(occ)}
+        className="flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100"
+      >
+        <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[occ.type]}`} />
+        <span className="font-mono text-gray-500">{occ.startTime}</span>
+        <span className="truncate">{occ.title}</span>
+        {occ.status === 'substituted' && (
+          <span className="text-amber-600 shrink-0">
+            ⟳{occ.sourceTitle ? <span className="ml-1 text-gray-400">← {occ.sourceTitle}</span> : null}
+          </span>
+        )}
+        {occ.outsidePreferredWindow && <span className="text-amber-500" title="outside preferred window">◷</span>}
+      </button>
+    </li>
   );
 }

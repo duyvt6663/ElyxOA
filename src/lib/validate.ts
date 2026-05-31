@@ -77,6 +77,7 @@ const TIME_PREF_LABELS = new Set<string>(['morning', 'midday', 'afternoon', 'eve
 const ANCHORS = new Set<string>(['wake', 'breakfast', 'lunch', 'dinner', 'bedtime', 'any'] as const);
 const INTENSITIES = new Set<string>(['none', 'low', 'moderate', 'high'] as const);
 const AVOID_INTENSITIES = new Set<string>(['moderate', 'high'] as const);
+const POLICY_SOURCES = new Set<string>(['explicit', 'default', 'llm-hint'] as const);
 // HH:MM with hh in 00-23 and mm in 00-59 — rejects 24:00 and any hh>23 / mm>59.
 const LOCAL_TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -349,6 +350,7 @@ export function isAllocationAttempt(x: unknown): x is AllocationAttempt {
   if (typeof x.candidateStartTime !== 'undefined' && !isLocalTime(x.candidateStartTime)) return false;
   if (typeof x.candidateEndTime !== 'undefined' && !isLocalTime(x.candidateEndTime)) return false;
   if (typeof x.score !== 'undefined' && !isNum(x.score)) return false;
+  if (typeof x.policySource !== 'undefined' && !POLICY_SOURCES.has(x.policySource as string)) return false;
   return true;
 }
 

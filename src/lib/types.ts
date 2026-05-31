@@ -274,6 +274,8 @@ export interface AllocationAttempt {
   candidateEndTime?: LocalTime;
   /** 015 — soft score for a feasible candidate; lower is better. */
   score?: number;
+  /** 015 — provenance of the temporal policy used for this candidate. */
+  policySource?: PolicySource;
 }
 
 export interface AllocationTrace {

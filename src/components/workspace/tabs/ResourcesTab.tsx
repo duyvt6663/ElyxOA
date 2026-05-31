@@ -66,6 +66,28 @@ function bandStyle(range: DateRange) {
   return { left: left + '%', width: width + '%' };
 }
 
+function addDay(date: string): string {
+  const ms = Date.UTC(Number(date.slice(0, 4)), Number(date.slice(5, 7)) - 1, Number(date.slice(8, 10))) + 86_400_000;
+  const d = new Date(ms);
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())}`;
+}
+
+// Coalesce a set of dates into contiguous DateRanges (for the member-occupied lane).
+function coalesce(dates: string[]): DateRange[] {
+  const sorted = [...new Set(dates)].sort();
+  const ranges: DateRange[] = [];
+  for (const d of sorted) {
+    const last = ranges[ranges.length - 1];
+    if (last && addDay(last.end) === d) last.end = d;
+    else ranges.push({ start: d, end: d });
+  }
+  return ranges;
+}
+
+const MEMBER_CATEGORY_ORDER = ['sleep', 'work', 'commute', 'meal', 'family', 'personal', 'clinical', 'travel'];
+const titleCase = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-6">
@@ -107,8 +129,46 @@ function ResourceRow({ label, role, defaultBg, overlays, onBand }: RowProps) {
 export default function ResourcesTab({ availability, selection: _selection, onSelect }: ResourcesTabProps) {
   const onBand = (date: string) => onSelect({ selectedDate: date, activeTab: 'resources' });
 
+  // 015: member occupied time, grouped by category (blocking blocks only), for the Member lane.
+  const memberByCategory = new Map<string, string[]>();
+  for (const mb of availability.memberBusy) {
+    if (!mb.blocksScheduling) continue;
+    const arr = memberByCategory.get(mb.category) ?? [];
+    for (const tb of mb.blocks) arr.push(tb.date);
+    memberByCategory.set(mb.category, arr);
+  }
+  const memberCategories = MEMBER_CATEGORY_ORDER.filter((c) => memberByCategory.has(c));
+
   return (
     <div className="p-4 text-sm">
+      {/* 014 #3 / 015: month date-axis (proportional to Jun 30 / Jul 31 / Aug 31 days). */}
+      <div className="flex items-center gap-3 mb-2 text-[10px] text-gray-400">
+        <span className="w-40" />
+        <span className="w-32" />
+        <div className="flex-1 flex">
+          <div style={{ width: `${(30 / WINDOW_DAYS) * 100}%` }} className="border-l border-gray-200 pl-1">Jun</div>
+          <div style={{ width: `${(31 / WINDOW_DAYS) * 100}%` }} className="border-l border-gray-200 pl-1">Jul</div>
+          <div style={{ width: `${(31 / WINDOW_DAYS) * 100}%` }} className="border-l border-gray-200 pl-1">Aug</div>
+        </div>
+      </div>
+      {memberCategories.length > 0 && (
+        <Section title={`Member occupied (${memberCategories.length} categories)`}>
+          {memberCategories.map((cat) => (
+            <ResourceRow
+              key={cat}
+              label={titleCase(cat)}
+              role="member"
+              defaultBg="bg-gray-100"
+              overlays={coalesce(memberByCategory.get(cat)!).map((r) => ({
+                range: r,
+                overlayBg: cat === 'travel' ? 'bg-amber-400' : 'bg-slate-400',
+                tooltip: `${r.start} → ${r.end} — ${cat} (member occupied)`,
+              }))}
+              onBand={onBand}
+            />
+          ))}
+        </Section>
+      )}
       <Section title={`Equipment (${availability.equipment.length})`}>
         {availability.equipment.map((e) => (
           <ResourceRow

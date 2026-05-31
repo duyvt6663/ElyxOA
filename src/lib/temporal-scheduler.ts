@@ -548,6 +548,7 @@ function allocateTemporal(
         candidateStartTime: minToTime(best.startMin),
         candidateEndTime: minToTime(best.endMin),
         score,
+        policySource: resolved.source,
       });
       commit(best.day, best, candidateActivity, resolved);
       const occ = buildOccurrence({
@@ -574,6 +575,7 @@ function allocateTemporal(
       boundResources: [],
       failedConstraints: fails.length > 0 ? fails : [{ kind: 'temporalRule', detail: 'no feasible slot in the movement window' }],
       candidateDate: slot.genDate,
+      policySource: resolved.source,
     });
     return null;
   };

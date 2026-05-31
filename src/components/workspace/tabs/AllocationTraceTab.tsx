@@ -60,6 +60,14 @@ function AttemptCard({ attempt, index, isChosen }: { attempt: AllocationAttempt;
         ) : (
           <span className="rounded bg-red-100 text-red-700 px-1">feasible: false</span>
         )}
+        {attempt.policySource && (
+          <span
+            className="rounded bg-slate-100 text-slate-600 px-1"
+            title="Provenance of the temporal policy used for this candidate"
+          >
+            policy: {attempt.policySource}
+          </span>
+        )}
         {isChosen && <span className="ml-auto rounded bg-emerald-600 text-white px-2">✓ chosen</span>}
       </div>
       {attempt.feasible ? (

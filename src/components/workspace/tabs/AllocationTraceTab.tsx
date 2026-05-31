@@ -64,6 +64,16 @@ function AttemptCard({ attempt, index, isChosen }: { attempt: AllocationAttempt;
       </div>
       {attempt.feasible ? (
         <div className="text-xs space-y-1">
+          {attempt.candidateStartTime && (
+            <div className="text-gray-700">
+              <span className="rounded bg-emerald-50 text-emerald-700 px-1.5 py-0.5 font-mono">
+                {attempt.candidateDate} {attempt.candidateStartTime}–{attempt.candidateEndTime}
+              </span>
+              {typeof attempt.score === 'number' && (
+                <span className="ml-2 font-mono text-gray-500">score {attempt.score}</span>
+              )}
+            </div>
+          )}
           {attempt.boundResources.length > 0 && (
             <ul className="flex flex-wrap gap-1">
               {attempt.boundResources.map((b, i) => (

@@ -25,11 +25,20 @@
  *   5. Return GroundingPayload.
  */
 
-import type { Activity, ScheduleResult, AllocationTrace } from '@/lib/types';
+import type { Activity, ScheduleResult, AllocationTrace, AvailabilityBundle } from '@/lib/types';
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
+}
+
+/** 015 — a member occupied block on a specific date, flattened for grounding. */
+export interface OccupiedBlock {
+  date: string;
+  startTime: string;
+  endTime: string;
+  title: string;
+  category: string;
 }
 
 export interface GroundingPayload {
@@ -46,17 +55,33 @@ export interface GroundingPayload {
   };
   /** Only activities referenced by the selected trace (source + backups). */
   activities: Activity[];
+  /** 015 — member occupied blocks on the selected date ± 1 day (why a slot was/ wasn't free). */
+  occupiedBlocks: OccupiedBlock[];
 }
 
-export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>) and dates explicitly. Use only the provided trace and schedule snapshot — never invent facts. If the selection is empty, ask the user to click an occurrence. When directing the user to the workspace, format links as [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), or [Resources](tab://resources).`;
+export const SYSTEM_PROMPT = `You are the Elyx Allocator Assistant. Answer in 1-3 sentences. Cite occurrenceIds (occ-<activityId>-<YYYY-MM-DD>), dates, and times (HH:MM) explicitly. Use only the provided trace, schedule snapshot, and occupiedBlocks — never invent facts. The trace's chosen attempt carries the final time slot (candidateStartTime/EndTime) and score; failed attempts carry the rejection reasons (kind memberBusy/actionOverlap/temporalRule/outsidePreferredWindow). occupiedBlocks are the member's sleep/work/commute/meal/family blocks near the selected date — use them to explain why a time was blocked or why an action moved. If the selection is empty, ask the user to click an occurrence. When directing the user to the workspace, format links as [Trace](trace://occ-...), [Calendar](tab://calendar?date=YYYY-MM-DD), or [Resources](tab://resources).`;
+
+const DAY_MS = 86400000;
+function nearbyDates(date: string | null): Set<string> {
+  const out = new Set<string>();
+  if (!date) return out;
+  const base = Date.UTC(Number(date.slice(0, 4)), Number(date.slice(5, 7)) - 1, Number(date.slice(8, 10)));
+  for (let off = -1; off <= 1; off++) {
+    const d = new Date(base + off * DAY_MS);
+    const p = (n: number) => String(n).padStart(2, '0');
+    out.add(`${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())}`);
+  }
+  return out;
+}
 
 export function buildGrounding(args: {
   selection: { selectedOccurrenceId: string | null; selectedDate: string | null };
   result: ScheduleResult;
   traces: AllocationTrace[];
   activities: Activity[];
+  availability?: AvailabilityBundle;
 }): GroundingPayload {
-  const { selection, result, traces, activities } = args;
+  const { selection, result, traces, activities, availability } = args;
 
   // 1. Locate trace for the selected occurrence.
   const trace = selection.selectedOccurrenceId
@@ -87,6 +112,25 @@ export function buildGrounding(args: {
       .sort((a, b) => a.id.localeCompare(b.id));
   }
 
+  // 4. Slice member occupied blocks to the selected date ± 1 day (keeps the payload small).
+  const occupiedBlocks: OccupiedBlock[] = [];
+  if (availability && selection.selectedDate) {
+    const dates = nearbyDates(selection.selectedDate);
+    for (const mb of availability.memberBusy) {
+      for (const tb of mb.blocks) {
+        if (!dates.has(tb.date)) continue;
+        occupiedBlocks.push({
+          date: tb.date,
+          startTime: tb.startTime,
+          endTime: tb.endTime,
+          title: mb.title,
+          category: mb.category,
+        });
+      }
+    }
+    occupiedBlocks.sort((a, b) => (a.date !== b.date ? a.date.localeCompare(b.date) : a.startTime.localeCompare(b.startTime)));
+  }
+
   return {
     selection,
     trace,
@@ -101,5 +145,6 @@ export function buildGrounding(args: {
       ],
     },
     activities: referencedActivities,
+    occupiedBlocks,
   };
 }

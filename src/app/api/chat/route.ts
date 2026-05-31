@@ -27,9 +27,15 @@
 import { NextRequest } from 'next/server';
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import availabilityData from '@/data/availability.json';
 import { hasApiKey, getModelId } from '@/lib/llm/config';
 import { SYSTEM_PROMPT, buildGrounding, type ChatMessage } from '@/lib/llm/prompt';
 import { checkRateLimit } from '@/lib/llm/rate-limit';
+import type { AvailabilityBundle } from '@/lib/types';
+
+// 015: the server holds the canonical availability fixture so it can slice the member's
+// occupied blocks for the selected date into the grounding (the client never ships 1000+ blocks).
+const availability = availabilityData as unknown as AvailabilityBundle;
 
 export const runtime = 'nodejs'; // edge optional; keep nodejs for AI SDK compatibility unless impl chooses otherwise
 
@@ -71,6 +77,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     result: body.result,
     traces: body.traces,
     activities: body.activities,
+    availability,
   });
 
   try {

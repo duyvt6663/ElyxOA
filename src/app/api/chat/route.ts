@@ -68,6 +68,24 @@ const navTools = {
   }),
 };
 
+// 019 Phase 3 — draft EDIT tools. The model proposes an input edit; the client renders it as a draft
+// the user must Apply (it reruns the scheduler in a preview, NOT here). execute() is a no-op ack.
+const editTools = {
+  setTemporalPolicy: tool({
+    description:
+      "Propose retiming an activity's whole series to a preferred time of day. This is a DRAFT the " +
+      'user must Apply — never claim it is applied. Resolve activityId from the grounding ' +
+      'activityCatalog (id+title of every activity) or an attached context, and give a window ' +
+      '(morning/midday/afternoon/evening) and/or an anchor.',
+    inputSchema: z.object({
+      activityId: z.string(),
+      window: z.enum(['morning', 'midday', 'afternoon', 'evening']).optional(),
+      anchor: z.enum(['wake', 'breakfast', 'lunch', 'dinner', 'bedtime', 'any']).optional(),
+    }),
+    execute: async () => ({ acknowledged: true as const }),
+  }),
+};
+
 interface ChatRequestBody {
   // 019 Phase 2 — UI messages from the AI SDK useChat client (parts-based).
   messages: UIMessage[];
@@ -129,10 +147,10 @@ export async function POST(req: NextRequest): Promise<Response> {
       model: openai.chat(getModelId()),
       system: SYSTEM_PROMPT + '\n\nGROUNDING:\n' + JSON.stringify(grounding, null, 2),
       messages: await convertToModelMessages(body.messages ?? [], {
-        tools: navTools,
+        tools: { ...navTools, ...editTools },
         ignoreIncompleteToolCalls: true,
       }),
-      tools: navTools,
+      tools: { ...navTools, ...editTools },
       stopWhen: stepCountIs(1),
     });
     return result.toUIMessageStreamResponse({

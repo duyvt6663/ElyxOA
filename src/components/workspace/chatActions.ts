@@ -11,8 +11,29 @@
  */
 
 import type { TabId, WorkspaceSelection } from './AllocatorWorkspace';
+import type { SchedulePatch, TimeWindow } from '@/lib/schedule-patch';
 
 export const NAV_TOOL_NAMES = ['openTab', 'selectDate', 'selectOccurrence', 'focusResource'] as const;
+
+const WINDOWS = ['morning', 'midday', 'afternoon', 'evening'];
+const ANCHORS = ['wake', 'breakfast', 'lunch', 'dinner', 'bedtime', 'any'];
+
+/** 019 Phase 3 — parse a draft-edit tool call into a typed SchedulePatch, or null if not an edit. */
+export function parseSchedulePatch(name: string, input: unknown): SchedulePatch | null {
+  const a = (input ?? {}) as Record<string, unknown>;
+  if (name === 'setTemporalPolicy' && typeof a.activityId === 'string') {
+    return {
+      kind: 'setTemporalPolicy',
+      activityId: a.activityId,
+      window: typeof a.window === 'string' && WINDOWS.includes(a.window) ? (a.window as TimeWindow) : undefined,
+      anchor:
+        typeof a.anchor === 'string' && ANCHORS.includes(a.anchor)
+          ? (a.anchor as SchedulePatch['anchor'])
+          : undefined,
+    };
+  }
+  return null;
+}
 
 const TAB_IDS: readonly TabId[] = ['calendar', 'activities', 'resources', 'trace', 'data'];
 

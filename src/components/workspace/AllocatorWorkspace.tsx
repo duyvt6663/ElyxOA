@@ -56,13 +56,20 @@
  */
 
 import { useCallback, useMemo, useState } from 'react';
-import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics } from '@/lib/types';
+import type { Activity, AvailabilityBundle, ScheduleResult, ScheduleDiagnostics, SchedulingSemanticHints } from '@/lib/types';
 import type { ContextBlock, ContextIndex } from '@/lib/chat-context';
+import schedulingHints from '@/data/scheduling-hints.json';
+import { scheduleTemporal } from '@/lib/temporal-scheduler';
+import { isSchedulingSemanticHints, validateHintReferences } from '@/lib/validate';
+import { applyPatchToInputs, diffResults, validatePatch, type SchedulePatch, type ScheduleDiff } from '@/lib/schedule-patch';
 import AppHeader from './AppHeader';
 import WindowLayout from './WindowLayout';
 import MobileSwitch from './MobileSwitch';
 import ChatSurface from './ChatSurface';
 import WorkspacePanel from './WorkspacePanel';
+
+/** 019 Phase 3 — result of previewing/applying a draft patch (no commit on preview). */
+export type PatchPreview = { diff: ScheduleDiff } | { error: string };
 
 export type TabId = 'calendar' | 'activities' | 'resources' | 'trace' | 'data';
 
@@ -102,6 +109,18 @@ export default function AllocatorWorkspace({ result, activities, availability, d
   const [extraBlocks, setExtraBlocks] = useState<ContextBlock[]>([]);
   // 019: active (selected) block keys the user explicitly removed; cleared on selection change.
   const [dismissedSelectedKeys, setDismissedSelectedKeys] = useState<Set<string>>(new Set());
+
+  // 019 Phase 3: the current effective scheduler INPUTS (seeded from props). A draft chat edit
+  // patches a copy and reruns; Apply commits the patched inputs here. Imports stay a separate path.
+  const [editedActivities, setEditedActivities] = useState<Activity[]>(activities);
+  const [editedAvailability, setEditedAvailability] = useState<AvailabilityBundle>(availability);
+  // 019 Phase 3: one-step undo — the schedule + inputs as they were before the last applied edit.
+  const [undoSnapshot, setUndoSnapshot] = useState<null | {
+    result: ScheduleResult;
+    diagnostics: ScheduleDiagnostics | undefined;
+    activities: Activity[];
+    availability: AvailabilityBundle;
+  }>(null);
 
   const select = (partial: Partial<WorkspaceSelection>) => {
     setSelection((prev) => ({ ...prev, ...partial }));
@@ -205,18 +224,77 @@ export default function AllocatorWorkspace({ result, activities, availability, d
     setDisplayedDiagnostics(diagnostics);
   }, [result, diagnostics]);
 
+  // 019 Phase 3: rerun the TEMPORAL scheduler client-side (same path as the Data Import flow),
+  // applying committed hints only while they still validate against the (possibly edited) inputs.
+  const rerunWith = useCallback((acts: Activity[], av: AvailabilityBundle) => {
+    const hintsOk =
+      isSchedulingSemanticHints(schedulingHints) &&
+      validateHintReferences(schedulingHints as SchedulingSemanticHints, acts, av).length === 0;
+    return scheduleTemporal(acts, av, hintsOk ? (schedulingHints as SchedulingSemanticHints) : undefined);
+  }, []);
+
+  // 019 Phase 3: preview a draft patch — apply to a COPY of the inputs, rerun, diff vs the displayed
+  // result. NO commit (decision 4 + no silent mutations).
+  const previewPatch = useCallback(
+    (patch: SchedulePatch): PatchPreview => {
+      const err = validatePatch(patch, editedActivities);
+      if (err) return { error: err };
+      const patched = applyPatchToInputs(patch, editedActivities, editedAvailability);
+      const next = rerunWith(patched.activities, patched.availability);
+      return { diff: diffResults(displayedResult, next.result) };
+    },
+    [editedActivities, editedAvailability, displayedResult, rerunWith]
+  );
+
+  // 019 Phase 3: Apply a draft patch — snapshot for undo, commit the patched inputs + rerun result.
+  const applyPatch = useCallback(
+    (patch: SchedulePatch): { error: string } | null => {
+      const err = validatePatch(patch, editedActivities);
+      if (err) return { error: err };
+      const patched = applyPatchToInputs(patch, editedActivities, editedAvailability);
+      const next = rerunWith(patched.activities, patched.availability);
+      setUndoSnapshot({
+        result: displayedResult,
+        diagnostics: displayedDiagnostics,
+        activities: editedActivities,
+        availability: editedAvailability,
+      });
+      setEditedActivities(patched.activities);
+      setEditedAvailability(patched.availability);
+      setDisplayedResult(next.result);
+      setDisplayedDiagnostics(next.diagnostics);
+      return null;
+    },
+    [editedActivities, editedAvailability, displayedResult, displayedDiagnostics, rerunWith]
+  );
+
+  const undoLastEdit = useCallback(() => {
+    setUndoSnapshot((snap) => {
+      if (!snap) return null;
+      setDisplayedResult(snap.result);
+      setDisplayedDiagnostics(snap.diagnostics);
+      setEditedActivities(snap.activities);
+      setEditedAvailability(snap.availability);
+      return null;
+    });
+  }, []);
+
   const chat = (
     <ChatSurface
       selection={selection}
       result={displayedResult}
       diagnostics={displayedDiagnostics}
-      activities={activities}
+      activities={editedActivities}
       onSelect={select}
       contextIndex={contextIndex}
       contextBlocks={contextBlocks}
       onAddContext={addContextBlock}
       onRemoveContext={removeContextBlock}
       onTogglePin={toggleContextPin}
+      onPreviewPatch={previewPatch}
+      onApplyPatch={applyPatch}
+      canUndo={undoSnapshot !== null}
+      onUndo={undoLastEdit}
     />
   );
   const workspace = (

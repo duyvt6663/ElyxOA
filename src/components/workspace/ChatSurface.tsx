@@ -40,7 +40,10 @@ import type { WorkspaceSelection } from './AllocatorWorkspace';
 import ContextTray from './ContextTray';
 import AtMentionMenu from './AtMentionMenu';
 import ChatActionCard from './ChatActionCard';
-import { navActionToSelection } from './chatActions';
+import DraftPatchPreview from './DraftPatchPreview';
+import { navActionToSelection, parseSchedulePatch } from './chatActions';
+import { describePatch, type SchedulePatch } from '@/lib/schedule-patch';
+import type { PatchPreview } from './AllocatorWorkspace';
 
 export interface ChatSurfaceProps {
   selection: WorkspaceSelection;
@@ -53,6 +56,11 @@ export interface ChatSurfaceProps {
   onAddContext: (block: ContextBlock) => void;
   onRemoveContext: (key: string) => void;
   onTogglePin: (key: string) => void;
+  // 019 Phase 3 — draft schedule edits.
+  onPreviewPatch: (patch: SchedulePatch) => PatchPreview;
+  onApplyPatch: (patch: SchedulePatch) => { error: string } | null;
+  canUndo: boolean;
+  onUndo: () => void;
 }
 
 const MENTION_LISTBOX_ID = 'at-mention-listbox';
@@ -252,6 +260,10 @@ export default function ChatSurface({
   onAddContext,
   onRemoveContext,
   onTogglePin,
+  onPreviewPatch,
+  onApplyPatch,
+  canUndo,
+  onUndo,
 }: ChatSurfaceProps) {
   const transport = useMemo(() => new DefaultChatTransport({ api: '/api/chat', fetch: chatFetch }), []);
   const { messages, sendMessage, status, error } = useChat({ transport });
@@ -358,7 +370,18 @@ export default function ChatSurface({
 
   return (
     <section className="relative flex h-full flex-col">
-      <header className="px-4 py-3 border-b text-sm font-medium">Allocator Assistant</header>
+      <header className="flex items-center justify-between px-4 py-3 border-b text-sm font-medium">
+        <span>Allocator Assistant</span>
+        {canUndo && (
+          <button
+            type="button"
+            onClick={onUndo}
+            className="rounded border border-gray-300 px-2 py-0.5 text-xs font-normal text-gray-600 hover:bg-gray-100"
+          >
+            ↶ Undo last edit
+          </button>
+        )}
+      </header>
       <div className="flex-1 overflow-y-auto px-4 py-3 text-sm">
         {messages.length === 0 ? (
           <div className="space-y-3">
@@ -425,6 +448,18 @@ export default function ChatSurface({
                     }
                     if (isToolUIPart(part)) {
                       const name = getToolName(part);
+                      const patch = parseSchedulePatch(name, part.input);
+                      if (patch) {
+                        return (
+                          <DraftPatchPreview
+                            key={idx}
+                            patch={patch}
+                            description={describePatch(patch, activities)}
+                            onPreview={onPreviewPatch}
+                            onApply={onApplyPatch}
+                          />
+                        );
+                      }
                       return (
                         <ChatActionCard
                           key={idx}

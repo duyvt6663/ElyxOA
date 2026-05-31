@@ -17,15 +17,27 @@ export interface DraftPatchPreviewProps {
   patch: SchedulePatch;
   onPreview: (patch: SchedulePatch) => PatchPreview;
   onApply: (patch: SchedulePatch) => { error: string } | null;
+  /** 019 Phase 3/4 — send a follow-up chat turn grounded in the preview's deterministic skip data. */
+  onExplain: (prompt: string) => void;
 }
 
-export default function DraftPatchPreview({ patch, onPreview, onApply }: DraftPatchPreviewProps) {
+export default function DraftPatchPreview({ patch, onPreview, onApply, onExplain }: DraftPatchPreviewProps) {
   // Compute the preview once for this draft (the scheduler rerun is synchronous).
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const preview = useMemo(() => onPreview(patch), [patch]);
   const description = preview.description;
   const [state, setState] = useState<'pending' | 'applied' | 'discarded'>('pending');
   const [applyError, setApplyError] = useState<string | null>(null);
+
+  // 019 Phase 3 rejection-explanation + Phase 4 why-not: compose a prompt from the DETERMINISTIC skip
+  // reasons + feasible alternatives, so the assistant narrates from validator output, not intuition.
+  function explainPrompt(): string {
+    if (!('diff' in preview)) return '';
+    const skips = preview.diff.nowSkipped.slice(0, 5).map((s) => `${s.title} on ${s.date} (${s.reason})`).join('; ');
+    const better = (preview.alternatives ?? []).filter((a) => a.skipped < preview.diff.nowSkipped.length);
+    const alts = better.map((a) => `${a.window} (${a.skipped} skipped)`).join(', ');
+    return `If I "${description}", these actions get skipped: ${skips}.${alts ? ` Windows with fewer skips: ${alts}.` : ''} Explain briefly why this happens, and recommend whether to pick an alternative.`;
+  }
 
   const headerCls = 'mt-1 rounded border px-2 py-1.5 text-xs ';
 
@@ -35,6 +47,8 @@ export default function DraftPatchPreview({ patch, onPreview, onApply }: DraftPa
 
   const err = 'error' in preview ? preview.error : null;
   const diff = 'diff' in preview ? preview.diff : null;
+  const alternatives = 'alternatives' in preview ? preview.alternatives : undefined;
+  const betterAlts = (alternatives ?? []).filter((a) => diff && a.skipped < diff.nowSkipped.length);
 
   return (
     <div className={headerCls + (err ? 'border-red-200 bg-red-50' : 'border-amber-300 bg-amber-50')}>
@@ -49,6 +63,24 @@ export default function DraftPatchPreview({ patch, onPreview, onApply }: DraftPa
         <div className="mt-1 text-red-700">Can’t apply: {err}</div>
       ) : (
         diff && <DiffSummary diff={diff} />
+      )}
+
+      {/* 019 Phase 3/4 — rejection-explanation + why-not, when the edit causes skips. */}
+      {diff && diff.nowSkipped.length > 0 && (
+        <div className="mt-1.5 rounded bg-red-50 px-1.5 py-1 text-[11px]">
+          {betterAlts.length > 0 && (
+            <div className="text-gray-700">
+              Fewer skips in: {betterAlts.map((a) => `${a.window} (${a.skipped})`).join(', ')}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => onExplain(explainPrompt())}
+            className="mt-1 rounded border border-gray-300 px-1.5 py-0.5 text-gray-600 hover:bg-gray-100"
+          >
+            Explain why
+          </button>
+        </div>
       )}
 
       {applyError && <div className="mt-1 text-red-700">Apply failed: {applyError}</div>}

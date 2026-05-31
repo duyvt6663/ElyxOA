@@ -26,6 +26,8 @@ import { getDefaultTemporalPolicy } from './temporal-policy';
 export type TimeWindow = 'morning' | 'midday' | 'afternoon' | 'evening';
 export type BusyCategory = MemberBusyBlock['category'];
 
+export const ALL_WINDOWS: readonly TimeWindow[] = ['morning', 'midday', 'afternoon', 'evening'];
+
 /** Canonical clock ranges for a named window, so the model only needs to pick a window. */
 const WINDOW_TIMES: Record<TimeWindow, { startTime: LocalTime; endTime: LocalTime }> = {
   morning: { startTime: '06:00', endTime: '12:00' },
@@ -154,7 +156,8 @@ export function describePatch(patch: SchedulePatch, activities: Activity[], avai
 export interface ScheduleDiff {
   retimed: Array<{ id: string; title: string; date: string; from: string; to: string }>;
   movedDay: Array<{ id: string; title: string; from: string; to: string }>;
-  nowSkipped: Array<{ id: string; title: string; date: string }>;
+  /** newly-skipped occurrences carry the scheduler's deterministic `reason` for the explanation loop. */
+  nowSkipped: Array<{ id: string; title: string; date: string; reason: string }>;
   nowScheduled: Array<{ id: string; title: string; date: string }>;
   /** total occurrences that changed in any way */
   totalChanged: number;
@@ -169,7 +172,7 @@ export function diffResults(before: ScheduleResult, after: ScheduleResult): Sche
     const b = beforeById.get(a.id);
     if (!b) continue; // ids are stable for these edits; ignore rare add/remove
     if (b.status !== a.status) {
-      if (a.status === 'skipped') diff.nowSkipped.push({ id: a.id, title: a.title, date: a.date });
+      if (a.status === 'skipped') diff.nowSkipped.push({ id: a.id, title: a.title, date: a.date, reason: a.reason });
       else if (b.status === 'skipped') diff.nowScheduled.push({ id: a.id, title: a.title, date: a.date });
       diff.totalChanged += 1;
     } else if (a.status !== 'skipped') {

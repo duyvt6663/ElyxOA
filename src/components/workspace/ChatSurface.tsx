@@ -61,6 +61,7 @@ export interface ChatSurfaceProps {
   onApplyPatch: (patch: SchedulePatch) => { error: string } | null;
   canUndo: boolean;
   onUndo: () => void;
+  onExport: () => void;
 }
 
 const MENTION_LISTBOX_ID = 'at-mention-listbox';
@@ -264,6 +265,7 @@ export default function ChatSurface({
   onApplyPatch,
   canUndo,
   onUndo,
+  onExport,
 }: ChatSurfaceProps) {
   const transport = useMemo(() => new DefaultChatTransport({ api: '/api/chat', fetch: chatFetch }), []);
   const { messages, sendMessage, status, error } = useChat({ transport });
@@ -272,6 +274,9 @@ export default function ChatSurface({
   // 019: @-mention menu state. `mentionStart` is the index of the active `@` in `input`, or null.
   const [mentionStart, setMentionStart] = useState<number | null>(null);
   const [mentionActive, setMentionActive] = useState(0);
+  // 019 Phase 4: command history — recall sent prompts with ArrowUp/Down in an empty/recalling composer.
+  const [history, setHistory] = useState<string[]>([]);
+  const [histIdx, setHistIdx] = useState<number | null>(null);
 
   const hasSelection = selection.selectedOccurrenceId !== null;
   const isStreaming = status === 'submitted' || status === 'streaming';
@@ -333,25 +338,32 @@ export default function ChatSurface({
     });
   }
 
+  // The dynamic grounding inputs sent per request. The attached, visible context blocks ride here;
+  // removing a chip drops it from contextBlocks, so it is guaranteed not sent.
+  function requestBody() {
+    return {
+      selection,
+      result,
+      traces: diagnostics?.traces ?? [],
+      activities,
+      contexts: contextBlocks.map<ChatContextItem>((b) => ({ ref: b.ref, provenance: b.provenance })),
+    };
+  }
+
   function handleSend() {
     const text = input.trim();
     if (!text) return;
     setInput('');
     setMentionStart(null);
-    void sendMessage(
-      { text },
-      {
-        body: {
-          selection,
-          result,
-          traces: diagnostics?.traces ?? [],
-          activities,
-          // 019: the attached, visible context blocks. Removing a chip drops it from contextBlocks,
-          // so it is guaranteed not sent here.
-          contexts: contextBlocks.map<ChatContextItem>((b) => ({ ref: b.ref, provenance: b.provenance })),
-        },
-      }
-    );
+    setHistory((h) => (h[h.length - 1] === text ? h : [...h, text]));
+    setHistIdx(null);
+    void sendMessage({ text }, { body: requestBody() });
+  }
+
+  // 019 Phase 3/4 — a draft card asks the assistant to narrate its DETERMINISTIC skip data.
+  function handleExplain(prompt: string) {
+    if (!prompt) return;
+    void sendMessage({ text: prompt }, { body: requestBody() });
   }
 
   function onChipClick(label: string) {
@@ -372,15 +384,25 @@ export default function ChatSurface({
     <section className="relative flex h-full flex-col">
       <header className="flex items-center justify-between px-4 py-3 border-b text-sm font-medium">
         <span>Allocator Assistant</span>
-        {canUndo && (
+        <div className="flex items-center gap-2">
+          {canUndo && (
+            <button
+              type="button"
+              onClick={onUndo}
+              className="rounded border border-gray-300 px-2 py-0.5 text-xs font-normal text-gray-600 hover:bg-gray-100"
+            >
+              ↶ Undo last edit
+            </button>
+          )}
           <button
             type="button"
-            onClick={onUndo}
+            onClick={onExport}
+            title="Download the current activities + availability as JSON (re-importable via the Data tab)"
             className="rounded border border-gray-300 px-2 py-0.5 text-xs font-normal text-gray-600 hover:bg-gray-100"
           >
-            ↶ Undo last edit
+            Export
           </button>
-        )}
+        </div>
       </header>
       <div className="flex-1 overflow-y-auto px-4 py-3 text-sm">
         {messages.length === 0 ? (
@@ -456,6 +478,7 @@ export default function ChatSurface({
                             patch={patch}
                             onPreview={onPreviewPatch}
                             onApply={onApplyPatch}
+                            onExplain={handleExplain}
                           />
                         );
                       }
@@ -517,6 +540,7 @@ export default function ChatSurface({
             aria-activedescendant={mentionOpen ? `${MENTION_LISTBOX_ID}-opt-${mentionActive}` : undefined}
             onChange={(e) => {
               setInput(e.target.value);
+              setHistIdx(null); // any manual edit exits history-recall mode
               syncMention(e.target.value, e.target.selectionStart ?? e.target.value.length);
             }}
             onClick={(e) => syncMention(input, e.currentTarget.selectionStart ?? input.length)}
@@ -542,6 +566,26 @@ export default function ChatSurface({
                   setMentionStart(null);
                   return;
                 }
+              }
+              // 019 Phase 4: command history recall (only when the @-menu is closed).
+              if (e.key === 'ArrowUp' && history.length > 0 && (input === '' || histIdx !== null)) {
+                e.preventDefault();
+                const idx = histIdx === null ? history.length - 1 : Math.max(0, histIdx - 1);
+                setHistIdx(idx);
+                setInput(history[idx]);
+                return;
+              }
+              if (e.key === 'ArrowDown' && histIdx !== null) {
+                e.preventDefault();
+                const idx = histIdx + 1;
+                if (idx >= history.length) {
+                  setHistIdx(null);
+                  setInput('');
+                } else {
+                  setHistIdx(idx);
+                  setInput(history[idx]);
+                }
+                return;
               }
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();

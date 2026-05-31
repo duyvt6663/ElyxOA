@@ -61,7 +61,7 @@ import type { ContextBlock, ContextIndex } from '@/lib/chat-context';
 import schedulingHints from '@/data/scheduling-hints.json';
 import { scheduleTemporal } from '@/lib/temporal-scheduler';
 import { isSchedulingSemanticHints, validateHintReferences } from '@/lib/validate';
-import { applyPatchToInputs, describePatch, diffResults, validatePatch, type SchedulePatch, type ScheduleDiff } from '@/lib/schedule-patch';
+import { applyPatchToInputs, describePatch, diffResults, validatePatch, ALL_WINDOWS, type SchedulePatch, type ScheduleDiff, type TimeWindow } from '@/lib/schedule-patch';
 import AppHeader from './AppHeader';
 import WindowLayout from './WindowLayout';
 import MobileSwitch from './MobileSwitch';
@@ -69,9 +69,10 @@ import ChatSurface from './ChatSurface';
 import WorkspacePanel from './WorkspacePanel';
 
 /** 019 Phase 3 — result of previewing a draft patch (no commit). Carries a human description so the
- * preview card needs neither activities nor availability. */
+ * preview card needs neither activities nor availability. `alternatives` (019 Phase 4 "why-not") lists
+ * the other windows ranked by resulting skip count, present only when a setTemporalPolicy causes skips. */
 export type PatchPreview =
-  | { description: string; diff: ScheduleDiff }
+  | { description: string; diff: ScheduleDiff; alternatives?: Array<{ window: TimeWindow; skipped: number }> }
   | { description: string; error: string };
 
 export type TabId = 'calendar' | 'activities' | 'resources' | 'trace' | 'data';
@@ -245,7 +246,20 @@ export default function AllocatorWorkspace({ result, activities, availability, d
       if (err) return { description, error: err };
       const patched = applyPatchToInputs(patch, editedActivities, editedAvailability);
       const next = rerunWith(patched.activities, patched.availability);
-      return { description, diff: diffResults(displayedResult, next.result) };
+      const diff = diffResults(displayedResult, next.result);
+      // 019 Phase 4 "why-not": when a retime causes skips, try the OTHER windows deterministically and
+      // rank them by resulting skip count, so the card can point at a feasible alternative.
+      let alternatives: Array<{ window: TimeWindow; skipped: number }> | undefined;
+      if (patch.kind === 'setTemporalPolicy' && diff.nowSkipped.length > 0) {
+        alternatives = ALL_WINDOWS.filter((w) => w !== patch.window)
+          .map((w) => {
+            const alt = applyPatchToInputs({ ...patch, window: w }, editedActivities, editedAvailability);
+            const altRes = rerunWith(alt.activities, alt.availability);
+            return { window: w, skipped: diffResults(displayedResult, altRes.result).nowSkipped.length };
+          })
+          .sort((a, b) => a.skipped - b.skipped);
+      }
+      return { description, diff, alternatives };
     },
     [editedActivities, editedAvailability, displayedResult, rerunWith]
   );
@@ -283,6 +297,18 @@ export default function AllocatorWorkspace({ result, activities, availability, d
     });
   }, []);
 
+  // 019 Phase 4: export the current effective INPUTS as JSON. Re-importable via the Data tab to
+  // reproduce the schedule (the result is derived), for reproducible teammate review.
+  const exportState = useCallback(() => {
+    const data = JSON.stringify({ activities: editedActivities, availability: editedAvailability }, null, 2);
+    const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'elyx-workspace.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [editedActivities, editedAvailability]);
+
   const chat = (
     <ChatSurface
       selection={selection}
@@ -299,6 +325,7 @@ export default function AllocatorWorkspace({ result, activities, availability, d
       onApplyPatch={applyPatch}
       canUndo={undoSnapshot !== null}
       onUndo={undoLastEdit}
+      onExport={exportState}
     />
   );
   const workspace = (

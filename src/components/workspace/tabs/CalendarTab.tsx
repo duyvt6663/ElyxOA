@@ -13,6 +13,7 @@
  */
 
 import type { AvailabilityBundle, ScheduleResult, ScheduledOccurrence } from '@/lib/types';
+import type { EducationMap } from '@/lib/activity-education';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
 import CalendarView from '@/components/CalendarView';
 
@@ -21,21 +22,29 @@ export interface CalendarTabProps {
   availability: AvailabilityBundle;
   selection: WorkspaceSelection;
   onSelect: (partial: Partial<WorkspaceSelection>) => void;
+  /** 023 — education profiles, for the inline action detail card in the day timeline. */
+  education: EducationMap;
 }
 
-export default function CalendarTab({ result, availability, selection: _selection, onSelect }: CalendarTabProps) {
+export default function CalendarTab({ result, availability, selection, onSelect, education }: CalendarTabProps) {
   return (
     <CalendarView
       result={result}
       memberBusy={availability.memberBusy}
       travel={availability.travel}
       homeTimeZone={availability.timeZone}
+      // 023 follow-up: clicking an action only SELECTS it (stays on the calendar, preserves the
+      // open day + month + filters, and feeds the chat context). The inline detail card offers an
+      // opt-in "View full trace" — no aggressive auto tab-switch.
       onSelect={(occ: ScheduledOccurrence) =>
-        // 023: opening an action's detail = its Trace, where timing/status/resources + the
-        // "About this action" education live.
-        onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date, activeTab: 'trace' })
+        onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date })
       }
       onExpandDay={(date) => onSelect({ selectedDate: date })}
+      selectedOccurrenceId={selection.selectedOccurrenceId}
+      education={education}
+      onViewTrace={(occ: ScheduledOccurrence) =>
+        onSelect({ selectedOccurrenceId: occ.id, selectedDate: occ.date, activeTab: 'trace' })
+      }
     />
   );
 }

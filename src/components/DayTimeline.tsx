@@ -14,6 +14,7 @@
 
 import { useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock } from '@/lib/types';
+import { educationForOccurrence, type EducationMap } from '@/lib/activity-education';
 import GlossaryTooltip from './GlossaryTooltip';
 
 const DAY_START = 6 * 60;
@@ -66,9 +67,16 @@ export interface DayTimelineProps {
   memberBusy: MemberBusyBlock[];
   showOccupied: boolean;
   onSelect?: (o: ScheduledOccurrence) => void;
+  /** 023 follow-up — the currently selected occurrence id; its row reveals an inline detail card
+   * (description + opt-in "View full trace") so clicking an action does NOT yank the user to Trace. */
+  selectedOccurrenceId?: string | null;
+  /** 023 — education profiles, for the inline card's one-line description. */
+  education?: EducationMap;
+  /** 023 — opt-in navigation to the Trace tab, fired only by the card's button. */
+  onViewTrace?: (o: ScheduledOccurrence) => void;
 }
 
-export default function DayTimeline({ date, occurrences, memberBusy, showOccupied, onSelect }: DayTimelineProps) {
+export default function DayTimeline({ date, occurrences, memberBusy, showOccupied, onSelect, selectedOccurrenceId = null, education = {}, onViewTrace }: DayTimelineProps) {
   const [openEntries, setOpenEntries] = useState<Set<string>>(new Set());
   const toggle = (k: string) =>
     setOpenEntries((prev) => {
@@ -282,7 +290,7 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
                           {isOpen && (
                             <ul className="ml-4 border-l border-gray-200 pl-3">
                               {e.items.map((o) => (
-                                <ActionRow key={o.id} occ={o} onSelect={onSelect} />
+                                <ActionRow key={o.id} occ={o} onSelect={onSelect} selectedId={selectedOccurrenceId} education={education} onViewTrace={onViewTrace} />
                               ))}
                             </ul>
                           )}
@@ -290,14 +298,14 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
                       );
                     })}
                     {g.scheduled.map((o) => (
-                      <ActionRow key={o.id} occ={o} onSelect={onSelect} />
+                      <ActionRow key={o.id} occ={o} onSelect={onSelect} selectedId={selectedOccurrenceId} education={education} onViewTrace={onViewTrace} />
                     ))}
                     {g.substituted.length > 0 && (
                       <li>
                         <div className="px-1.5 text-[10px] text-amber-600">↳ substituted ({g.substituted.length})</div>
                         <ul className="ml-2 border-l border-amber-200 pl-2">
                           {g.substituted.map((o) => (
-                            <ActionRow key={o.id} occ={o} onSelect={onSelect} variant="substituted" />
+                            <ActionRow key={o.id} occ={o} onSelect={onSelect} variant="substituted" selectedId={selectedOccurrenceId} education={education} onViewTrace={onViewTrace} />
                           ))}
                         </ul>
                       </li>
@@ -319,12 +327,19 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
                 key={o.id}
                 type="button"
                 onClick={() => onSelect?.(o)}
-                className="rounded border border-gray-200 bg-gray-100 px-2 py-0.5 text-[11px] text-gray-600 opacity-70 hover:opacity-100"
+                className={`rounded border px-2 py-0.5 text-[11px] hover:opacity-100 ${
+                  o.id === selectedOccurrenceId
+                    ? 'border-blue-300 bg-blue-50 text-gray-700 opacity-100 ring-1 ring-blue-300'
+                    : 'border-gray-200 bg-gray-100 text-gray-600 opacity-70'
+                }`}
               >
                 ✕ {o.title}
               </button>
             ))}
           </div>
+          {skipped.some((o) => o.id === selectedOccurrenceId) && (
+            <OccurrenceDetailCard occ={skipped.find((o) => o.id === selectedOccurrenceId)!} education={education} onViewTrace={onViewTrace} />
+          )}
         </div>
       )}
     </div>
@@ -340,19 +355,26 @@ function ActionRow({
   occ,
   onSelect,
   variant = 'scheduled',
+  selectedId = null,
+  education = {},
+  onViewTrace,
 }: {
   occ: ScheduledOccurrence;
   onSelect?: (o: ScheduledOccurrence) => void;
   variant?: 'scheduled' | 'substituted';
+  selectedId?: string | null;
+  education?: EducationMap;
+  onViewTrace?: (o: ScheduledOccurrence) => void;
 }) {
   const isSub = variant === 'substituted';
+  const isSel = occ.id === selectedId;
   return (
     <li>
       <button
         type="button"
         onClick={() => onSelect?.(occ)}
         className={`flex w-full items-center gap-2 rounded px-1.5 py-0.5 text-left text-[11px] hover:bg-gray-100 ${
-          isSub ? 'bg-amber-50' : ''
+          isSel ? 'bg-blue-50 ring-1 ring-blue-300' : isSub ? 'bg-amber-50' : ''
         }`}
       >
         {isSub && <span className="shrink-0 text-amber-600">↳</span>}
@@ -369,6 +391,49 @@ function ActionRow({
           </GlossaryTooltip>
         )}
       </button>
+      {isSel && <OccurrenceDetailCard occ={occ} education={education} onViewTrace={onViewTrace} />}
     </li>
+  );
+}
+
+/**
+ * 023 follow-up — the inline detail "popup" shown directly under a selected action row. Keeps the
+ * user on the calendar (no tab jump): a one-line description from the education profile, the
+ * substitution/skip context, and an OPT-IN "View full trace" button.
+ */
+function OccurrenceDetailCard({
+  occ,
+  education,
+  onViewTrace,
+}: {
+  occ: ScheduledOccurrence;
+  education: EducationMap;
+  onViewTrace?: (o: ScheduledOccurrence) => void;
+}) {
+  const edu = educationForOccurrence(education, occ);
+  const time = occ.startTime ? `${occ.startTime}–${occ.endTime ?? occ.startTime}` : 'no slot';
+  return (
+    <div className="my-1 ml-5 rounded border border-blue-200 bg-blue-50/70 p-2 text-[11px]">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-medium text-gray-800">{occ.title}</span>
+        <span className="shrink-0 font-mono text-[10px] text-gray-500">{time}</span>
+      </div>
+      {occ.status === 'substituted' && occ.sourceTitle && (
+        <div className="mt-0.5 text-amber-700">↳ replaces {occ.sourceTitle}</div>
+      )}
+      <p className="mt-1 text-gray-600">{edu ? edu.oneLine : occ.details}</p>
+      {occ.status === 'skipped' && occ.reason && (
+        <p className="mt-0.5 text-gray-500">Not placed: {occ.reason}</p>
+      )}
+      {onViewTrace && (
+        <button
+          type="button"
+          onClick={() => onViewTrace(occ)}
+          className="mt-1.5 rounded border border-blue-300 bg-white px-2 py-0.5 text-[11px] font-medium text-blue-700 hover:bg-blue-100"
+        >
+          View full trace →
+        </button>
+      )}
+    </div>
   );
 }

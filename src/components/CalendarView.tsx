@@ -29,6 +29,7 @@ import type {
   MemberBusyBlock,
   TravelPlan,
 } from '@/lib/types';
+import type { EducationMap } from '@/lib/activity-education';
 import SummaryHeader from './SummaryHeader';
 import FilterBar from './FilterBar';
 import MonthGrid from './MonthGrid';
@@ -57,9 +58,13 @@ export interface CalendarViewProps {
   /** 019: fired when a day is expanded (not collapsed), so the workspace can set selectedDate and
    * the chat context tray shows an active day block before any action is selected. */
   onExpandDay?: (date: string) => void;
+  /** 023 follow-up — selection + education + opt-in trace nav, for the inline action detail card. */
+  selectedOccurrenceId?: string | null;
+  education?: EducationMap;
+  onViewTrace?: (occurrence: ScheduledOccurrence) => void;
 }
 
-export default function CalendarView({ result, memberBusy = [], travel, homeTimeZone, onSelect, onExpandDay }: CalendarViewProps) {
+export default function CalendarView({ result, memberBusy = [], travel, homeTimeZone, onSelect, onExpandDay, selectedOccurrenceId = null, education, onViewTrace }: CalendarViewProps) {
   // 011 impl: onSelect is forwarded to MonthGrid + AgendaList; chips invoke it on click.
   const [month, setMonth] = useState<'Jun' | 'Jul' | 'Aug'>('Jun');
   const [statusFilters, setStatusFilters] = useState<Set<ScheduledOccurrence['status']>>(() => new Set(ALL_STATUSES));
@@ -87,10 +92,10 @@ export default function CalendarView({ result, memberBusy = [], travel, homeTime
         onReset={resetFilters}
       />
       <div className="hidden md:block">
-        <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} travel={travel} homeTimeZone={homeTimeZone} onSelect={onSelect} onExpandDay={onExpandDay} />
+        <MonthGrid occurrences={filtered} month={month} year={2026} memberBusy={memberBusy} travel={travel} homeTimeZone={homeTimeZone} onSelect={onSelect} onExpandDay={onExpandDay} selectedOccurrenceId={selectedOccurrenceId} education={education} onViewTrace={onViewTrace} />
       </div>
       <div className="block md:hidden">
-        <AgendaList occurrences={filtered} month={month} memberBusy={memberBusy} travel={travel} homeTimeZone={homeTimeZone} onSelect={onSelect} />
+        <AgendaList occurrences={filtered} month={month} memberBusy={memberBusy} travel={travel} homeTimeZone={homeTimeZone} onSelect={onSelect} selectedOccurrenceId={selectedOccurrenceId} education={education} onViewTrace={onViewTrace} />
       </div>
     </div>
   );

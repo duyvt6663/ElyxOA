@@ -10,6 +10,7 @@
 
 import { useState } from 'react';
 import type { ScheduledOccurrence, MemberBusyBlock } from '@/lib/types';
+import type { EducationMap } from '@/lib/activity-education';
 import DayTimeline from './DayTimeline';
 
 export interface DayDetailProps {
@@ -18,9 +19,13 @@ export interface DayDetailProps {
   memberBusy?: MemberBusyBlock[];
   onClose?: () => void;
   onSelect?: (occurrence: ScheduledOccurrence) => void;
+  /** 023 follow-up — selection + education + opt-in trace nav, for the inline action detail card. */
+  selectedOccurrenceId?: string | null;
+  education?: EducationMap;
+  onViewTrace?: (occurrence: ScheduledOccurrence) => void;
 }
 
-export default function DayDetail({ date, occurrences, memberBusy = [], onClose, onSelect }: DayDetailProps) {
+export default function DayDetail({ date, occurrences, memberBusy = [], onClose, onSelect, selectedOccurrenceId = null, education, onViewTrace }: DayDetailProps) {
   const [showOccupied, setShowOccupied] = useState(true);
 
   return (
@@ -57,6 +62,9 @@ export default function DayDetail({ date, occurrences, memberBusy = [], onClose,
           memberBusy={memberBusy}
           showOccupied={showOccupied}
           onSelect={onSelect}
+          selectedOccurrenceId={selectedOccurrenceId}
+          education={education}
+          onViewTrace={onViewTrace}
         />
       )}
     </aside>

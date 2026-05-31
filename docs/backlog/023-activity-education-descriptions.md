@@ -285,10 +285,15 @@ Verification:
 
 ### Phase 3 - Calendar / Trace detail display (see R1) ✅ DONE
 
-> Implemented per R1's simpler option: clicking a day-timeline action now opens the **Trace tab**
-> (`CalendarTab` sets `activeTab:'trace'`), and the "About this action" education lives in the Trace
-> tab's new `AboutThisActionPanel` (alongside the existing `SourceActivityPanel`). No separate
-> `DayDetail` occurrence panel was added — the Trace is the single occurrence-detail surface.
+> **Final design (refined after UX review).** The first cut made a day-timeline action click jump
+> straight to the Trace tab — too aggressive: it unmounted the calendar and lost the open day, month,
+> and filters (all local state). Replaced with a **non-disruptive inline detail card**: clicking an
+> action only SELECTS it (stays on the calendar, preserves day/month/filters, feeds chat context) and
+> reveals a compact card directly **below the selected row** in `DayTimeline` — title · time ·
+> education one-liner (+ "replaces …" for substitutes, skip reason for skipped) · an OPT-IN
+> **"View full trace →"** button. The full "About this action" education still lives in the Trace tab's
+> `AboutThisActionPanel` (reached via that button, the Activities outcome links, or chat
+> `selectOccurrence`). No separate `DayDetail` occurrence panel — the inline card + Trace cover it.
 
 Scope:
 
@@ -342,7 +347,8 @@ Playwright (canonical suite `tests/drive-acceptance.mjs`, renumbered A10–A13 p
 
 - **A10** ✅ - Activities tab shows a one-line summary under activity titles.
 - **A11** ✅ - Expanding an activity shows "Health context" with what/why/focus/signals.
-- **A12** ✅ - Clicking a scheduled calendar action opens its Trace with "About this action".
+- **A12** ✅ - Clicking a calendar action shows an inline detail card (no tab jump); its "View full
+  trace" button is the opt-in route to the Trace "About this action" block.
 - **A13** ✅ - Clicking a substituted action shows fallback education and original-plan context.
 
 ## What this is not

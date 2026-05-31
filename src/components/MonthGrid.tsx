@@ -20,6 +20,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { ScheduledOccurrence, MemberBusyBlock, TravelPlan } from '@/lib/types';
+import type { EducationMap } from '@/lib/activity-education';
 import DayCell from './DayCell';
 import DayDetail from './DayDetail';
 
@@ -36,6 +37,10 @@ export interface MonthGridProps {
   onSelect?: (occurrence: ScheduledOccurrence) => void;
   /** 019 — fired with the date when a day is expanded (not when collapsed). */
   onExpandDay?: (date: string) => void;
+  /** 023 follow-up — selection + education + opt-in trace nav, for DayDetail's inline action card. */
+  selectedOccurrenceId?: string | null;
+  education?: EducationMap;
+  onViewTrace?: (occurrence: ScheduledOccurrence) => void;
 }
 
 const WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -56,7 +61,7 @@ function weekdayOfYMD(s: string): number {
   return dow === 0 ? 7 : dow;
 }
 
-export default function MonthGrid({ occurrences, month, year, memberBusy = [], travel, homeTimeZone, onSelect, onExpandDay }: MonthGridProps) {
+export default function MonthGrid({ occurrences, month, year, memberBusy = [], travel, homeTimeZone, onSelect, onExpandDay, selectedOccurrenceId = null, education, onViewTrace }: MonthGridProps) {
   const [expandedDate, setExpandedDate] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement | null>(null);
 
@@ -129,6 +134,9 @@ export default function MonthGrid({ occurrences, month, year, memberBusy = [], t
             memberBusy={memberBusy}
             onClose={() => setExpandedDate(null)}
             onSelect={onSelect}
+            selectedOccurrenceId={selectedOccurrenceId}
+            education={education}
+            onViewTrace={onViewTrace}
           />
         </div>
       )}

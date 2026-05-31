@@ -10,6 +10,7 @@
 
 import { useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock, TravelPlan } from '@/lib/types';
+import type { EducationMap } from '@/lib/activity-education';
 import DayTimeline from './DayTimeline';
 import { travelForDate, TravelBadge } from './travelMarker';
 import GlossaryTooltip from './GlossaryTooltip';
@@ -25,6 +26,10 @@ export interface AgendaListProps {
   travel?: TravelPlan[];
   /** home IANA tz, for the travel badge's offset annotation. */
   homeTimeZone?: string;
+  /** 023 follow-up — selection + education + opt-in trace nav, for the inline action detail card. */
+  selectedOccurrenceId?: string | null;
+  education?: EducationMap;
+  onViewTrace?: (occurrence: ScheduledOccurrence) => void;
 }
 
 const MONTH_PREFIX: Record<'Jun' | 'Jul' | 'Aug', string> = {
@@ -48,7 +53,7 @@ interface Tally {
   skipped: number;
 }
 
-export default function AgendaList({ occurrences, onSelect, month, memberBusy = [], travel, homeTimeZone }: AgendaListProps) {
+export default function AgendaList({ occurrences, onSelect, month, memberBusy = [], travel, homeTimeZone, selectedOccurrenceId = null, education, onViewTrace }: AgendaListProps) {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   const filtered = month ? occurrences.filter((o) => o.date.startsWith(MONTH_PREFIX[month])) : occurrences;
@@ -119,7 +124,7 @@ export default function AgendaList({ occurrences, onSelect, month, memberBusy = 
             </button>
             {isOpen && (
               <div className="border-t border-gray-200 p-2">
-                <DayTimeline date={date} occurrences={occs} memberBusy={memberBusy} showOccupied onSelect={onSelect} />
+                <DayTimeline date={date} occurrences={occs} memberBusy={memberBusy} showOccupied onSelect={onSelect} selectedOccurrenceId={selectedOccurrenceId} education={education} onViewTrace={onViewTrace} />
               </div>
             )}
           </div>

@@ -14,7 +14,8 @@
 // A9 (020): the header Help control opens the Help & glossary panel.
 // A10 (023): Activities row shows a one-line education summary under the title.
 // A11 (023): expanding an activity shows the "Health context" section (what it does).
-// A12 (023): selecting a scheduled calendar action opens its Trace with "About this action".
+// A12 (023 + follow-up): clicking a calendar action shows an inline detail card (no tab jump);
+//   its "View full trace" button is the opt-in path to the Trace "About this action" block.
 // A13 (023): a substituted action's Trace shows the fallback education + "Original plan".
 
 import { chromium } from 'playwright';
@@ -232,7 +233,8 @@ async function runA11(page) {
   record('A11', ok, ok ? 'Health context shown on expand' : 'Health context / whatItDoes missing');
 }
 
-// A12 (023): clicking a calendar action opens its Trace with the "About this action" education block.
+// A12 (023 + follow-up): clicking a calendar action shows the inline detail card WITHOUT leaving
+// the calendar; the card's "View full trace" button is the opt-in route to the Trace education.
 async function runA12(page) {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(BASE, { waitUntil: 'networkidle' });
@@ -247,12 +249,20 @@ async function runA12(page) {
     .first();
   await action.waitFor({ timeout: 5000 });
   await action.click({ force: true });
-  const ok = await page
-    .waitForSelector('text=About this action', { timeout: 5000 })
-    .then(() => true)
-    .catch(() => false);
+  await page.waitForTimeout(400);
+  // inline card appears, and we are STILL on the calendar (no tab jump).
+  const viewTrace = page.getByRole('button', { name: /View full trace/i }).first();
+  const cardShown = await viewTrace.isVisible().catch(() => false);
+  const stillCalendar = await page.locator('[data-tour-id="calendar-grid"]').first().isVisible().catch(() => false);
+  // opt-in: clicking "View full trace" navigates to the Trace with the education block.
+  let traceOpens = false;
+  if (cardShown) {
+    await viewTrace.click();
+    traceOpens = await page.waitForSelector('text=About this action', { timeout: 5000 }).then(() => true).catch(() => false);
+  }
   await page.screenshot({ path: `${SHOTS}/A12.png` });
-  record('A12', ok, ok ? 'Trace shows About this action' : 'no About this action block');
+  const ok = cardShown && stillCalendar && traceOpens;
+  record('A12', ok, ok ? 'inline card (no jump) + opt-in trace' : `cardShown=${cardShown} stillCalendar=${stillCalendar} traceOpens=${traceOpens}`);
 }
 
 // A13 (023): a substituted action's Trace distinguishes the scheduled fallback from the original plan.

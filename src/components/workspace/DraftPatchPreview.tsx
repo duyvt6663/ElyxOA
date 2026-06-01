@@ -23,9 +23,16 @@ export interface DraftPatchPreviewProps {
 }
 
 export default function DraftPatchPreview({ patch, onPreview, onApply, onExplain }: DraftPatchPreviewProps) {
-  // Compute the preview once for this draft (the scheduler rerun is synchronous).
+  // Compute the preview for this draft (the scheduler rerun is synchronous). `patch` is rebuilt on
+  // every parent render (ChatSurface re-parses the tool part), so this memo recomputes each render —
+  // intended, so a still-streaming tool input is tracked. But once Apply commits the patch into the
+  // schedule, recomputing would diff the already-updated schedule against re-applying the same patch
+  // and collapse to "No schedule change — already placed there". So we freeze the committed preview at
+  // Apply time and keep showing it.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const preview = useMemo(() => onPreview(patch), [patch]);
+  const livePreview = useMemo(() => onPreview(patch), [patch]);
+  const [appliedPreview, setAppliedPreview] = useState<PatchPreview | null>(null);
+  const preview = appliedPreview ?? livePreview;
   const description = preview.description;
   const [state, setState] = useState<'pending' | 'applied' | 'discarded'>('pending');
   const [applyError, setApplyError] = useState<string | null>(null);
@@ -95,7 +102,11 @@ export default function DraftPatchPreview({ patch, onPreview, onApply, onExplain
             onClick={() => {
               const r = onApply(patch);
               if (r?.error) setApplyError(r.error);
-              else setState('applied');
+              else {
+                // freeze the pre-apply diff before onApply's state update re-renders this card
+                setAppliedPreview(livePreview);
+                setState('applied');
+              }
             }}
             className="rounded bg-emerald-600 px-2 py-0.5 text-white hover:bg-emerald-700"
           >

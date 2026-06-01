@@ -394,8 +394,12 @@ export default function AllocatorWorkspace({ result, activities, availability, d
       selection={selection}
       onSelect={select}
       result={displayedResult}
-      activities={activities}
-      availability={availability}
+      // 019 follow-up: the panel must reflect the EFFECTIVE (chat-edited) inputs, not the build-time
+      // originals — otherwise a committed addTravelWindow/addBusyBlock/setTemporalPolicy lands in
+      // editedAvailability/editedActivities (and displayedResult) but the calendar's travel/busy
+      // overlays + activity list keep reading the stale originals, so the edit looks unapplied.
+      activities={editedActivities}
+      availability={editedAvailability}
       diagnostics={displayedDiagnostics}
       education={education}
       setSchedule={setSchedule}

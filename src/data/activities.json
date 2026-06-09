@@ -455,7 +455,7 @@
       "count": 1,
       "period": "day"
     },
-    "durationMinutes": 20,
+    "durationMinutes": 15,
     "priority": 13,
     "facilitatorLabel": "Self",
     "locations": [
@@ -1905,6 +1905,16 @@
     "id": "act-053",
     "type": "fitness",
     "title": "Pulse Oximeter Readiness Check",
+    "temporalPolicy": {
+      "preferredWindows": [
+        {
+          "label": "midday",
+          "startTime": "08:00",
+          "endTime": "20:00"
+        }
+      ],
+      "intensity": "low"
+    },
     "details": "Pulse Oximeter Readiness Check is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
     "frequency": {
       "count": 2,
@@ -2693,6 +2703,16 @@
     "id": "act-075",
     "type": "fitness",
     "title": "Wearable Readiness Sync",
+    "temporalPolicy": {
+      "preferredWindows": [
+        {
+          "label": "midday",
+          "startTime": "08:00",
+          "endTime": "20:00"
+        }
+      ],
+      "intensity": "low"
+    },
     "details": "Wearable Readiness Sync is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
     "frequency": {
       "count": 1,
@@ -3423,6 +3443,16 @@
     "id": "act-096",
     "type": "fitness",
     "title": "Technique Video Review",
+    "temporalPolicy": {
+      "preferredWindows": [
+        {
+          "label": "midday",
+          "startTime": "08:00",
+          "endTime": "20:00"
+        }
+      ],
+      "intensity": "low"
+    },
     "details": "Technique Video Review is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
     "frequency": {
       "count": 1,
@@ -3460,6 +3490,16 @@
     "id": "act-097",
     "type": "fitness",
     "title": "Monthly Training Adherence Report",
+    "temporalPolicy": {
+      "preferredWindows": [
+        {
+          "label": "midday",
+          "startTime": "08:00",
+          "endTime": "20:00"
+        }
+      ],
+      "intensity": "low"
+    },
     "details": "Monthly Training Adherence Report is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
     "frequency": {
       "count": 1,
@@ -3528,6 +3568,16 @@
     "id": "act-099",
     "type": "fitness",
     "title": "Deload Readiness Check",
+    "temporalPolicy": {
+      "preferredWindows": [
+        {
+          "label": "midday",
+          "startTime": "08:00",
+          "endTime": "20:00"
+        }
+      ],
+      "intensity": "low"
+    },
     "details": "Deload Readiness Check is part of the member's movement plan, balancing training stimulus with recovery, travel, and equipment availability.",
     "frequency": {
       "count": 1,

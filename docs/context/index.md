@@ -113,7 +113,7 @@ category/intensity-aware same-day overload + a same-day high↔high rule; overlo
 Plan 3318/190/6 → 3277/232/5 (skip 0.14%), zero 2+-high days, consultations 3-4 → 2/day. Monthly/yearly
 due-date stagger (Phase B) deferred (would move the June 1 cardiology-skip A1 demo); moderate-fitness
 cap scoped out (data-quality). `npm test` 95/95, deterministic, build green.
-`025-schedule-realism-gaps.md` (**G1+G2 DONE** 2026-06-09, not yet deployed; G3/G4 experimented — not scoring-solvable) — residual realism gaps from the post-024 deploy
+`025-schedule-realism-gaps.md` (**G1+G2 DEPLOYED** 2026-06-09 commit `82ed525`; G3/G4 experimented — not scoring-solvable) — residual realism gaps from the post-024 deploy
 verification: G1 "breakfast" scheduled at night (act-013 is a daily blocking food), G2 fitness-admin
 mis-typed as moderate, G3 residual late workouts, G4 wind-down therapy in the morning. G1/G2 are
 data-quality fixes. G3/G4 experiment (2026-06-09): **structural over-subscription** (2.6 focused
@@ -121,6 +121,12 @@ workouts/day) — a soft late-evening penalty moves nothing even at 5×, and Pha
 real fix is data-level (fewer/shorter focused activities) or accept evening workouts/morning sauna. **G1/G2 shipped** (breakfast → 06:00–08:30, admin
 fitness → low intensity; skip 0.14% → 0.085%, 3311/200/3, vitest 97/97 + fixture-realism guard).
 024 confirmed a net improvement, no regressions.
+`026-trace-overlap-explanation.md` (**V1 IMPLEMENTED & verified** 2026-06-09, not yet deployed) — UI: a
+contextual note in the Trace tab explaining the two intentional overlaps (consultations overlap work
+blocks; quick/point-in-time actions coincide with busy blocks + each other) and *why*, so reviewers stop
+reading them as bugs. Shared `temporal-classification.ts` (`isBlockingActivity` extracted from the
+scheduler, behavior-preserving) + `overlapExplanationKind`; vitest 104/104. Open follow-up: work-overlapping
+consultations aren't a simple click target in the DayTimeline.
 
 Archived plans 001-018 live in `docs/archive/`. Highlights: 007 prompts+README · 008 deploy
 (live at https://elyx-oa.vercel.app/) · 015 temporal availability + scheduler · 016 temporal

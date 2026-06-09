@@ -33,6 +33,8 @@
 
 import type { Activity, ScheduleDiagnostics, ScheduleResult, ScheduledOccurrence, AllocationTrace, AllocationAttempt, ActivityEducationProfile } from '@/lib/types';
 import { educationForOccurrence, educationForActivity, type EducationMap } from '@/lib/activity-education';
+import { getDefaultTemporalPolicy } from '@/lib/temporal-policy';
+import { overlapExplanationKind } from '@/lib/temporal-classification';
 import type { WorkspaceSelection } from '../AllocatorWorkspace';
 
 export interface AllocationTraceTabProps {
@@ -157,6 +159,12 @@ export default function AllocationTraceTab({ selection, diagnostics, activities,
 
   const occ = result.occurrences.find((o) => o.id === selection.selectedOccurrenceId);
   const sourceOneLine = educationForActivity(education, trace.sourceActivityId)?.oneLine;
+  // 026 — explain when/why a placed action overlaps the member's calendar, classified by the
+  // effective (placed) action so substitutions explain the fallback, not the original source.
+  const activityById = new Map((activities ?? []).map((a) => [a.id, a]));
+  const overlapKind = occ
+    ? overlapExplanationKind(occ, activityById, (a) => a.temporalPolicy ?? getDefaultTemporalPolicy(a))
+    : null;
 
   return (
     <div className="p-4 text-sm" data-tour-id="trace-content">
@@ -170,6 +178,14 @@ export default function AllocationTraceTab({ selection, diagnostics, activities,
         </div>
         {sourceOneLine && <div className="mt-1 text-xs text-gray-400">{sourceOneLine}</div>}
       </header>
+      {overlapKind && (
+        <div className="mb-3 rounded border border-sky-200 bg-sky-50 p-3 text-xs text-sky-900">
+          <span className="font-medium">ℹ Why this can overlap your calendar: </span>
+          {overlapKind === 'consultation'
+            ? 'Appointments can overlap your work block — clinicians are only available during business hours, so we schedule the appointment during work and assume you step away from your desk. Other occupied time (sleep, meals, commute, travel) still blocks it.'
+            : "This is a quick, point-in-time action (like a pill or a log). It doesn't need focused time, so it can sit alongside your work, commute, meals, or other actions. Sleep and explicit safety/proximity rules still block it."}
+        </div>
+      )}
       <ol className="space-y-2">
         {trace.attempts.map((attempt, i) => (
           <li key={i}>

@@ -50,6 +50,7 @@ import type {
 } from './types';
 import { getDefaultTemporalPolicy } from './temporal-policy';
 import { bundleAssignment } from './bundle';
+import { isBlockingActivity as isBlocking } from './temporal-classification';
 import {
   addDaysYMD,
   buildOccurrence,
@@ -173,19 +174,8 @@ interface CommittedAction {
 
 type ActionLedger = Map<string /* date */, CommittedAction[]>;
 
-/**
- * "Blocking" actions occupy exclusive focused member time (strength/VO2 workouts, therapy
- * sessions, consultations, meal prep) — no two may overlap and they cannot overlap blocking
- * busy blocks. "Quick" actions are point-in-time: they get a placed time and still obey waking
- * hours + their own temporal rules, but may coincide with each other and with blocking actions.
- * Quick = (<20 min: pills, BP/CGM logs, hydration, short food habits) OR low-intensity fitness
- * (brisk walks, mobility, balance, step-count) which weave into the day rather than demanding a
- * focused booking. This realizes 015's "daily overload is a soft score, not a dropped action".
- */
-function isBlocking(activity: Activity, policy: ActivityTemporalPolicy): boolean {
-  if (activity.type === 'fitness' && policy.intensity === 'low') return false;
-  return activity.durationMinutes >= 20;
-}
+// "Blocking vs quick" classification lives in temporal-classification.ts (026) so the scheduler and
+// the Trace-tab overlap explanation share one definition; `isBlocking` is imported above.
 
 // ---------- Preferred-window + anchor resolution ----------
 

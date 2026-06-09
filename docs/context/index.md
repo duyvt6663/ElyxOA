@@ -121,12 +121,15 @@ workouts/day) — a soft late-evening penalty moves nothing even at 5×, and Pha
 real fix is data-level (fewer/shorter focused activities) or accept evening workouts/morning sauna. **G1/G2 shipped** (breakfast → 06:00–08:30, admin
 fitness → low intensity; skip 0.14% → 0.085%, 3311/200/3, vitest 97/97 + fixture-realism guard).
 024 confirmed a net improvement, no regressions.
-`026-trace-overlap-explanation.md` (**V1 IMPLEMENTED & verified** 2026-06-09, not yet deployed) — UI: a
+`026-trace-overlap-explanation.md` (**V1 DEPLOYED** 2026-06-09 commit `b4d772c`; **Phase 2 implemented**, not yet deployed) — UI: a
 contextual note in the Trace tab explaining the two intentional overlaps (consultations overlap work
 blocks; quick/point-in-time actions coincide with busy blocks + each other) and *why*, so reviewers stop
 reading them as bugs. Shared `temporal-classification.ts` (`isBlockingActivity` extracted from the
-scheduler, behavior-preserving) + `overlapExplanationKind`; vitest 104/104. Open follow-up: work-overlapping
-consultations aren't a simple click target in the DayTimeline.
+scheduler, behavior-preserving) + `overlapExplanationKind`; vitest 104/104. All three branches confirmed
+live (consultation note shows on `Annual Blood Panel Draw`). **Phase 2 (P3) implemented & verified** in
+`DayTimeline.tsx`: lane chips floor to ≥24×26 px + `hover:z-10` + selected ring; a grouped `HH:MM ×N`
+chip opens an in-place chooser of its actions (each `onSelect`), keeping the 023 inline-card → "View
+full trace" flow. Verified June 1: `09:00 ×5` chooser → `Annual Blood Panel Draw` → Trace note. UI-only.
 
 Archived plans 001-018 live in `docs/archive/`. Highlights: 007 prompts+README · 008 deploy
 (live at https://elyx-oa.vercel.app/) · 015 temporal availability + scheduler · 016 temporal

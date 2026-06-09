@@ -10,8 +10,9 @@ the UI explains *when* an overlap is allowed or *why*. Add a small, contextual e
 
 Severity: **P2** — not a bug, but a recurring source of reviewer confusion / a credibility ding.
 
-> **Status (2026-06-09):** **V1 implemented & verified** (shared `temporal-classification.ts` + Trace-tab
-> note). Not yet deployed — see Implementation result.
+> **Status (2026-06-09):** **V1 DEPLOYED** (commit `b4d772c`). **Phase 2 implemented & verified**
+> (DayTimeline lane — min hit targets + selected styling + an in-place chooser for grouped overlap
+> chips); not yet deployed — see Phase 2 result.
 
 ---
 
@@ -29,14 +30,76 @@ Severity: **P2** — not a bug, but a recurring source of reviewer confusion / a
 
 **Verified:** `tsc` clean · **vitest 104/104** (+7 in `temporal-classification.test.ts` covering
 consultation / quick / low-fitness≥20 / blocking / skipped / substituted-by-effective) ·
-`npm run build` static green · 0 console errors. UI spot-checked on a live dev server: the **quick**
-note renders for `Outdoor Brisk Walk`, and a 60-min `Lower Body Strength` correctly shows **no** note;
-the consultation branch is the same conditional + the unit-tested classifier.
+`npm run build` static green · 0 console errors. UI confirmed on a live dev server — all three branches:
+the **consultation** note renders for `Annual Blood Panel Draw` (`type: consultation`), the **quick**
+note for `Outdoor Brisk Walk`, and a 60-min `Lower Body Strength` correctly shows **no** note.
 
-**Follow-up observed (separate from this note):** work-overlapping consultations render *inside* the
-work block in the DayTimeline and weren't a simple click target in verification — reaching their Trace
-currently needs the Activities tab / chat `selectOccurrence`. A small DayTimeline clickability fix
-would let reviewers reach exactly the occurrences this note explains.
+**Reachability (corrected):** the note *is* reachable for work-overlapping consultations — via the
+day-detail **Scheduled actions** list (row → inline card → "View full trace" → Trace), confirmed
+end-to-end on `Annual Blood Panel Draw`. The friction is only the visual timeline **lane** — see Phase 2.
+
+---
+
+## Phase 2 — DayTimeline overlap clickability (P3 — implemented & verified 2026-06-09)
+
+**Implemented in `DayTimeline.tsx`** (UI-only, no scheduler change): lane action chips now floor to
+≥24 px height / ≥26 px width with `hover:z-10` so fanned overlaps stay clickable, and show a selected
+ring when their occurrence matches `selectedOccurrenceId`; a **grouped** lane chip (`HH:MM ×N`) now
+opens an **in-place chooser** listing each overlapping action as a selectable button (`onSelect`)
+instead of a bare expand-toggle. The 023 rule is preserved — selecting shows the inline card; "View
+full trace" remains the only path to Trace.
+
+**Verified** on a live dev server (June 1): clicking the **`09:00 ×5`** lane chip opens a chooser
+listing `Annual Blood Panel Draw` + the other four 09:00 actions; selecting it → inline card → "View
+full trace" → the Trace shows the **consultation-overlap note**. `tsc` clean · vitest 104/104 ·
+`npm run build` static green · 0 console errors · scheduler unchanged.
+
+**Problem.** The note works, but the most intuitive way to reach it — clicking the action in the
+timeline **lane** where it visibly overlaps the work block — has too much friction. Verified on **June
+1**: the 09:00 `Annual Blood Panel Draw` and 09:30 `Psychiatry Medication Review` sit inside the
+09:00–12:00 work block. The **Scheduled actions** list below the lane works (row → inline card → "View
+full trace" → Trace note), but the visual lane should be a dependable first click target too.
+
+There are two separate lane issues:
+1. **Single-action lane chips are selectable but visually tiny/truncated under overlap.** The current
+   absolute buttons use proportional height (`barHeight`) and narrow fanned lanes, so the title can be
+   hard to target or even recognize.
+2. **Grouped lane chips do not expose a selectable action.** For `items.length > 1`, the lane button
+   calls `toggle(en.key)` instead of `onSelect`. Bundle entries expand the list below; slot-group
+   entries can effectively feel like a no-op from the lane because the individual actions only appear
+   in the Scheduled actions list.
+
+**Recommended Phase 2 fix (small, no navigation behavior change).**
+- Keep the 023 rule: clicking a calendar/timeline action **selects it in-place** and shows the inline
+  detail card; it must **not** jump directly to Trace. "View full trace" remains the explicit path.
+- Give lane action buttons a reliable hit target and selected state:
+  - minimum visual/clickable height around 24 px for short actions;
+  - enough min width or hover/focus expansion for fanned lanes so the chip can be clicked intentionally;
+  - visible selected styling when the lane chip's occurrence matches `selectedOccurrenceId`.
+- For grouped lane entries, replace the bare `toggle` behavior with a tiny in-place chooser/popover
+  listing the grouped actions as buttons that call `onSelect(item)`. This is clearer than selecting an
+  arbitrary "primary" action and keeps every overlapping item reachable from the lane.
+- Keep the existing Scheduled actions list path unchanged; it remains the dense, readable fallback.
+
+**Implementation notes.**
+- `DayTimeline.tsx` already has `selectedOccurrenceId`, `onSelect`, and `onViewTrace`; Phase 2 should
+  stay inside this component unless a tiny child component keeps it simpler.
+- Avoid a large lane rewrite. Preserve the existing lane packing, busy-block rendering, bundles, and
+  time-grouped Scheduled actions list.
+- Use accessible buttons for any chooser rows and close the chooser when an item is selected or when a
+  different grouped chip opens.
+
+**Acceptance.**
+- Playwright: open June 1, click `Annual Blood Panel Draw` **in the lane** → it is selected, the inline
+  detail card appears in the day detail, and the active tab remains Calendar. Then click "View full
+  trace" → Trace opens and shows the consultation-overlap note.
+- If a grouped lane chip exists in the fixture, clicking it opens a chooser with each grouped action
+  individually selectable. Selecting one shows the same inline detail card path.
+- Regression: the Scheduled actions list still selects actions and opens Trace via "View full trace";
+  the occupied-slot toggle still hides/shows busy blocks; no scheduler output changes.
+
+**Out of scope.** Re-architecting the timeline lane, changing the schedule/list hierarchy, or adding
+auto-navigation from lane click to Trace. This is a targeted hit-target / lane-selection polish pass.
 
 ---
 

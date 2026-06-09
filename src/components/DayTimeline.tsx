@@ -12,7 +12,7 @@
  * - 016 §10: substituted rows show "title ← source".
  */
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import type { ScheduledOccurrence, ActivityType, MemberBusyBlock } from '@/lib/types';
 import { educationForOccurrence, type EducationMap } from '@/lib/activity-education';
 import GlossaryTooltip from './GlossaryTooltip';
@@ -78,6 +78,9 @@ export interface DayTimelineProps {
 
 export default function DayTimeline({ date, occurrences, memberBusy, showOccupied, onSelect, selectedOccurrenceId = null, education = {}, onViewTrace }: DayTimelineProps) {
   const [openEntries, setOpenEntries] = useState<Set<string>>(new Set());
+  // 026 Phase 2 — which grouped lane chip's in-place chooser is open (so overlapping actions in the
+  // lane are individually selectable instead of the chip being a bare expand-toggle).
+  const [chooserKey, setChooserKey] = useState<string | null>(null);
   const toggle = (k: string) =>
     setOpenEntries((prev) => {
       const next = new Set(prev);
@@ -239,24 +242,57 @@ export default function DayTimeline({ date, occurrences, memberBusy, showOccupie
             const single = en.items.length === 1 ? en.items[0]! : null;
             const grouped = !single;
             const anySub = en.items.some((o) => o.status === 'substituted');
+            const isSel = single ? single.id === selectedOccurrenceId : en.items.some((o) => o.id === selectedOccurrenceId);
+            const leftPct = colLeftPct + lane * laneWidthPct;
+            // 026 Phase 2 — floor the chip height/width so fanned overlap chips stay clickable.
+            const h = Math.max(24, barHeight(en.startMin, en.endMin));
             return (
-              <button
-                key={en.key}
-                type="button"
-                onClick={() => (single ? onSelect?.(single) : toggle(en.key))}
-                className={`absolute overflow-hidden rounded border px-1 text-left text-[10px] leading-tight hover:brightness-95 ${
-                  grouped ? 'bg-white border-gray-300 text-gray-700' : TYPE_BAR[en.type]
-                } ${anySub ? 'ring-1 ring-amber-500' : ''}`}
-                style={{
-                  top: top(en.startMin),
-                  height: barHeight(en.startMin, en.endMin),
-                  left: `${colLeftPct + lane * laneWidthPct}%`,
-                  width: `calc(${laneWidthPct}% - 2px)`,
-                }}
-                title={en.kind === 'bundle' ? `${en.label} (tap to expand)` : single ? `${single.title} ${single.startTime}-${single.endTime}` : en.label}
-              >
-                {en.kind === 'bundle' ? en.label : single ? `${single.startTime} ${single.title}` : en.label}
-              </button>
+              <Fragment key={en.key}>
+                <button
+                  type="button"
+                  // single → select in-place (023 shows the inline card, no Trace jump); grouped → open
+                  // an in-place chooser so every overlapping action is individually selectable.
+                  onClick={() => (single ? onSelect?.(single) : setChooserKey((k) => (k === en.key ? null : en.key)))}
+                  className={`absolute overflow-hidden rounded border px-1 text-left text-[10px] leading-tight hover:z-10 hover:brightness-95 ${
+                    grouped ? 'bg-white border-gray-300 text-gray-700' : TYPE_BAR[en.type]
+                  } ${isSel ? 'z-10 ring-2 ring-blue-500' : anySub ? 'ring-1 ring-amber-500' : ''}`}
+                  style={{
+                    top: top(en.startMin),
+                    height: h,
+                    left: `${leftPct}%`,
+                    width: `calc(${laneWidthPct}% - 2px)`,
+                    minWidth: 26,
+                  }}
+                  title={en.kind === 'bundle' ? `${en.label} (tap to choose)` : single ? `${single.title} ${single.startTime}-${single.endTime}` : `${en.label} (tap to choose)`}
+                >
+                  {en.kind === 'bundle' ? en.label : single ? `${single.startTime} ${single.title}` : en.label}
+                </button>
+                {grouped && chooserKey === en.key && (
+                  <div
+                    className="absolute z-20 max-h-48 overflow-auto rounded border border-gray-300 bg-white p-1 text-[11px] shadow-lg"
+                    style={{ top: top(en.startMin) + h + 2, left: `${leftPct}%`, minWidth: 168 }}
+                  >
+                    <div className="px-1.5 py-0.5 text-[10px] font-medium text-gray-400">{en.items.length} actions at {en.items[0]!.startTime}</div>
+                    {en.items.map((o) => (
+                      <button
+                        key={o.id}
+                        type="button"
+                        onClick={() => {
+                          onSelect?.(o);
+                          setChooserKey(null);
+                        }}
+                        className={`flex w-full items-center gap-1.5 rounded px-1.5 py-1 text-left hover:bg-gray-100 ${
+                          o.id === selectedOccurrenceId ? 'bg-blue-50' : ''
+                        }`}
+                      >
+                        <span className={`inline-block h-2 w-2 shrink-0 rounded-full ${TYPE_DOT[o.type]}`} />
+                        <span className="truncate">{o.title}</span>
+                        {o.status === 'substituted' && <span className="shrink-0 text-amber-600">↳</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </Fragment>
             );
           })}
         </div>

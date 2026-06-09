@@ -108,6 +108,11 @@ DB layer, Google admin login, protected expensive API routes, and Google Calenda
 `023-activity-education-descriptions.md` (116 LLM-generated activity purpose/health-context profiles
 surfaced in the Activities tab oneLine + Health context, the Trace "About this action"
 panel with scheduled/substituted/skipped handling, and chat grounding).
+`024-daily-load-realism-consultation-fitness.md` (PROPOSED, not started) — per-day load realism:
+category/intensity-aware same-day overload plus a same-day high↔high recovery rule; keeps overload a
+soft cost (no silent drops). Monthly/yearly due-date staggering is explicitly deferred because it would
+move the locked June 1 cardiology-skip acceptance demo. Triggered by June 2 stacking 3 consultations +
+2 late-night high-intensity workouts.
 
 Archived plans 001-018 live in `docs/archive/`. Highlights: 007 prompts+README · 008 deploy
 (live at https://elyx-oa.vercel.app/) · 015 temporal availability + scheduler · 016 temporal

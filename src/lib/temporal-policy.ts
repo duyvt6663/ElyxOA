@@ -6,6 +6,9 @@
  *   validated LLM hint > this default.
  * - Pure: no I/O, no clock. Keyed off the lowercased title; approximate by design — the
  *   handful of activities that must place precisely carry an explicit override in the fixture.
+ * - 024: high-intensity fitness default carries a high↔high same-day avoidAfter rule (withinMinutes
+ *   > waking span) so no two high-intensity sessions share a day. The temporal-rule check is
+ *   symmetric, so a default-high candidate also separates from an explicit-policy high.
  */
 
 /**
@@ -70,6 +73,10 @@ export function getDefaultTemporalPolicy(activity: Activity): ActivityTemporalPo
           intensity: 'high',
           avoidAfter: [
             { category: 'meal', withinMinutes: 90, reason: 'high-intensity training should not start within 90 min after a meal' },
+            // 024 — two high-intensity sessions should not share a day (recovery). withinMinutes is
+            // larger than the waking span, so any same-day pair conflicts; the temporal-rule check is
+            // intra-day only, so this is a same-day ban with no cross-day reach.
+            { activityType: 'fitness', intensity: 'high', withinMinutes: 24 * 60, reason: 'two high-intensity sessions should not share a day (recovery)' },
           ],
         };
       }

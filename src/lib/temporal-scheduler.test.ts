@@ -192,4 +192,48 @@ describe('scheduleTemporal', () => {
     const overlap = toMin(oa.startTime!) < toMin(ob.endTime!) && toMin(ob.startTime!) < toMin(oa.endTime!);
     expect(overlap).toBe(false);
   });
+
+  // ---- 024: daily load realism ----
+
+  it('slides a second same-day consultation to another day', () => {
+    // Two monthly consultations share a June 1 due-date (monthly is not staggered); the escalating
+    // same-day consultation cost (40 > a one-day move = 6) moves the second off June 1. Fails under
+    // the old flat per-action overload, which would leave both on June 1.
+    const c1 = makeActivity({ id: 'c1', type: 'consultation', title: 'Review A', frequency: { count: 1, period: 'month' }, priority: 1, durationMinutes: 30 });
+    const c2 = makeActivity({ id: 'c2', type: 'consultation', title: 'Review B', frequency: { count: 1, period: 'month' }, priority: 2, durationMinutes: 30 });
+    const av = makeAvailability({ windowStart: '2026-06-01', windowEnd: '2026-06-30' });
+    const { result } = scheduleTemporal([c1, c2], av);
+    const o1 = result.occurrences.find((o) => o.sourceActivityId === 'c1')!;
+    const o2 = result.occurrences.find((o) => o.sourceActivityId === 'c2')!;
+    expect(o1.status).toBe('scheduled');
+    expect(o2.status).toBe('scheduled');
+    expect(o1.date).not.toBe(o2.date);
+  });
+
+  it('never schedules two high-intensity sessions on the same day', () => {
+    // Four high-intensity weekly activities ('interval' -> default high policy, which now carries the
+    // high<->high same-day rule) over two weeks. No date may hold two high-intensity occurrences.
+    const acts = ['h1', 'h2', 'h3', 'h4'].map((id) =>
+      makeActivity({ id, type: 'fitness', title: `Interval Session ${id}`, frequency: { count: 1, period: 'week' }, priority: 1, durationMinutes: 45 }),
+    );
+    const av = makeAvailability({ windowStart: '2026-06-01', windowEnd: '2026-06-14' });
+    const { result } = scheduleTemporal(acts, av);
+    const highByDate = new Map<string, number>();
+    for (const o of result.occurrences) {
+      if (o.status === 'skipped') continue;
+      highByDate.set(o.date, (highByDate.get(o.date) ?? 0) + 1);
+    }
+    const maxPerDay = Math.max(...highByDate.values());
+    expect(maxPerDay).toBeLessThanOrEqual(1);
+  });
+
+  it('keeps the same-day consultation cost soft — never forces a skip', () => {
+    // Three consultations pinned to a one-day window (nowhere to slide). The escalating cost is a
+    // score penalty, not a feasibility wall, so all three still schedule sequentially.
+    const mk = (id: string, p: number) =>
+      makeActivity({ id, type: 'consultation', title: `Review ${id}`, frequency: { count: 1, period: 'day' }, priority: p, durationMinutes: 30 });
+    const { result } = scheduleTemporal([mk('c1', 1), mk('c2', 2), mk('c3', 3)], makeAvailability());
+    expect(result.occurrences.every((o) => o.status === 'scheduled')).toBe(true);
+    expect(new Set(result.occurrences.map((o) => o.startTime)).size).toBe(3); // distinct times, same day
+  });
 });

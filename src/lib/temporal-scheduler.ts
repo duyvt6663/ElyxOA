@@ -14,6 +14,10 @@
  *   membership is NOT the priority field — a high-priority fitness never pre-empts the
  *   medication pass.
  * - endTime = startTime + durationMinutes, snapped UP to the next 30-min boundary for occupancy.
+ * - 024: same-day load is category-aware (FOCUSED_OVERLOAD_PER / CONSULT_SAME_DAY_COST) — quick
+ *   habits add nothing, focused actions add a mild per-prior cost, consultations escalate so the
+ *   auto-scheduler keeps ~1 consultation/day. Stays SOFT (never changes feasibility / skip rate);
+ *   pairs with the default high↔high same-day rule in temporal-policy.ts.
  */
 
 /**
@@ -86,11 +90,19 @@ function overlaps(aStart: number, aEnd: number, bStart: number, bEnd: number): b
 export const TEMPORAL_SCORE_WEIGHTS = {
   movedPerDay: 6, // each day away from the generated date
   outsidePreferredWindow: 18, // candidate not inside any preferred/anchor window
-  sameDayOverloadPer: 3, // per health action already committed that day
   nearMealSoft: 10, // within 60 min of a meal but not hard-blocked
   lateEveningStimulating: 15, // high-intensity start after 19:00
   usesBackup: 12, // chosen candidate is a backup, not the primary
 } as const;
+
+// 024 — category-aware same-day load (replaces the old flat per-action `sameDayOverloadPer: 3`).
+// Overload stays a SOFT cost (never affects feasibility, so it cannot raise the skip rate):
+//   - quick/habit actions (pills, walks, low-intensity fitness) add nothing;
+//   - focused (blocking) actions add a mild per-prior-focused cost;
+//   - consultations escalate steeply so the auto-scheduler keeps ~1 consultation/day, sliding the
+//     rest within the movement window (40 > a monthly activity's ±6-day move = 36).
+const FOCUSED_OVERLOAD_PER = 3; // per prior blocking (focused) action already committed that day
+const CONSULT_SAME_DAY_COST = [0, 40, 200] as const; // cost for the (n+1)th consultation that day
 
 const LATE_EVENING_MIN = 19 * 60;
 
@@ -441,7 +453,14 @@ function evaluateCandidates(
         score += TEMPORAL_SCORE_WEIGHTS.outsidePreferredWindow;
         pushFail({ kind: 'outsidePreferredWindow', detail: `${minToTime(startMin)} is outside the preferred window` });
       }
-      score += committed.length * TEMPORAL_SCORE_WEIGHTS.sameDayOverloadPer;
+      // 024 — category-aware same-day load (see FOCUSED_OVERLOAD_PER / CONSULT_SAME_DAY_COST).
+      if (activity.type === 'consultation') {
+        const priorConsults = committed.reduce((n, c) => (c.type === 'consultation' ? n + 1 : n), 0);
+        score += CONSULT_SAME_DAY_COST[Math.min(priorConsults, CONSULT_SAME_DAY_COST.length - 1)];
+      } else if (candBlocking) {
+        const priorFocused = committed.reduce((n, c) => (c.blocking ? n + 1 : n), 0);
+        score += priorFocused * FOCUSED_OVERLOAD_PER;
+      }
       for (const b of busy) {
         if (b.category === 'meal' && !overlaps(startMin, endMin, b.startMin, b.endMin)) {
           const gap = Math.min(Math.abs(startMin - b.endMin), Math.abs(b.startMin - endMin));
